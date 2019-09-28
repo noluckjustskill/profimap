@@ -58,7 +58,7 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: `${process.env.BASE_URL}/api`,
+    baseURL: `${BASE_URL}/api`,
   },
   auth: {
     plugins: [
@@ -71,8 +71,8 @@ module.exports = {
     strategies: {
       local: {
         endpoints: {
-          login: { url: `${process.env.BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
-          user: { url: `${process.env.BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
+          login: { url: `${BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
+          user: { url: `${BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
           logout: false,
         }
       }
