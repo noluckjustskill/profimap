@@ -22,6 +22,12 @@
       </v-layout>
     </v-app-bar>
     <v-content class="content">
+      <HeaderBar
+        v-if="isMobile"
+        :items="itemsBar"
+        centered
+        fixed
+      />
       <v-container>
         <nuxt />
       </v-container>
@@ -71,6 +77,18 @@
       user() {
         return this.$store.state.auth.user;
       },
+      user() {
+        return this.$store.state.auth.user;
+      },
+      barHeight() {
+        return this.$vuetify.breakpoint.mdAndDown ? 50 : 88;
+      }
+    },
+    methods: {
+      async logout() {
+        await this.$auth.logout();
+        this.$router.push('/login');
+      }
     },
     methods: {
       async logout() {
