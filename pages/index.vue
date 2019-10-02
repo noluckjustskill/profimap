@@ -60,7 +60,6 @@
   import Recomendation from '../components/Recomendations';
 
   export default {
-    middleware: 'auth',
     components: {
       UserInfo,
       Skills,

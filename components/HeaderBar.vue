@@ -81,6 +81,11 @@
       drawer: false,
       overlay: false
     }),
+    computed: {
+      isMobile() {
+        return this.$vuetify.breakpoint.mdAndDown;
+      }
+    }
   };
 </script>
 
