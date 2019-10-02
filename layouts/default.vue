@@ -74,9 +74,6 @@
       user() {
         return this.$store.state.auth.user;
       },
-      barHeight() {
-        return this.isMobile ? 50 : 88;
-      }
     },
     methods: {
       async logout() {
