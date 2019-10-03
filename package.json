@@ -34,6 +34,7 @@
     "mysql": "^2.17.1",
     "nuxt": "^2.0.0",
     "objection": "^1.6.11",
+    "vis-network": "^6.1.1",
     "vue-chartjs": "^3.4.2"
   },
   "devDependencies": {
