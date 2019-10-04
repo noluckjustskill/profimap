@@ -69,12 +69,7 @@
     },
     computed: {
       user() {
-        // return this.$store.state.auth.user; <= presentation hotfix
-        return {
-          name: 'Vasya Pupkin',
-          email: 'profimap@gmail.com',
-          picture: 'https://wolfsgallery.com/images/works/_huge/charles-cottet-portrait-of-boy-4.jpg',
-        };
+        return this.$store.state.auth.user;
       },
       user() {
         return this.$store.state.auth.user;
