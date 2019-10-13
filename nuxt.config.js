@@ -1,5 +1,10 @@
 require('dotenv').config();
 
+<<<<<<< HEAD
+=======
+const { BASE_URL } = require('./config/http.json')[process.env.NODE_ENV];
+
+>>>>>>> HTTP settigs
 module.exports = {
   mode: 'universal',
   /*

@@ -1,5 +1,12 @@
 {
-  "HOST": "0.0.0.0",
-  "PORT": 3000,
-  "BASE_URL": "http://77.221.144.187:3000"
+  "development": {
+    "HOST": "0.0.0.0",
+    "PORT": 3000,
+    "BASE_URL": "//dev.profimap.ru"
+  },
+  "production": {
+    "HOST": "0.0.0.0",
+    "PORT": 80,
+    "BASE_URL": "//profimap.ru"
+  }
 }
