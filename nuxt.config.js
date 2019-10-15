@@ -1,14 +1,5 @@
 require('dotenv').config();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-const { BASE_URL } = require('./config/http.json')[process.env.NODE_ENV];
-=======
-const BASE_URL = process.env.BASE_URL;
->>>>>>> Dev environment
-
->>>>>>> HTTP settigs
 module.exports = {
   mode: 'universal',
   /*
@@ -67,7 +58,7 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: `${BASE_URL}/api`,
+    baseURL: `${process.env.BASE_URL}/api`,
   },
   auth: {
     plugins: [
@@ -80,8 +71,8 @@ module.exports = {
     strategies: {
       local: {
         endpoints: {
-          login: { url: `${BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
-          user: { url: `${BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
+          login: { url: `${process.env.BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
+          user: { url: `${process.env.BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
           logout: false,
         }
       }
