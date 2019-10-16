@@ -20,4 +20,7 @@ RUN npm install
 
 # build necessary, even if no static files are needed,
 # since it builds the server as well
+ARG base_url
+ENV BASE_URL $base_url
+
 RUN npm run build

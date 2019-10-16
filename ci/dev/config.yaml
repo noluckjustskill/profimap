@@ -5,11 +5,11 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
-        - HOST=0.0.0.0
-        - PORT=3000
-        - BASE_URL=//dev.profimap.ru
+        - base_url=//dev.profimap.ru
     restart: always
     environment:
+      - HOST=0.0.0.0
+      - PORT=3000
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
