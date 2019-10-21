@@ -8,7 +8,7 @@ services:
         - base_url=//dev.profimap.ru
     restart: always
     environment:
-      - HOST=0.0.0.0
+      - HOST=127.0.0.1
       - PORT=3000
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}

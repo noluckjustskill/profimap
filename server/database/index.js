@@ -19,7 +19,7 @@ const knex = Knex({
   client: 'mysql', 
   connection: {
     host: DB_HOST,
-    port: DB_PORT,
+    port: Number(DB_PORT),
     user: DB_USER,
     password: DB_USER_PASSWORD,
     database: DB_NAME
