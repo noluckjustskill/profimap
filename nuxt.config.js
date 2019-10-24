@@ -61,6 +61,13 @@ module.exports = {
     baseURL: `${process.env.BASE_URL}/api`,
   },
   auth: {
+    plugins: [
+      '~/plugins/auth.js',
+    ],
+    redirect: {
+      login: '/login',
+      logout: false,
+    },
     strategies: {
       local: {
         endpoints: {
@@ -70,10 +77,9 @@ module.exports = {
         }
       }
     },
-    redirect: {
-      login: '/login',
-      user: '/profile',
-    },
+  },
+  router: {
+    middleware: ['auth'],
   },
   /*
   ** vuetify module configuration

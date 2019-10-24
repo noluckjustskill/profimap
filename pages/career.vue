@@ -13,7 +13,6 @@
   import CareerChart from '../components/Charts/CareerChart';
 
   export default {
-    middleware: 'auth',
     components: {
       CareerChart,
     },
