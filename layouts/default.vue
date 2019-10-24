@@ -71,15 +71,6 @@
       user() {
         return this.$store.state.auth.user;
       },
-      user() {
-        return this.$store.state.auth.user;
-      },
-    },
-    methods: {
-      async logout() {
-        await this.$auth.logout();
-        this.$router.push('/login');
-      }
     },
     methods: {
       async logout() {
