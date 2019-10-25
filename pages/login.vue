@@ -65,7 +65,7 @@
                       class="ma-2" 
                       tile
                       outlined
-                      color="success"
+                      color="primary"
                       href="/auth/google" 
                     >
                       <v-icon left>
@@ -111,14 +111,15 @@
       passwordRules: [v => !!v || 'The input is required'],
       snackbar: false,
       snackbarText: '',
-      preloader: false
+      preloader: true,
     }),
     mounted() {
       const token = this.$route.query.token;
 
       if (token) {
-        this.preloader = true;
         this.$auth.setUserToken(token);
+      } else {
+        this.preloader = false;
       }
     },
     methods: {
