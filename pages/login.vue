@@ -31,7 +31,7 @@
             sm="8"
             md="4"
           >
-            <v-card class="elevation-12">
+            <v-card v-if="!preloader" class="elevation-12">
               <v-toolbar
                 color="primary"
                 dark
@@ -62,6 +62,18 @@
 
                   <div class="flex-grow-1">
                     <v-btn
+                      class="ma-2" 
+                      tile
+                      outlined
+                      color="success"
+                      href="/auth/google" 
+                    >
+                      <v-icon left>
+                        mdi-google
+                      </v-icon>
+                      Вход через Google
+                    </v-btn>
+                    <v-btn
                       :disabled="!email || !password"
                       color="primary" 
                       type="submit"
@@ -72,6 +84,7 @@
                 </v-form>
               </v-card-text>
             </v-card>
+            <Preloader v-if="preloader" />
           </v-col>
         </v-row>
       </v-container>
@@ -80,8 +93,13 @@
 </template>
 
 <script>
+  import Preloader from '../components/Preloader';
+  
   export default {
     layout: 'login',
+    components: {
+      Preloader
+    },
     data: () => ({
       drawer: null,
       email: null,
@@ -93,7 +111,16 @@
       passwordRules: [v => !!v || 'The input is required'],
       snackbar: false,
       snackbarText: '',
+      preloader: false
     }),
+    mounted() {
+      const token = this.$route.query.token;
+
+      if (token) {
+        this.preloader = true;
+        this.$auth.setUserToken(token);
+      }
+    },
     methods: {
       async login() {
         if (!this.email || !this.password) return;
@@ -113,7 +140,7 @@
           this.snackbarText = 'Can not login';
           this.snackbar = true;
         }
-      },
+      }
     }
   };
 </script>

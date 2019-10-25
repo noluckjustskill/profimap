@@ -3,7 +3,7 @@ const Users = require('./users');
 
 module.exports = class AuthUsers extends Model {
   static get tableName() {
-    return 'auth_users';
+    return 'authUsers';
   }
   static get idColumn() {
     return 'id';
@@ -14,7 +14,7 @@ module.exports = class AuthUsers extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
         join: {
-          from: 'auth_users.user_id',
+          from: 'authUsers.userId',
           to: 'users.id'
         },
       },

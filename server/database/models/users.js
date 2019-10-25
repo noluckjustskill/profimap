@@ -15,7 +15,7 @@ module.exports = class Users extends Model {
         modelClass: AuthUsers,
         join: {
           from: 'users.id',
-          to: 'auth_users.user_id'
+          to: 'authUsers.userId'
         },
       },
     };

@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const Koa = require('koa');
+const passport = require('./services/passport');
 const bodyParser = require('koa-bodyparser');
 const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
@@ -27,6 +28,10 @@ async function start () {
   } else {
     await nuxt.ready();
   }
+
+  // Init passport
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // Init routes
   app.use(bodyParser());
