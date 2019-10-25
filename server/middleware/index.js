@@ -1,23 +1,8 @@
-const { UsersModel, AuthUsersModel } = require('../database');
-const { get, split, nth } = require('lodash');
-
-const validateUser = async (token) => {
-  // TODO: use join
-  const authUser = await AuthUsersModel.query().findOne({token});
-  const userId = get(authUser, 'user_id');
-
-  if (!userId) return false;
-
-  const user = await UsersModel.query().findById(userId);
-
-  return user;
-};
+const { validateUser } = require('../services/user');
 
 module.exports = async (ctx, next) => {
   try {
-    const { authorization } = ctx.headers;
-    const auth = nth(split(authorization, ' '), 1); // NUXT put fucking prerfix
-    const user = await validateUser(auth);
+    const user = await validateUser(ctx);
 
     if (!user) {
       throw new Error('Not authorized');
