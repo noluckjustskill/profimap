@@ -84,7 +84,7 @@
                 </v-form>
               </v-card-text>
             </v-card>
-            <Preloader v-if="preloader" />
+            <Preloader v-if="preloader" class="preloader" />
           </v-col>
         </v-row>
       </v-container>
@@ -150,5 +150,8 @@
   .flex-grow-1 {
     margin-top: 10px;
     text-align: right;
+  }
+  .preloader {
+    max-width: 300px;
   }
 </style>
