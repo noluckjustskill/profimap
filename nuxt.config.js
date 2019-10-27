@@ -90,14 +90,19 @@ module.exports = {
     theme: {
       themes: {
         light: {
-          primary: '#3f51b5',
+          primary: '#E23B3B',
           secondary: '#b0bec5',
           accent: '#1782FF',
           error: '#b71c1c',
           background: '#ffffff',
           dark: '#000000',
         }
-      }
+      },
+      minifyTheme: css => {
+        return process.env.NODE_ENV === 'production'
+          ? css.replace(/[\r\n|\r|\n]/g, '')
+          : css;
+      },
     }
   },
   /*

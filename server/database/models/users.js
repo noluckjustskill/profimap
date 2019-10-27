@@ -1,5 +1,6 @@
 const { Model } = require('objection');
 const AuthUsers = require('./authUsers');
+const SoftSkills = require('./softSkills');
 
 module.exports = class Users extends Model {
   static get tableName() {
@@ -18,6 +19,14 @@ module.exports = class Users extends Model {
           to: 'authUsers.userId'
         },
       },
+      softSkills: {
+        relation: Model.HasManyRelation,
+        modelClass: SoftSkills,
+        join: {
+          from: 'users.id',
+          to: 'softSkills.userId'
+        }
+      }
     };
   }
 };

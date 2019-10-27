@@ -12,7 +12,7 @@
       <v-flex xs9>
         <v-tabs
           v-model="tab"
-          :color="$vuetify.theme.themes.light.accent"
+          :color="$vuetify.theme.themes.light.primary"
           :centered="centered"
           :fixed-tabs="fixed"
           icons-and-text

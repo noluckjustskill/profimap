@@ -14,6 +14,7 @@ const Knex = require('knex');
 const { Model, knexSnakeCaseMappers } = require('objection');
 const UsersModel = require('./models/users');
 const AuthUsersModel = require('./models/authUsers');
+const SoftSkillsModel = require('./models/softSkills');
 
 const knex = Knex({
   client: 'mysql', 
@@ -40,4 +41,5 @@ module.exports = {
   knex,
   UsersModel,
   AuthUsersModel,
+  SoftSkillsModel,
 };
