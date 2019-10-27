@@ -35,7 +35,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .initials {
     font-size: 22px;
   }

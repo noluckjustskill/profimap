@@ -60,10 +60,9 @@
           {
             icon: 'mdi-star-circle',
             title: 'Тестирование',
-            to: '#'
+            to: '/tests'
           }
         ],
-        title: 'Vuetify.js',
         tab: null,
       };
     },
@@ -88,6 +87,7 @@
   }
   .content {
     background-color: #fff;
+    /* background-color: #E5E5E5; */
   }
   .burger {
     margin-right: 15px;
