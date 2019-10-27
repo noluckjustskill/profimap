@@ -14,7 +14,7 @@ const { PostGollandController, PostGollandRoute } = require('./gollandTest/postG
 
 const router = new Router();
 
-router.post('/auth/login', UserIsAuth, LoginController);
+router.post('/auth/login', LoginController);
 router.get('/auth/google', UserIsAuth, GoogleAuthController);
 router.get('/auth/google-redirect', GooglePassportController, GoogleAuthRedirectController);
 
