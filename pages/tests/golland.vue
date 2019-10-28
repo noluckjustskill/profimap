@@ -64,7 +64,17 @@
                   </v-card-title>
                 </v-card>
               </v-hover>
-              <!-- TODO: back button -->
+              <v-btn
+                :disabled="!current"
+                color="accent"
+                class="mt-6 white--text"
+                @click="back"
+              >
+                <v-icon left dark>
+                  mdi-arrow-left
+                </v-icon>
+                Предыдущий вопрос
+              </v-btn>
             </v-layout>
           </template>
           <template v-else>
@@ -156,6 +166,14 @@
         if (this.current === this.professions.length) {
           this.end();
         }
+      },
+      back() {
+        if (!this.current) {
+          return;
+        }
+
+        this.current--;
+        this.result.pop();
       },
       end() {
         this.$axios.$post('postGolland', {

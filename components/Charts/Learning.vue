@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Preloader v-if="!myChart && !noData" />
+    <Preloader v-if="!myChart && !noData" :width="loaderSize" :height="loaderSize" />
     <canvas ref="canvas" height="250" />
     <div v-if="!myChart && noData" class="no-data text-center">
       <h3 class="headline">
@@ -66,6 +66,9 @@
     computed: {
       bgColor() {
         return hexToRgba(this.$vuetify.theme.themes.light.primary, 0.2);
+      },
+      loaderSize() {
+        return this.$vuetify.breakpoint.smAndDown ? 150 : 200;
       },
     },
     mounted() {
