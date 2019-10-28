@@ -11,9 +11,10 @@ const {
 } = process.env;
 
 const Knex = require('knex');
-const { Model } = require('objection');
+const { Model, knexSnakeCaseMappers } = require('objection');
 const UsersModel = require('./models/users');
 const AuthUsersModel = require('./models/authUsers');
+const SoftSkillsModel = require('./models/softSkills');
 
 const knex = Knex({
   client: 'mysql', 
@@ -24,6 +25,7 @@ const knex = Knex({
     password: DB_USER_PASSWORD,
     database: DB_NAME
   },
+  ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
       warn: console.warn,
@@ -39,4 +41,5 @@ module.exports = {
   knex,
   UsersModel,
   AuthUsersModel,
+  SoftSkillsModel,
 };

@@ -32,7 +32,7 @@
     >
       <div class="block">
         <div class="text">
-          Гибкие качества
+          Тип личности
         </div>
         <Learning />
       </div>
@@ -68,25 +68,6 @@
     },
     data () {
       return {
-        dataForBar: {
-          labels: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
-          datasets: [
-            {
-              label: 'Часов в день',
-              backgroundColor: '#000000',
-              data: [3.4, 2.5, 3.1, 1.2, 3.8, 0.5, 2]
-            }
-          ]          
-        },
-        dataForCircle: {
-          labels: ['Математика', 'Русский язык'],
-          datasets: [
-            {
-              data: [150, 40],
-              backgroundColor: ['#000000', '#C0C0C0'],
-            }
-          ]
-        },
         dataForRec: [
           {
             avatar: require('~/assets/stomo.jpg'),
@@ -102,7 +83,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .row {
     max-width: 100%;
     margin: 0 auto;

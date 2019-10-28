@@ -1,0 +1,22 @@
+{
+  "realisticType": [
+    { "image": "auto_mechanic.png", "name": "Автомеханик" }, { "image": "electrician.png", "name": "Электротехник" }, { "image": "mining_engineer.png", "name": "Горный инженер" }, { "image": "research_engineer.png", "name": "Инженер-исследователь" }
+  ],
+  "intellectualType": [
+    { "image": "theoretical_physicist.png", "name": "Физик-теоретик" }, { "image": "astronomer.png", "name": "Астроном" }, { "image": "theoretical_scientist.png", "name": "Ученый теоретик" }, { "image": "biophysicist.png", "name": "Биофизик" }
+  ],
+  "socialType": [
+    { "image": "family_doctor.png", "name": "Семейный врач" }, { "image": "tutor.png", "name": "Репетитор" }, { "image": "teacher.png", "name": "Учитель" }, { "image": "social_worker.png", "name": "Социальный работник" }
+  ],
+  "conventionalType": [
+    { "image": "archive_worker.png", "name": "Работник архива" }, { "image": "cashier.png", "name": "Контроллер-кассир" }, { "image": "typewriter.png", "name": "Наборщик типографии" }, { "image": "blueprint_copier.png", "name": "Копировальщик чертежей" }, { "image": "financial_controller.png", "name": "Финансовый контролер" }
+  ],
+  "enterprisingType": [
+    { "image": "director.png", "name": "Директор" }, { "image": "administrator.png", "name": "Администратор" }, { "image": "business_owner.png", "name": "Предприниматель" }, { "name": "Глава администрации" }, { "image": "manager.png", "name": "Менеджер" }
+  ],
+  "artisticType": [
+    { "image": "musician.png", "name": "Музыкант-исполнитель" }, { "image": "composer.png", "name": "Композитор" },  { "image": "interior_artist.png", "name": "Художник по интерьеру" }, { "image": "writer.png", "name": "Писатель" }, { "image": "actor.png", "name": "Актер" } 
+  ]
+ }
+
+ 

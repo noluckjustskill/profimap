@@ -13,9 +13,14 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [],
+  },
+  manifest: {
+    name: 'ProfiMap',
+    short_name: 'ProfiMap',
+    lang: 'ru',
+    start_url: '/',
+    display: 'standalone',
   },
   /*
   ** Customize the progress-bar color
@@ -48,6 +53,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
+    ['nuxt-rfg-icon', { masterPicture: './assets/logo-big.png' }],
     ['@nuxtjs/robots', {
       UserAgent: '*',
       Disallow: '/'
@@ -90,14 +96,19 @@ module.exports = {
     theme: {
       themes: {
         light: {
-          primary: '#3f51b5',
+          primary: '#E23B3B',
           secondary: '#b0bec5',
           accent: '#1782FF',
           error: '#b71c1c',
           background: '#ffffff',
           dark: '#000000',
         }
-      }
+      },
+      minifyTheme: css => {
+        return process.env.NODE_ENV === 'production'
+          ? css.replace(/[\r\n|\r|\n]/g, '')
+          : css;
+      },
     }
   },
   /*
