@@ -80,7 +80,7 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .row {
     max-width: 100%;
     margin: 0 auto;
@@ -102,13 +102,15 @@
     font-weight: 500;
     border: 1px solid #c0c0c0;
     border-radius: 5px;
-    padding: 45px 125px;
+    padding: 45px 21%;
     box-sizing: border-box;
-    /* width: 70%;
-    min-width: 300px; */
   }
   .block.second-block {
     padding: 50px;
+
+    @media (max-width: 599px) {
+      padding: 10%;
+    }
   }
   .text {
     font-family: Roboto;

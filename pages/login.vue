@@ -65,13 +65,14 @@
                       class="ma-2" 
                       tile
                       outlined
+                      :icon="hideGoogleText"
                       color="primary"
                       href="/auth/google" 
                     >
-                      <v-icon left>
+                      <v-icon :left="!hideGoogleText">
                         mdi-google
                       </v-icon>
-                      Вход через Google
+                      {{ !hideGoogleText ? 'Вход через Google' : null }}
                     </v-btn>
                     <v-btn
                       :disabled="!email || !password"
@@ -84,7 +85,7 @@
                 </v-form>
               </v-card-text>
             </v-card>
-            <Preloader v-if="preloader" class="preloader" />
+            <Preloader v-if="preloader" :width="300" :height="300" />
           </v-col>
         </v-row>
       </v-container>
@@ -113,6 +114,11 @@
       snackbarText: '',
       preloader: true,
     }),
+    computed: {
+      hideGoogleText() {
+        return this.$vuetify.breakpoint.xsOnly;
+      },
+    },
     mounted() {
       const token = this.$route.query.token;
 
@@ -150,8 +156,5 @@
   .flex-grow-1 {
     margin-top: 10px;
     text-align: right;
-  }
-  .preloader {
-    max-width: 300px;
   }
 </style>

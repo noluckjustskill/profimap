@@ -50,22 +50,21 @@
                 <v-card
                   :elevation="hover ? 8 : 3"
                   class="item-card"
-                  max-width="350"
-                  width="45%"
                   color="primary"
                   @click="next(i)"
                 >
                   <v-img
                     :src="`img/${item.image}`"
-                    height="200px"
+                    :height="cardImageHeight"
                     contain
                     class="white"
                   />
-                  <v-card-title class="card-title subtitle-1 white--text">
+                  <v-card-title class="card-title subtitle-1 white--text text-truncate">
                     {{ item.name }}
                   </v-card-title>
                 </v-card>
               </v-hover>
+              <!-- TODO: back button -->
             </v-layout>
           </template>
           <template v-else>
@@ -93,17 +92,17 @@
             <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-3">
               Профессии, которые вам подходят:
             </h4>
-            <v-layout row class="mt-1 mb-3">
+            <v-layout row :justify-center="isMobile" class="mt-1 mb-3">
               <v-card
                 v-for="(item, i) in recommendations"
                 :key="`rcmd${i}`"
                 width="200"
-                class="mr-3"
+                class="mr-3 mb-3"
                 color="primary"
               >
                 <v-img
                   :src="`img/${item.image}`"
-                  height="90"
+                  :height="cardImageHeight / 1.5"
                   contain
                   class="white"
                 />
@@ -112,7 +111,12 @@
                 </v-card-title>
               </v-card>
             </v-layout>
-            <v-btn href="/tests" color="primary" class="mt-2">
+            <v-btn
+              :block="isMobile"
+              to="/tests"
+              color="primary"
+              class="mt-2"
+            >
               Выбрать другой тест
             </v-btn>
           </template>
@@ -132,6 +136,14 @@
       recommendations: null,
       description: null,
     }),
+    computed: {
+      cardImageHeight() {
+        return this.$vuetify.breakpoint.xsOnly ? 120 : 200;
+      },
+      isMobile() {
+        return this.$vuetify.breakpoint.xsOnly;
+      },
+    },
     async asyncData({ $axios }) {
       const professions = await $axios.$get('getGolland').catch(() => ([]));
       return { professions };
@@ -166,7 +178,7 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .row {
     max-width: 100%;
     margin: 0 auto;
@@ -190,11 +202,13 @@
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;
-    /* width: 70%;
-    min-width: 300px; */
   }
   .block.second-block {
     padding: 50px;
+    
+    @media (max-width: 599px) {
+      padding: 10%;
+    }
   }
   .text {
     font-family: Roboto;
@@ -214,6 +228,14 @@
   }
   .item-card {
     cursor: pointer;
+    width: 45%;
+    max-width: 350px;
+
+    @media (max-width: 599px) {
+      width: 100%;
+      max-width: unset;
+      margin-bottom: 10px;
+    }
   }
   .card-title {
     padding: 10px;
