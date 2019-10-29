@@ -20,7 +20,7 @@
           <UserInfo />
         </v-flex>
         <v-flex md4 xs12>
-          <Recomendation :items="dataForRec" />
+          <Recomendation />
         </v-flex>
       </v-layout>
     </v-flex>
@@ -32,7 +32,7 @@
     >
       <div class="block">
         <div class="text">
-          Тип личности
+          Тип личности  
         </div>
         <Learning />
       </div>
@@ -65,21 +65,7 @@
       Skills,
       Learning,
       Recomendation
-    },
-    data () {
-      return {
-        dataForRec: [
-          {
-            avatar: require('~/assets/stomo.jpg'),
-            name: 'Стоматолог-ортопед'
-          },
-          {
-            avatar: require('~/assets/orto.jpg'),
-            name: 'Ортодонт'
-          }
-        ]
-      };
-    },
+    }
   };
 </script>
 

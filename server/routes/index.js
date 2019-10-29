@@ -3,6 +3,7 @@ const MidleWare = require('../middleware');
 const { MeController, MeRoute } = require('./me');
 const { LoginController } = require('./login');
 const { SoftSkillsController, SoftSkillsRoute } = require('./softSkills');
+const { RecommendationsController, RecommendationsRoute } = require('./recommendations');
 const { UserIsAuth } = require('../middleware/user');
 const {
   GoogleAuthController,
@@ -23,5 +24,6 @@ router.get(`/api${MeRoute}`, MeController);
 router.get(`/api${SoftSkillsRoute}`, SoftSkillsController);
 router.get(`/api${GetGollandRoute}`, GetGollandController);
 router.post(`/api${PostGollandRoute}`, PostGollandController);
+router.get(`/api${RecommendationsRoute}`, RecommendationsController);
 
 module.exports = router;
