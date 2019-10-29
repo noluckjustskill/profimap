@@ -1,5 +1,6 @@
 <template>
   <v-card
+    v-if="items.length"
     class="elevation-0 recomendation"
     tile
   >
@@ -8,19 +9,26 @@
         Вас может заинтересовать:
       </v-subheader>
       <v-list-item-group>
-        <v-list-item
-          v-for="(item, i) in items"
+        <v-list-item 
+          v-for="(item, i) in computedItems" 
           :key="i" 
         >
           <v-list-item-avatar>
-            <v-img :src="item.avatar" />
+            <v-img :src="item.image" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title v-text="item.name" />
+            <v-list-item-title class="text-truncate" v-text="item.name" />
           </v-list-item-content>
         </v-list-item>
-      
-        <a class="link" :style="{color: $vuetify.theme.themes.light.accent}" href="#">Все рекомендации</a>
+        <v-btn 
+          class="link"
+          text
+          small 
+          color:accent
+          @click="showMore=!showMore"
+        > 
+          {{ showMore ? 'Скрыть' : 'Все рекомендации' }} 
+        </v-btn>
       </v-list-item-group>
     </v-list>
   </v-card>
@@ -28,17 +36,31 @@
 
 <script>
   export default {
-    props: {
-      items: {
-        type: Array,
-        required: true,
+    data() {
+      return {
+        showMore: false,
+        items: []
+      };
+    },
+    computed: {
+      computedItems: function() {
+        if (this.showMore) {
+          return this.items;
+        } else {
+          return this.items.slice(0, 2);
+        }
       }
+    },
+    mounted() {
+      this.$axios.$get('recommendations').then(response => {
+        this.items = response;
+      });
     },
   };
 </script>
 
 <style scoped>
-.link{
+.link {
   text-decoration: none;
   font-size: 12px;
   line-height: 14px;
