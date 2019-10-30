@@ -58,6 +58,16 @@ module.exports = {
       UserAgent: '*',
       Disallow: '/'
     }],
+    [
+      '@nuxtjs/yandex-metrika',
+      {
+        id: Number(process.env.YANDEX_METRIKA),
+        webvisor: true,
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+      }
+    ]
   ],
   /*
   ** Axios module configuration

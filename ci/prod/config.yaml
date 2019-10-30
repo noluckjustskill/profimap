@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
       args:
         - base_url=https://profimap.ru
+        - yandex_metrika=56011483
     restart: always
     environment:
       - HOST=127.0.0.1
