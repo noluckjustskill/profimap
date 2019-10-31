@@ -3,6 +3,8 @@ require('dotenv').config();
 const Koa = require('koa');
 const passport = require('./services/passport');
 const bodyParser = require('koa-bodyparser');
+const staticFolder = require('koa-static');
+const mount = require('koa-mount');
 const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
 const router = require('./routes/index');
@@ -36,6 +38,9 @@ async function start () {
   // Init routes
   app.use(bodyParser());
   app.use(router.routes()).use(router.allowedMethods());
+
+  // Static folder
+  app.use(mount(process.env.STATIC_URL, staticFolder(process.env.STATIC_DIR)));
 
   // Init SSR
   app.use((ctx) => {

@@ -54,7 +54,7 @@
                   @click="next(i)"
                 >
                   <v-img
-                    :src="`img/${item.image}`"
+                    :src="item.image"
                     :height="cardImageHeight"
                     contain
                     class="white"
@@ -111,7 +111,7 @@
                 color="primary"
               >
                 <v-img
-                  :src="`img/${item.image}`"
+                  :src="item.image"
                   :height="cardImageHeight / 1.5"
                   contain
                   class="white"
