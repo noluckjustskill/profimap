@@ -56,7 +56,6 @@
                   <v-img
                     :src="item.image"
                     :height="cardImageHeight"
-                    contain
                     class="white"
                   />
                   <v-card-title class="card-title subtitle-1 white--text text-truncate">
@@ -113,7 +112,6 @@
                 <v-img
                   :src="item.image"
                   :height="cardImageHeight / 1.5"
-                  contain
                   class="white"
                 />
                 <v-card-title class="card-title subtitle-2 white--text text-truncate">
