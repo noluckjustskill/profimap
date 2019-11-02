@@ -15,9 +15,9 @@
           <div class="userName">
             {{ user.name }}
           </div>
-          <div class="userMail">
+          <!-- <div class="userMail">
             {{ subTitle }}
-          </div>
+          </div> -->
         </div>
       </template>
       <v-list>
@@ -82,7 +82,7 @@
   }
 
   .userName {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 18px;
   }
 
