@@ -104,6 +104,7 @@
     border-radius: 5px;
     padding: 45px 21%;
     box-sizing: border-box;
+    background: white;
   }
   .block.second-block {
     padding: 50px;

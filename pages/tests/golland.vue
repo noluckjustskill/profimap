@@ -218,6 +218,7 @@
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;
+    background: white;
   }
   .block.second-block {
     padding: 50px;

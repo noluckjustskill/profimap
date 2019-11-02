@@ -16,7 +16,7 @@
         justify-space-between
         class="row"
       >
-        <v-flex sm5 md7 xs12>
+        <v-flex md7 xs12>
           <UserInfo />
         </v-flex>
         <v-flex md4 xs12>
@@ -85,8 +85,7 @@
     border-radius: 5px;
     padding: 10px;
     box-sizing: border-box;
-    /* width: 70%;
-    min-width: 300px; */
+    background: white;
   }
   .text {
     font-family: Roboto;

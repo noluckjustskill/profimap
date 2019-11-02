@@ -2,10 +2,10 @@ const { get } = require('lodash');
 const { keyWithMaxValue } = require('../../utils/object');
 const { SoftSkillsModel } = require('../../database');
 
-const { answers } = require('../../config/golland.json');
+const { answers } = require('../../config/golland/golland.json');
 const keyDictionary = require('../../config/softSkillsDictionary.json');
-const gollandRecommendations = require('../../config/gollandRecommendations.json');
-const golladDescription = require('../../config/golladDescr.json');
+const gollandRecommendations = require('../../config/golland/gollandRecommendations.json');
+const golladDescription = require('../../config/golland/golladDescr.json');
 
 const PostGollandController = async (ctx) => {
   const result = get(ctx, 'request.body.result', []);

@@ -1,30 +1,34 @@
 <template>
-  <div v-if="!$vuetify.breakpoint.mdAndDown">
-    <v-layout
-      row
-      wrap
-      align-center
-      justify-start
-    >
-      <v-flex xs3>
-        <img :src="require('~/assets/logo.png')" width="125" class="logo-img">
-      </v-flex>
-      <v-flex xs9>
-        <v-tabs
-          v-model="tab"
-          :color="$vuetify.theme.themes.light.primary"
-          :centered="centered"
-          :fixed-tabs="fixed"
-          icons-and-text
+  <v-layout
+    v-if="!$vuetify.breakpoint.mdAndDown"
+    row
+    wrap
+    align-center
+    justify-start
+    class="header-layout"
+  >
+    <v-flex xs12>
+      <v-tabs
+        v-model="tab"
+        :color="$vuetify.theme.themes.light.primary"
+        :centered="centered"
+        :fixed-tabs="fixed"
+        :hide-slider="hideSlider"
+      >
+        <v-tab to="/" active-class="selected">
+          <v-img :src="require('~/assets/logo.png')" width="125" />
+        </v-tab>
+        <v-tab
+          v-for="(item, i) in items"
+          :key="i"
+          :to="item.to"
+          class="tab"
         >
-          <v-tab v-for="(item, i) in items" :key="i" :to="item.to">
-            {{ item.title }}
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-tab>
-        </v-tabs>
-      </v-flex>
-    </v-layout>
-  </div>
+          {{ item.title }}
+        </v-tab>
+      </v-tabs>
+    </v-flex>
+  </v-layout>
   <div v-else>
     <v-navigation-drawer
       v-model="drawer"
@@ -38,6 +42,14 @@
         </v-btn>
       </div>
       <v-list>
+        <v-list-item to="/" router exact>
+          <v-list-item-action>
+            <v-icon>mdi-star-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="`Профиль`" />
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -77,16 +89,27 @@
       },
     },
     data: () => ({
-      tab: 0,
+      tab: '/',
       drawer: false,
       overlay: false
     }),
+    computed: {
+      hideSlider() {
+        return this.tab === '/';
+      },
+    },
   };
 </script>
 
 
 <style scoped>
-  .logo-img {
-    vertical-align: middle;
+  .header-layout {
+    max-width: 100%;
+    margin: 0;
+  }
+  .tab {
+    font-weight: 500;
+    line-height: 15px;
+    letter-spacing: 0.4px;
   }
 </style>

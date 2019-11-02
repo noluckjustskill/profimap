@@ -49,12 +49,7 @@
         itemsBar: [
           {
             icon: 'mdi-star-circle',
-            title: 'Обучение',
-            to: '/'
-          },
-          {
-            icon: 'mdi-star-circle',
-            title: 'Карьера',
+            title: 'Карта профессий',
             to: '/career'
           },
           {
@@ -63,7 +58,6 @@
             to: '/tests'
           }
         ],
-        tab: null,
       };
     },
     computed: {
@@ -86,8 +80,7 @@
     padding: 5px 5px 0 0;
   }
   .content {
-    background-color: #fff;
-    /* background-color: #E5E5E5; */
+    background-color: #F8F8F8;
   }
   .burger {
     margin-right: 15px;
@@ -96,7 +89,7 @@
     max-width: 1040px;
   }
   .header-layout{
-    max-width: 1040px;
+    max-width: 1016px;
     margin: 0 auto;
   }
 </style>
