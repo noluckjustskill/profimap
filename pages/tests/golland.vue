@@ -41,15 +41,12 @@
               </template>
             </v-progress-linear>
             <v-layout
-              v-for="(row, k) in professions"
-              :key="`row${k}`"
-              :class="{ 'd-none': k !== current }"
               row
               align-center
               justify-space-around
               class="my-5"
             >
-              <v-hover v-for="(item, i) in row" :key="i" v-slot:default="{ hover }">
+              <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
                 <v-card
                   :elevation="hover ? 8 : 3"
                   class="item-card"
@@ -66,8 +63,6 @@
                   </v-card-title>
                 </v-card>
               </v-hover>
-            </v-layout>
-            <div class="text-center">
               <v-btn
                 :disabled="!current"
                 color="accent"
@@ -79,7 +74,7 @@
                 </v-icon>
                 Предыдущий вопрос
               </v-btn>
-            </div>
+            </v-layout>
           </template>
           <template v-else>
             <h4 class="title">
