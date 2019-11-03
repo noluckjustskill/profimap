@@ -76,6 +76,21 @@
           </div>
         </nuxt-link>
       </v-flex>
+      <v-flex
+        xs12
+        class="block-wrap"
+      >
+        <nuxt-link to="tests/klimov" class="test-link">
+          <div class="block second-block">
+            <h3 class="headline test-name">
+              Тест Климова
+            </h3>
+            <h4 class="subtitle-1 test-descr">
+              Оцените себя
+            </h4>
+          </div>
+        </nuxt-link>
+      </v-flex>
     </v-layout>
   </div>
 </template>

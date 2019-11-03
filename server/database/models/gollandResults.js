@@ -1,9 +1,9 @@
 const { Model } = require('objection');
 const Users = require('./users');
 
-module.exports = class SoftSkills extends Model {
+module.exports = class GollandResults extends Model {
   static get tableName() {
-    return 'softSkills';
+    return 'gollandResults';
   }
   static get idColumn() {
     return 'id';
@@ -14,7 +14,7 @@ module.exports = class SoftSkills extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
         join: {
-          from: 'softSkills.userId',
+          from: 'gollandResults.userId',
           to: 'users.id'
         },
       },
