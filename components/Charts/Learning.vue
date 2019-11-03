@@ -77,7 +77,7 @@
     methods: {
       async fetchResult() {
         const ctx = this.$refs.canvas;
-        const result = await this.$axios.$get('softSkills');
+        const result = await this.$axios.$get('gollandResults');
         
         if (isEmpty(result)) {
           this.noData = true;

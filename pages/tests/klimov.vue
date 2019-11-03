@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="display-1 page-title">
-      Тест Голланда
+      Тест Климова
     </h2>
     <v-layout
       row
@@ -19,11 +19,7 @@
               Что это?
             </h4>
             <p class="my-2 font-weight-light">
-              Вам будут предложены 43 пары профессий.
-              Из каждой пары вам нужно будет выбрать один вариант, который вам больше нравится и лучше всего подходит,
-              но не с точки зрения престижности, а с точки зрения содержания работы и вашего отношения к тому,
-              что необходимо делать. Вам нужно определить,
-              можете ли вы успешно заниматься данным видом деятельности и хотите ли вы этим заниматься.
+              Это описание
             </p>
             <v-btn :disabled="!professions || !professions.length" color="primary" @click="startTest = true">
               Начать тест
@@ -59,11 +55,15 @@
                   <v-img
                     :src="item.image"
                     :height="cardImageHeight"
-                    class="white"
-                  />
-                  <v-card-title class="card-title subtitle-1 white--text text-truncate">
-                    {{ item.name }}
-                  </v-card-title>
+                    lazy-src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                    gradient="to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.4)"
+                    class="white align-end"
+                  >
+                    <v-card-title 
+                      class="card-title subtitle-1 white--text text-center"
+                      v-text="item.name"
+                    />
+                  </v-img>
                 </v-card>
               </v-hover>
             </v-layout>
@@ -86,7 +86,7 @@
               Поздравляем!
             </h4>
             <h4 class="subtitle-1 mt-4 font-weight-medium">
-              Ваш тип личности - 
+              Ваш результат - 
               <template v-if="calculated">
                 {{ calculated }}
               </template>
@@ -158,7 +158,7 @@
       },
     },
     async asyncData({ $axios }) {
-      const professions = await $axios.$get('getGolland').catch(() => ([]));
+      const professions = await $axios.$get('getKlimov').catch(() => ([]));
       return { professions };
     },
     methods: {
@@ -179,7 +179,7 @@
         this.result.pop();
       },
       end() {
-        this.$axios.$post('postGolland', {
+        this.$axios.$post('postKlimov', {
           result: this.result,
         }).then(response => {
           const { name, recommendations = [], description } = response;
@@ -262,6 +262,8 @@
   .card-title {
     padding: 10px;
     justify-content: center;
+    line-height: 1.2;
+    word-break: break-word;
   }
   .caption {
     vertical-align: middle;

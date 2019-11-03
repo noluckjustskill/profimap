@@ -1,11 +1,11 @@
 const { get } = require('lodash');
 const { keyWithMaxValue } = require('../../utils/object');
-const { SoftSkillsModel } = require('../../database');
+const { GollandResultsModel } = require('../../database');
 
 const { answers } = require('../../config/golland/golland.json');
-const keyDictionary = require('../../config/softSkillsDictionary.json');
+const keyDictionary = require('../../config/golland/gollandSkillsDictionary.json');
 const gollandRecommendations = require('../../config/golland/gollandRecommendations.json');
-const golladDescription = require('../../config/golland/golladDescr.json');
+const golladDescription = require('../../config/golland/gollandDescr.json');
 
 const PostGollandController = async (ctx) => {
   const result = get(ctx, 'request.body.result', []);
@@ -24,12 +24,12 @@ const PostGollandController = async (ctx) => {
   const profileType = keyWithMaxValue(profileTypes);
   const profileTypeName = keyDictionary[profileType];
 
-  const softSKillUser = await SoftSkillsModel.query().findOne({ userId: ctx.user.id });
+  const gollandResultsUser = await GollandResultsModel.query().findOne({ userId: ctx.user.id });
 
-  if (softSKillUser) {
-    await softSKillUser.$query().patch(profileTypes);
+  if (gollandResultsUser) {
+    await gollandResultsUser.$query().patch(profileTypes);
   } else {
-    await SoftSkillsModel.query().insert({
+    await GollandResultsModel.query().insert({
       userId: ctx.user.id,
       ...profileTypes,
     });
