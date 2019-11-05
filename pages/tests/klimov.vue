@@ -19,7 +19,8 @@
               Что это?
             </h4>
             <p class="my-2 font-weight-light">
-              Это описание
+              Предположим, что после соответствующего обучения Вы сможете выполнить любую работу.
+              Но если бы Вам пришлось выбирать только из двух возможностей, что бы Вы предпочли?
             </p>
             <v-btn :disabled="!professions || !professions.length" color="primary" @click="startTest = true">
               Начать тест
@@ -28,7 +29,7 @@
           <template v-else-if="result.length < professions.length">
             <v-progress-linear
               :value="Math.round(current/professions.length * 100)"
-              color="primary"
+              color="accent"
               height="25"
               reactive
             >
@@ -36,6 +37,9 @@
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
               </template>
             </v-progress-linear>
+            <h3 class="my-4 font-weight-regular">
+              Выберите предпочитаемый род занятий:
+            </h3>
             <v-layout
               row
               align-center
@@ -45,22 +49,14 @@
               <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
                 <v-card
                   :elevation="hover ? 8 : 3"
-                  class="item-card"
+                  class="item-card mb-5"
                   color="primary"
                   @click="next(i)"
                 >
-                  <v-img
-                    :src="item.image"
-                    :height="cardImageHeight"
-                    lazy-src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                    gradient="to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.4)"
-                    class="white align-end"
-                  >
-                    <v-card-title 
-                      class="card-title subtitle-1 white--text text-center"
-                      v-text="item.name"
-                    />
-                  </v-img>
+                  <v-card-title 
+                    class="card-title title white--text text-center pa-6"
+                    v-text="item.name"
+                  />
                 </v-card>
               </v-hover>
               <v-btn
@@ -95,9 +91,8 @@
                 />
               </template>
             </h4>
-            <p v-if="description" class="body-2">
-              {{ description }}
-            </p>
+            <!-- eslint-disable-next-line -->
+            <p v-if="description" class="body-2" v-html="description.full" />
             <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-3">
               Профессии, которые вам подходят:
             </h4>
@@ -245,20 +240,19 @@
   }
   .item-card {
     cursor: pointer;
-    width: 45%;
-    max-width: 350px;
-
-    @media (max-width: 599px) {
-      width: 100%;
-      max-width: unset;
-      margin-bottom: 10px;
-    }
+    width: 100%;
   }
   .card-title {
-    padding: 10px;
+    height: 100px;
+    font-weight: 400;
     justify-content: center;
     line-height: 1.2;
     word-break: break-word;
+
+    @media (max-width: 599px) {
+      height: 150px;
+      font-size: 0.9rem !important;
+    }
   }
   .caption {
     vertical-align: middle;

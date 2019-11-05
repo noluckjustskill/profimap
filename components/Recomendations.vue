@@ -5,61 +5,74 @@
     tile
   >
     <v-list>
-      <v-subheader class="subtitle">
+      <v-subheader class="subtitle-1 font-weight-bold">
         Вас может заинтересовать:
       </v-subheader>
-      <v-list-item-group>
-        <v-list-item 
-          v-for="(item, i) in computedItems" 
-          :key="i" 
+      <v-layout row wrap class="list ma-0">
+        <v-flex
+          v-for="(item, n) in computedItems"
+          :key="n"
+          xs6
         >
-          <v-list-item-avatar>
-            <v-img :src="item.image" />
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title class="text-truncate" v-text="item.name" />
-          </v-list-item-content>
-        </v-list-item>
-        <v-btn 
-          class="link"
-          text
-          small 
-          color:accent
-          @click="showMore=!showMore"
-        > 
-          {{ showMore ? 'Скрыть' : 'Все рекомендации' }} 
-        </v-btn>
-      </v-list-item-group>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-img :src="item.image" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title class="caption" v-text="item.name" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-flex>
+        <v-flex xs12>
+          <v-btn 
+            class="link"
+            text
+            small
+            color:accent
+            @click="showMore=!showMore"
+          > 
+            {{ showMore ? 'Скрыть' : 'Все рекомендации' }} 
+          </v-btn>
+        </v-flex>
+      </v-layout>
     </v-list>
   </v-card>
 </template>
 
 <script>
   export default {
+    props: {
+      items: {
+        type: Array,
+        required: true,
+      },
+    },
     data() {
       return {
         showMore: false,
-        items: []
       };
     },
     computed: {
       computedItems: function() {
+        console.log(this.items);
         if (this.showMore) {
           return this.items;
         } else {
-          return this.items.slice(0, 2);
+          return this.items.slice(0, 4);
         }
       }
-    },
-    mounted() {
-      this.$axios.$get('recommendations').then(response => {
-        this.items = response;
-      });
     },
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.list {
+  width: 100%;
+
+  .v-card {
+    border: 0;
+  }
+}
 .link {
   text-decoration: none;
   font-size: 12px;
@@ -73,15 +86,12 @@
   border-radius: 5px;
 }
 
-.recomendation.mrg {
-  margin-right: 10px !important;
+.caption {
+  color: #1782FF !important;
 }
 
-.subtitle {
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
+.subtitle-1 {
   color: black;
 }
+
 </style>

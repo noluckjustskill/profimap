@@ -40,6 +40,9 @@
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
               </template>
             </v-progress-linear>
+            <h3 class="my-4 font-weight-regular">
+              Выберите одну из профессий:
+            </h3>
             <v-layout
               row
               align-center
