@@ -49,8 +49,8 @@
         itemsBar: [
           {
             icon: 'mdi-star-circle',
-            title: 'Карта профессий',
-            to: '/career'
+            title: 'Портфолио',
+            to: '/'
           },
           {
             icon: 'mdi-star-circle',

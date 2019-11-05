@@ -7,17 +7,23 @@
     justify-start
     class="header-layout"
   >
-    <v-flex xs12>
+    <v-flex xs3>
+      <nuxt-link to="/">
+        <v-img
+          :src="require('~/assets/logo.png')"
+          :height="48"
+          :max-width="125"
+          class="ml-2"
+        />
+      </nuxt-link>
+    </v-flex>
+    <v-flex xs9>
       <v-tabs
         v-model="tab"
         :color="$vuetify.theme.themes.light.primary"
         :centered="centered"
         :fixed-tabs="fixed"
-        :hide-slider="hideSlider"
       >
-        <v-tab to="/" active-class="selected">
-          <v-img :src="require('~/assets/logo.png')" width="125" />
-        </v-tab>
         <v-tab
           v-for="(item, i) in items"
           :key="i"
@@ -42,14 +48,6 @@
         </v-btn>
       </div>
       <v-list>
-        <v-list-item to="/" router exact>
-          <v-list-item-action>
-            <v-icon>mdi-star-circle</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="`Профиль`" />
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -93,11 +91,6 @@
       drawer: false,
       overlay: false
     }),
-    computed: {
-      hideSlider() {
-        return this.tab === '/';
-      },
-    },
   };
 </script>
 

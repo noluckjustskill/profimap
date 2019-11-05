@@ -16,11 +16,11 @@
         justify-space-between
         class="row"
       >
-        <v-flex md7 xs12>
+        <v-flex md6 xs12>
           <UserInfo />
         </v-flex>
-        <v-flex md4 xs12>
-          <Recomendation />
+        <v-flex md6 xs12 class="recommendation">
+          <Recomendation :items="recomendations" />
         </v-flex>
       </v-layout>
     </v-flex>
@@ -32,7 +32,7 @@
     >
       <div class="block">
         <div class="text">
-          Тип личности  
+          Soft skills
         </div>
         <Learning />
       </div>
@@ -43,33 +43,35 @@
       xs12
       class="block-wrap"
     >
-      <div class="block">
-        <div class="text">
-          Навыки
-        </div>
-        <Skills />
-      </div>
+      <!-- <Skills> -->
+      <PersonType />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
   import UserInfo from '../components/UserInfo';
-  import Skills from '../components/Skills';
+  //import Skills from '../components/Skills';
+  import PersonType from '../components/PersonType';
   import Learning from '../components/Charts/Learning';
   import Recomendation from '../components/Recomendations';
 
   export default {
     components: {
       UserInfo,
-      Skills,
+      //Skills,
+      PersonType,
       Learning,
       Recomendation
-    }
+    },
+    async asyncData({ $axios }) {
+      const recomendations = await $axios.$get('recommendations').catch(() => ([]));
+      return { recomendations };
+    },
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .row {
     max-width: 100%;
     margin: 0 auto;
@@ -92,5 +94,11 @@
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
+  }
+  .recommendation {
+    padding-left: 10px;
+    @media (max-width: 959px) {
+      padding: 0;
+    }
   }
 </style>
