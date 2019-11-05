@@ -62,6 +62,11 @@
         }
       }
     },
+    mounted() {
+      this.$axios.$get('recommendations').then(response => {
+        this.items = response;
+      });
+    },
   };
 </script>
 
