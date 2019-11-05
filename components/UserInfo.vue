@@ -52,7 +52,7 @@
     }
   }
   .card {
-    background: transparent;
+    background-color: transparent !important;
   }
   .initials {
     font-size: 22px;

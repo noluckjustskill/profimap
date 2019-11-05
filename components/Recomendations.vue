@@ -54,7 +54,6 @@
     },
     computed: {
       computedItems: function() {
-        console.log(this.items);
         if (this.showMore) {
           return this.items;
         } else {
