@@ -14,7 +14,7 @@
         <v-list-item-title class="headline font-weight-medium">
           {{ user.name }}
         </v-list-item-title>
-        <v-list-item-subtitle>Начинающий сценарист</v-list-item-subtitle>
+        <!-- <v-list-item-subtitle>Начинающий сценарист</v-list-item-subtitle> -->
       </v-list-item-content>
     </v-list-item>
   </v-card>

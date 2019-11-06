@@ -12,7 +12,7 @@
     { "image": "/images/archive_worker.jpg", "name": "Работник архива" }, { "image": "/images/cashier.jpg", "name": "Контроллер-кассир" }, { "image": "/images/typewriter.jpg", "name": "Наборщик типографии" }, { "image": "/images/blueprint_copier.jpg", "name": "Копировальщик чертежей" }, { "image": "/images/financial_controller.jpg", "name": "Финансовый контролер" }
   ],
   "enterprisingType": [
-    { "image": "/images/director.jpg", "name": "Директор" }, { "image": "/images/administrator.jpg", "name": "Администратор" }, { "image": "/images/business_owner.jpg", "name": "Предприниматель" }, { "name": "Глава администрации" }, { "image": "/images/manager.jpg", "name": "Менеджер" }
+    { "image": "/images/director.jpg", "name": "Директор" }, { "image": "/images/administrator.jpg", "name": "Администратор" }, { "image": "/images/business_owner.jpg", "name": "Предприниматель" }, { "image": "/images/head_of_administration.jpg", "name": "Глава администрации" }, { "image": "/images/manager.jpg", "name": "Менеджер" }
   ],
   "artisticType": [
     { "image": "/images/musician.jpg", "name": "Музыкант-исполнитель" }, { "image": "/images/composer.jpg", "name": "Композитор" },  { "image": "/images/interior_artist.jpg", "name": "Художник по интерьеру" }, { "image": "/images/writer.jpg", "name": "Писатель" }, { "image": "/images/actor.jpg", "name": "Актер" } 

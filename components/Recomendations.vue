@@ -12,7 +12,8 @@
         <v-flex
           v-for="(item, n) in computedItems"
           :key="n"
-          xs6
+          sm6
+          xs12
         >
           <v-list-item>
             <v-list-item-avatar>
