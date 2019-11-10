@@ -1,5 +1,6 @@
 const { Model } = require('objection');
-const Users = require('./users');
+const Users = require('../users');
+const KlimovTypes = require('./klimovTypes');
 
 module.exports = class KlimovResults extends Model {
   static get tableName() {
@@ -10,7 +11,7 @@ module.exports = class KlimovResults extends Model {
   }
   static get relationMappings() {
     return {
-      owner: {
+      user: {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
         join: {
@@ -18,6 +19,14 @@ module.exports = class KlimovResults extends Model {
           to: 'users.id'
         },
       },
+      klimovType: {
+        relatiom: Model.BelongsToOneRelation,
+        modelClass: KlimovTypes,
+        join: {
+          from: 'klimovResults.klimovTypeId',
+          to: 'klimovTypes.id'
+        }
+      }
     };
   }
 };

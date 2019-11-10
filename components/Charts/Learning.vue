@@ -1,7 +1,13 @@
 <template>
-  <div>
+  <v-card
+    class="elevation-0 skills pb-4"
+    tile
+  >
+    <v-card-title class="title">
+      Софт скиллы
+    </v-card-title>
     <Preloader v-if="!myChart && !noData" :width="loaderSize" :height="loaderSize" />
-    <canvas ref="canvas" height="250" />
+    <canvas ref="canvas" height="250" class="px-4" />
     <div v-if="!myChart && noData" class="no-data text-center">
       <h3 class="headline">
         Для Вас нет статистики :(
@@ -13,7 +19,7 @@
         </h4>
       </nuxt-link>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -105,6 +111,10 @@
 </script>
 
 <style scoped>
+  .skills {
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+  }
   .no-data {
     margin: 50px 0;
   }

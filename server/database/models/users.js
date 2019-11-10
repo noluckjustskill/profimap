@@ -1,7 +1,7 @@
 const { Model } = require('objection');
 const AuthUsers = require('./authUsers');
-const GollandResults = require('./gollandResults');
-const KlimovResults = require('./klimovResults');
+const GollandResults = require('./golland/gollandResults');
+const KlimovResults = require('./klimov/klimovResults');
 
 module.exports = class Users extends Model {
   static get tableName() {

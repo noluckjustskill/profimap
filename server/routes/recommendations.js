@@ -1,13 +1,15 @@
-const { GollandResultsModel } = require('../database');
-const { keyWithMaxValue } = require('../utils/object');
-const { omit } = require('lodash');
-const recommendations = require('../config/golland/gollandRecommendations.json');
+const { getProfileType, getRecommendations } = require('../services/testGolland');
 
 const RecommendationsController = async (ctx) => {
-  const user = await GollandResultsModel.query().findOne({ userId: ctx.user.id }) || {};
-  const userType = keyWithMaxValue(omit(user, ['id', 'userId']));
-  const recommendation = userType ? recommendations[userType] : [];
-  ctx.body = recommendation;
+  const profileType = await getProfileType(ctx.user.id);
+  const recommendations = [];
+
+  if (profileType) {
+    const profileRecommendations = await getRecommendations(profileType.name);
+    recommendations.push(...profileRecommendations);
+  }
+
+  ctx.body = recommendations;
 };
 
 const RecommendationsRoute = '/recommendations';

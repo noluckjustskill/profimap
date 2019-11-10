@@ -1,5 +1,6 @@
 const { Model } = require('objection');
-const Users = require('./users');
+const Users = require('../users');
+const GollandTypes = require('./gollandTypes');
 
 module.exports = class GollandResults extends Model {
   static get tableName() {
@@ -10,7 +11,7 @@ module.exports = class GollandResults extends Model {
   }
   static get relationMappings() {
     return {
-      owner: {
+      user: {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
         join: {
@@ -18,6 +19,14 @@ module.exports = class GollandResults extends Model {
           to: 'users.id'
         },
       },
+      gollandType: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: GollandTypes,
+        join: {
+          from: 'gollandResults.gollandTypeId',
+          to: 'gollandTypes.id'
+        }
+      }
     };
   }
 };

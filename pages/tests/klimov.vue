@@ -13,7 +13,7 @@
         xs12
         class="block-wrap"
       >
-        <div class="block second-block">
+        <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
             <h4 class="title">
               Что это?
@@ -72,57 +72,36 @@
               </v-btn>
             </v-layout>
           </template>
-          <template v-else>
-            <h4 class="title">
-              Поздравляем!
-            </h4>
-            <h4 class="subtitle-1 mt-4 font-weight-medium">
-              Ваш результат - 
-              <template v-if="calculated">
-                {{ calculated }}
-              </template>
-              <template v-else>
-                <span class="caption font-weight-light gray">Загружаем</span>
-                <v-progress-circular
-                  indeterminate
-                  size="16"
-                  width="2"
-                  class="ml-1"
-                />
-              </template>
-            </h4>
-            <!-- eslint-disable-next-line -->
-            <p v-if="description" class="body-2" v-html="description.full" />
-            <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-3">
-              Профессии, которые вам подходят:
-            </h4>
-            <v-layout row :justify-center="isMobile" class="mt-1 mb-3">
-              <v-card
-                v-for="(item, i) in recommendations"
-                :key="`rcmd${i}`"
-                width="200"
-                class="mr-3 mb-3"
-                color="primary"
-              >
-                <v-img
-                  :src="item.image"
-                  :height="cardImageHeight / 1.5"
-                  class="white"
-                />
-                <v-card-title class="card-title subtitle-2 white--text text-truncate">
-                  {{ item.name }}
-                </v-card-title>
-              </v-card>
-            </v-layout>
-            <v-btn
-              :block="isMobile"
-              to="/tests"
-              color="primary"
-              class="mt-2"
-            >
-              Выбрать другой тест
-            </v-btn>
-          </template>
+        </div>
+        <div v-else class="block second-block">
+          <h4 class="title">
+            Поздравляем!
+          </h4>
+          <h4 class="subtitle-1 mt-4 font-weight-medium">
+            Ваш результат - 
+            <template v-if="calculated">
+              {{ calculated }}
+            </template>
+            <template v-else>
+              <span class="caption font-weight-light gray">Загружаем</span>
+              <v-progress-circular
+                indeterminate
+                size="16"
+                width="2"
+                class="ml-1"
+              />
+            </template>
+          </h4>
+          <!-- eslint-disable-next-line -->
+          <p v-if="description" class="body-2" v-html="description" />
+          <v-btn
+            :block="isMobile"
+            to="/tests"
+            color="primary"
+            class="mt-2"
+          >
+            Выбрать другой тест
+          </v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -130,13 +109,17 @@
 </template>
 
 <script>
+  import { isEmpty } from 'lodash';
+
   export default {
     data: () => ({
+      hasResult: false,
+
       startTest: false,
       current: 0,
       result: [],
+
       calculated: null,
-      recommendations: null,
       description: null,
     }),
     computed: {
@@ -148,8 +131,18 @@
       },
     },
     async asyncData({ $axios }) {
-      const professions = await $axios.$get('getKlimov').catch(() => ([]));
-      return { professions };
+      const result = await $axios.$get('klimovResults').catch(() => ({}));
+
+      if (!result || isEmpty(result)) {
+        const professions = await $axios.$get('getKlimov').catch(() => ([]));
+        return { professions };
+      }
+
+      return {
+        hasResult: true,
+        calculated: result.name,
+        description: result.fullText,
+      };
     },
     methods: {
       next(index) {
@@ -172,15 +165,15 @@
         this.$axios.$post('postKlimov', {
           result: this.result,
         }).then(response => {
-          const { name, recommendations = [], description } = response;
+          const { name, fullText } = response;
           
           if (!name) {
             throw new Error('Can not fetch name');
           }
 
+          this.hasResult = true;
           this.calculated = name;
-          this.recommendations = recommendations;
-          this.description = description;
+          this.description = fullText;
         }).catch(err => {
           console.error(err);
         });
