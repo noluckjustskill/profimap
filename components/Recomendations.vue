@@ -24,7 +24,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-flex>
-        <v-flex xs12>
+        <v-flex v-if="items.length > listCount" xs12>
           <v-btn 
             class="link"
             text
@@ -54,11 +54,14 @@
       };
     },
     computed: {
+      listCount() {
+        return this.$vuetify.breakpoint.smAndDown ? 2 : 4;
+      },
       computedItems: function() {
         if (this.showMore) {
           return this.items;
         } else {
-          return this.items.slice(0, 4);
+          return this.items.slice(0, this.listCount);
         }
       }
     },

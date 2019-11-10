@@ -1,7 +1,7 @@
-const { tasks } = require('../../config/golland/golland.json');
+const { getTasks } = require('../../services/testGolland');
 
 const GetGollandController = async (ctx) => {
-  ctx.body = tasks;
+  ctx.body = await getTasks();
 };
 
 const GetGollandRoute = '/getGolland';

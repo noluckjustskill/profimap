@@ -30,12 +30,7 @@
       xs12
       class="block-wrap"
     >
-      <div class="block">
-        <div class="text">
-          Soft skills
-        </div>
-        <Learning />
-      </div>
+      <Learning />
     </v-flex>
     <v-flex
       lg6
