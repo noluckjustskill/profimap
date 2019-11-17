@@ -1,10 +1,10 @@
 const { Model } = require('objection');
 const Users = require('../users');
-const KlimovTypes = require('./klimovTypes');
+const BelbinTypes = require('./belbinTypes');
 
-module.exports = class KlimovResults extends Model {
+module.exports = class BelbinResults extends Model {
   static get tableName() {
-    return 'klimovResults';
+    return 'belbinResults';
   }
   static get idColumn() {
     return 'id';
@@ -15,16 +15,16 @@ module.exports = class KlimovResults extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
         join: {
-          from: 'klimovResults.userId',
+          from: 'belbinResults.userId',
           to: 'users.id'
         },
       },
-      klimovType: {
+      belbinType: {
         relatiom: Model.BelongsToOneRelation,
-        modelClass: KlimovTypes,
+        modelClass: BelbinTypes,
         join: {
-          from: 'klimovResults.klimovTypeId',
-          to: 'klimovTypes.id'
+          from: 'belbinResults.belbinTypeId',
+          to: 'belbinTypes.id'
         }
       }
     };
@@ -32,11 +32,11 @@ module.exports = class KlimovResults extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'klimovTypeId', 'result'],
+      required: ['userId', 'belbinTypeId', 'result'],
       properties: {
         id: { type: 'integer' },
         userId: { type: 'integer' },
-        klimovTypeId: { type: 'integer' },
+        belbinTypeId: { type: 'integer' },
         result: { type: 'decimal' }
       }
     };
