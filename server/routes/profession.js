@@ -1,6 +1,7 @@
 const { getProfession } = require('../services/professions');
 const { get } = require('lodash');
 const { NotFoundError, BadRequestError } = require('http-custom-errors');
+const staticUrl = process.env.STATIC_URL;
 
 const ProfessionController = async (ctx) => {
   const param = get(ctx, 'request.query.id');
@@ -12,6 +13,7 @@ const ProfessionController = async (ctx) => {
   if (!res) {
     throw new NotFoundError('Profession not found');
   }
+  res.image = `${staticUrl}/${res.image}`;
   ctx.body = res;
 };
 
