@@ -15,14 +15,16 @@
           sm6
           xs12
         >
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-img :src="item.image" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title class="caption" v-text="item.name" />
-            </v-list-item-content>
-          </v-list-item>
+          <nuxt-link :to="`professions/${item.id}`" class="nuxtLink">
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img :src="item.image" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title class="caption" v-text="item.name" />
+              </v-list-item-content>
+            </v-list-item>
+          </nuxt-link>
         </v-flex>
         <v-flex v-if="items.length > listCount" xs12>
           <v-btn 
@@ -100,6 +102,10 @@
 
 .subtitle-1 {
   color: black;
+}
+
+.nuxtLink {
+  text-decoration: none;
 }
 
 </style>

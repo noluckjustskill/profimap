@@ -13,7 +13,6 @@ const {
 const Knex = require('knex');
 const { Model, knexSnakeCaseMappers } = require('objection');
 const UsersModel = require('./models/users');
-const AuthUsersModel = require('./models/authUsers');
 const GollandResultsModel = require('./models/golland/gollandResults');
 const KlimovResultsModel = require('./models/klimov/klimovResults');
 const GollandTasksModel = require('./models/golland/gollandTasks');
@@ -47,7 +46,6 @@ Model.knex(knex);
 module.exports = {
   knex,
   UsersModel,
-  AuthUsersModel,
   GollandResultsModel,
   GollandTasksModel,
   GollandTypesModel,
