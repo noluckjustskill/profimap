@@ -37,7 +37,7 @@ module.exports = class GollandResults extends Model {
         id: { type: 'integer' },
         userId: { type: 'integer' },
         gollandTypeId: { type: 'integer' },
-        result: { type: 'integer' }
+        result: { type: 'decimal' }
       }
     };
   }

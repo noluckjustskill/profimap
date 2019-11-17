@@ -21,6 +21,9 @@ const GollandTypesModel = require('./models/golland/gollandTypes');
 const KlimovTypesModel = require('./models/klimov/klimovTypes');
 const GollandRecommendationsModel = require('./models/golland/gollandRecommendations');
 const ProfessionsModel = require('./models/professions');
+const BelbinTasksModel = require('./models/belbin/belbinTasks');
+const BelbinTypesModel = require('./models/belbin/belbinTypes');
+const BelbinResultsModel = require('./models/belbin/belbinResults');
 
 const knex = Knex({
   client: 'mysql', 
@@ -53,5 +56,8 @@ module.exports = {
   KlimovResultsModel,
   KlimovTasksModel,
   KlimovTypesModel,
-  ProfessionsModel
+  ProfessionsModel,
+  BelbinTasksModel,
+  BelbinTypesModel,
+  BelbinResultsModel,
 };
