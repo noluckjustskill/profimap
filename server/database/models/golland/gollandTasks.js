@@ -28,4 +28,15 @@ module.exports = class GollandTasks extends Model {
       }
     };
   }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['letId', 'rightId'],
+      properties: {
+        id: { type: 'integer' },
+        leftId: { type: 'integer' },
+        rightId: { type: 'integer' }
+      }
+    };
+  }
 };

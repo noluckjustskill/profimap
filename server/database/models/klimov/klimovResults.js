@@ -29,4 +29,16 @@ module.exports = class KlimovResults extends Model {
       }
     };
   }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['userId', 'klimovTypeId', 'result'],
+      properties: {
+        id: { type: 'integer' },
+        userId: { type: 'integer' },
+        klimovTypeId: { type: 'integer' },
+        result: { type: 'integer' }
+      }
+    };
+  }
 };

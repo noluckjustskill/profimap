@@ -15,6 +15,7 @@ const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGoll
 const { PostGollandController, PostGollandRoute } = require('./gollandTest/postGolland');
 const { GollandProfileController, GollandProfileRoute } = require('./gollandTest/gollandProfile');
 const { RecommendationsController, RecommendationsRoute } = require('./recommendations');
+const { ProfessionController, ProfessionRoute } = require('./profession');
 
 const { KlimovResultsController, KlimovResultsRoute } = require('./klimovTest/klimovResults');
 const { GetKlimovController, GetKlimovRoute } = require('./klimovTest/getKlimov');
@@ -34,6 +35,7 @@ router.get(`/api${GetGollandRoute}`, GetGollandController);
 router.post(`/api${PostGollandRoute}`, PostGollandController);
 router.get(`/api${GollandProfileRoute}`, GollandProfileController);
 router.get(`/api${RecommendationsRoute}`, RecommendationsController);
+router.get(`/api${ProfessionRoute}`, ProfessionController);
 
 router.get(`/api${KlimovResultsRoute}`, KlimovResultsController);
 router.get(`/api${GetKlimovRoute}`, GetKlimovController);

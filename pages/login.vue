@@ -123,7 +123,9 @@
       const token = this.$route.query.token;
 
       if (token) {
-        this.$auth.setUserToken(token);
+        this.$auth.setUserToken(token).catch(() => {
+          this.preloader = false;
+        });
       } else {
         this.preloader = false;
       }

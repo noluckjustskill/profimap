@@ -1,15 +1,9 @@
 require('dotenv').config();
 
-const Koa = require('koa');
-const passport = require('./services/passport');
-const bodyParser = require('koa-bodyparser');
-const staticFolder = require('koa-static');
-const mount = require('koa-mount');
 const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
-const router = require('./routes/index');
 
-const app = new Koa();
+const app = require('./koa');
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js');
@@ -31,17 +25,6 @@ async function start () {
     await nuxt.ready();
   }
 
-  // Init passport
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-  // Init routes
-  app.use(bodyParser());
-  app.use(router.routes()).use(router.allowedMethods());
-
-  // Static folder
-  app.use(mount(process.env.STATIC_URL, staticFolder(process.env.STATIC_DIR)));
-
   // Init SSR
   app.use((ctx) => {
     ctx.status = 200;
@@ -51,10 +34,11 @@ async function start () {
   });
 
   //Start server
-  app.listen(PORT, HOST);
-  consola.ready({
-    message: `Server listening on http://${HOST}:${PORT}`,
-    badge: true
+  app.listen(PORT, HOST, () => {
+    consola.ready({
+      message: `Server listening on http://${HOST}:${PORT}`,
+      badge: true
+    });
   });
 }
 

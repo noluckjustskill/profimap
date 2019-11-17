@@ -113,14 +113,16 @@
               class="mr-3 mb-3"
               color="primary"
             >
-              <v-img
-                :src="item.image"
-                :height="cardImageHeight / 1.5"
-                class="white"
-              />
-              <v-card-title class="card-title subtitle-2 white--text text-truncate">
-                {{ item.name }}
-              </v-card-title>
+              <nuxt-link :to="`/professions/${item.id}`" class="nuxtLink">
+                <v-img
+                  :src="item.image"
+                  :height="cardImageHeight / 1.5"
+                  class="white"
+                />
+                <v-card-title class="card-title subtitle-2 white--text text-truncate">
+                  {{ item.name }}
+                </v-card-title>
+              </nuxt-link>
             </v-card>
           </v-layout>
           <v-btn
@@ -280,5 +282,8 @@
   }
   .caption {
     vertical-align: middle;
+  }
+  .nuxtLink {
+    text-decoration: none;
   }
 </style>

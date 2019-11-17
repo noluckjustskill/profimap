@@ -29,4 +29,15 @@ module.exports = class GollandRecommendations extends Model {
       }
     };
   }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['gollandTypeId', 'professionId'],
+      properties: {
+        id: { type: 'integer' },
+        gollandTypeId: { type: 'integer' },
+        professionId: { type: 'integer' }
+      }
+    };
+  }
 };

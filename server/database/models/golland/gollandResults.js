@@ -29,4 +29,16 @@ module.exports = class GollandResults extends Model {
       }
     };
   }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['userId', 'gollandTypeId', 'result'],
+      properties: {
+        id: { type: 'integer' },
+        userId: { type: 'integer' },
+        gollandTypeId: { type: 'integer' },
+        result: { type: 'integer' }
+      }
+    };
+  }
 };
