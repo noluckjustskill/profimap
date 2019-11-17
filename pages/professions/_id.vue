@@ -42,7 +42,7 @@
         class="block-wrap"
       >
         <div>
-          <div class="block">
+          <div v-if="profession.fullDescr" class="block">
             <h3 class="title sub">
               Задачи
             </h3>
@@ -50,7 +50,7 @@
               {{ profession.fullDescr }}
             </h4>
           </div>
-          <div class="block">
+          <div v-if="profession.education" class="block">
             <h3 class="title sub">
               Образование
             </h3>
@@ -66,7 +66,7 @@
         class="block-wrap"
       >
         <div>
-          <div class="block">
+          <div v-if="profession.requirements" class="block">
             <h3 class="title sub">
               Особенности
             </h3>
@@ -74,7 +74,7 @@
               {{ profession.requirements }}
             </h4>
           </div>
-          <div class="block">
+          <div v-if="profession.dangerous" class="block">
             <h3 class="title sub">
               Недостатки
             </h3>
