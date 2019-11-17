@@ -101,7 +101,7 @@
         <nuxt-link to="tests/belbin" class="test-link">
           <div class="block second-block">
             <h3 class="headline test-name">
-              Тест Белбин
+              Тест Белбина
             </h3>
             <h4 class="subtitle-1 test-descr">
               Описание теста Белбина

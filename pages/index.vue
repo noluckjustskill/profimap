@@ -40,6 +40,7 @@
     >
       <!-- <Skills> -->
       <PersonType />
+      <TeamRole />
     </v-flex>
   </v-layout>
 </template>
@@ -48,6 +49,7 @@
   import UserInfo from '../components/UserInfo';
   //import Skills from '../components/Skills';
   import PersonType from '../components/PersonType';
+  import TeamRole from '../components/TeamRole';
   import Learning from '../components/Charts/Learning';
   import Recomendation from '../components/Recomendations';
 
@@ -56,6 +58,7 @@
       UserInfo,
       //Skills,
       PersonType,
+      TeamRole,
       Learning,
       Recomendation
     },
@@ -74,15 +77,6 @@
   .block-wrap {
     padding: 10px;
     box-sizing: border-box;
-  }
-  .block {
-    font-size: 18px;
-    font-weight: 500;
-    border: 1px solid #c0c0c0;
-    border-radius: 5px;
-    padding: 10px;
-    box-sizing: border-box;
-    background: white;
   }
   .text {
     font-family: Roboto;
