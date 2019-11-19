@@ -96,6 +96,17 @@
           <p v-if="description" class="body-2" v-html="description" />
           <v-btn
             :block="isMobile"
+            color="accent"
+            class="mt-2 mr-1"
+            @click="restart"
+          >
+            <v-icon left>
+              mdi-cached
+            </v-icon>
+            Пройти заново
+          </v-btn>
+          <v-btn
+            :block="isMobile"
             to="/tests"
             color="primary"
             class="mt-2"
@@ -109,7 +120,7 @@
 </template>
 
 <script>
-  import { isEmpty } from 'lodash';
+  import { isEmpty, get } from 'lodash';
 
   export default {
     data: () => ({
@@ -132,16 +143,13 @@
     },
     async asyncData({ $axios }) {
       const result = await $axios.$get('klimovResults').catch(() => ({}));
-
-      if (!result || isEmpty(result)) {
-        const professions = await $axios.$get('getKlimov').catch(() => ([]));
-        return { professions };
-      }
+      const professions = await $axios.$get('getKlimov').catch(() => ([]));
 
       return {
-        hasResult: true,
-        calculated: result.name,
-        description: result.fullText,
+        professions,
+        hasResult: !isEmpty(result),
+        calculated: get(result, 'name'),
+        description: get(result, 'fullText'),
       };
     },
     methods: {
@@ -177,6 +185,13 @@
         }).catch(err => {
           console.error(err);
         });
+      },
+      restart() {
+        this.hasResult = false;
+
+        this.startTest = true;
+        this.current = 0;
+        this.result = [];
       },
     },
   };

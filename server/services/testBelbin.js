@@ -55,6 +55,9 @@ const getProfileResult = async (userId) => {
 };
 
 const insertResult = async (userId, result = {}) => {
+  // Delete old results
+  await BelbinResultsModel.query().delete().where({ userId });
+
   const profileTypes = {};
 
   await Promise.all(Object.keys(answers).map(typeName => {

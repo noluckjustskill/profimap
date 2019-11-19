@@ -77,6 +77,9 @@ const getRecommendations = async (typeName) => {
 };
 
 const insertResult = async (userId, result = []) => {
+  // Delete old results
+  await GollandResultsModel.query().delete().where({ userId });
+
   const profileTypes = {};
 
   await Promise.all(Object.keys(answers).map(typeName => {

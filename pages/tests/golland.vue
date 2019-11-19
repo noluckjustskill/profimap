@@ -127,6 +127,17 @@
           </v-layout>
           <v-btn
             :block="isMobile"
+            color="accent"
+            class="mt-2 mr-1"
+            @click="restart"
+          >
+            <v-icon left>
+              mdi-cached
+            </v-icon>
+            Пройти заново
+          </v-btn>
+          <v-btn
+            :block="isMobile"
             to="/tests"
             color="primary"
             class="mt-2"
@@ -140,7 +151,7 @@
 </template>
 
 <script>
-  import { isEmpty } from 'lodash';
+  import { isEmpty, get } from 'lodash';
 
   export default {
     data: () => ({
@@ -164,17 +175,14 @@
     },
     async asyncData({ $axios }) {
       const result = await $axios.$get('gollandProfile').catch(() => ({}));
-
-      if (!result || isEmpty(result)) {
-        const professions = await $axios.$get('getGolland').catch(() => ([]));
-        return { professions };
-      }
+      const professions = await $axios.$get('getGolland').catch(() => ([]));
 
       return {
-        hasResult: true,
-        calculated: result.name,
-        recommendations: result.recommendations,
-        description: result.description,
+        professions,
+        hasResult: !isEmpty(result),
+        calculated: get(result, 'name'),
+        recommendations: get(result, 'recommendations'),
+        description: get(result, 'description'),
       };
     },
     methods: {
@@ -211,6 +219,13 @@
         }).catch(err => {
           console.error(err);
         });
+      },
+      restart() {
+        this.hasResult = false;
+
+        this.startTest = true;
+        this.current = 0;
+        this.result = [];
       },
     },
   };

@@ -14,8 +14,14 @@ module.exports = async (ctx, next) => {
 
     await next();
   } catch (err) {
-    ctx.status = err.code || 500;
-    ctx.body = err.message;
+    const status = Number(err.code);
+    if (status) {
+      ctx.status = status;
+      ctx.body = err.message;
+    } else {
+      ctx.status = 500;
+    }
+
     ctx.app.emit('error', err, ctx);
   }
 };

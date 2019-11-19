@@ -53,7 +53,8 @@
                 v-for="(item, i) in tasks[current]"
                 :key="i"
                 md3
-                xs6
+                sm6
+                xs12
               >
                 <v-card
                   :elevation="3"
@@ -131,6 +132,17 @@
           </p>
           <v-btn
             :block="isMobile"
+            color="accent"
+            class="mt-2 mr-1"
+            @click="restart"
+          >
+            <v-icon left>
+              mdi-cached
+            </v-icon>
+            Пройти заново
+          </v-btn>
+          <v-btn
+            :block="isMobile"
             to="/tests"
             color="primary"
             class="mt-2"
@@ -144,7 +156,7 @@
 </template>
 
 <script>
-  import { isEmpty } from 'lodash';
+  import { isEmpty, get } from 'lodash';
 
   export default {
     data: () => ({
@@ -174,17 +186,14 @@
     },
     async asyncData({ $axios }) {
       const result = await $axios.$get('belbinResults').catch(() => ({}));
-
-      if (!result || isEmpty(result)) {
-        const tasks = await $axios.$get('getBelbin').catch(() => ([]));
-        return { tasks };
-      }
+      const tasks = await $axios.$get('getBelbin').catch(() => ([]));
 
       return {
-        hasResult: true,
-        calculated: result.name,
-        description: result.descr,
-        func: result.func,
+        tasks,
+        hasResult: !isEmpty(result),
+        calculated: get(result, 'name'),
+        description: get(result, 'descr'),
+        func:get(result, 'func'),
       };
     },
     methods: {
@@ -255,6 +264,13 @@
           console.error(err);
         });
       },
+      restart() {
+        this.hasResult = false;
+
+        this.startTest = true;
+        this.current = 0;
+        this.result = {};
+      },
     },
   };
 </script>
@@ -322,7 +338,7 @@
     word-break: break-word;
 
     @media (max-width: 599px) {
-      height: 180px;
+      height: 150px;
       font-size: 0.9rem !important;
     }
   }
