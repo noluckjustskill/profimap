@@ -1,4 +1,4 @@
-const { keyWithMaxValue } = require('../server/utils/object');
+const { keyWithMaxValue } = require('../../server/utils/object');
 
 test('keyWithMaxValue({}) returns undefined', () => {
   expect(keyWithMaxValue({})).toBe(undefined);

@@ -1,4 +1,4 @@
-import { initials } from '../utils/userUtils';
+import { initials } from '../../utils/userUtils';
 
 test('initials("Ivanov Ivan") returns string', () => {
   expect(typeof(initials('Ivanov Ivan'))).toBe('string');

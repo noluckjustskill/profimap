@@ -1,7 +1,6 @@
 const { Model } = require('objection');
-const AuthUsers = require('./authUsers');
-const GollandResults = require('./gollandResults');
-const KlimovResults = require('./klimovResults');
+const GollandResults = require('./golland/gollandResults');
+const KlimovResults = require('./klimov/klimovResults');
 
 module.exports = class Users extends Model {
   static get tableName() {
@@ -12,14 +11,6 @@ module.exports = class Users extends Model {
   }
   static get relationMappings() {
     return {
-      auth_users: {
-        relation: Model.HasManyRelation,
-        modelClass: AuthUsers,
-        join: {
-          from: 'users.id',
-          to: 'authUsers.userId'
-        },
-      },
       gollandResults: {
         relation: Model.HasManyRelation,
         modelClass: GollandResults,
@@ -35,6 +26,20 @@ module.exports = class Users extends Model {
           from: 'users.id',
           to: 'klimovResults.userId'
         }
+      }
+    };
+  }
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['name', 'email'],
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string' },
+        email: { type: 'string' },
+        externalId: { type: 'string' },
+        password: { type: 'string' },
+        picture: { type: 'string' }
       }
     };
   }

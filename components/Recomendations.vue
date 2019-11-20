@@ -12,18 +12,21 @@
         <v-flex
           v-for="(item, n) in computedItems"
           :key="n"
-          xs6
+          sm6
+          xs12
         >
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-img :src="item.image" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title class="caption" v-text="item.name" />
-            </v-list-item-content>
-          </v-list-item>
+          <nuxt-link :to="`professions/${item.id}`" class="nuxtLink">
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img :src="item.image" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title class="caption" v-text="item.name" />
+              </v-list-item-content>
+            </v-list-item>
+          </nuxt-link>
         </v-flex>
-        <v-flex xs12>
+        <v-flex v-if="items.length > listCount" xs12>
           <v-btn 
             class="link"
             text
@@ -53,11 +56,14 @@
       };
     },
     computed: {
+      listCount() {
+        return this.$vuetify.breakpoint.smAndDown ? 2 : 4;
+      },
       computedItems: function() {
         if (this.showMore) {
           return this.items;
         } else {
-          return this.items.slice(0, 4);
+          return this.items.slice(0, this.listCount);
         }
       }
     },
@@ -96,6 +102,10 @@
 
 .subtitle-1 {
   color: black;
+}
+
+.nuxtLink {
+  text-decoration: none;
 }
 
 </style>

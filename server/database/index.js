@@ -13,9 +13,17 @@ const {
 const Knex = require('knex');
 const { Model, knexSnakeCaseMappers } = require('objection');
 const UsersModel = require('./models/users');
-const AuthUsersModel = require('./models/authUsers');
-const GollandResultsModel = require('./models/gollandResults');
-const KlimovResultsModel = require('./models/klimovResults');
+const GollandResultsModel = require('./models/golland/gollandResults');
+const KlimovResultsModel = require('./models/klimov/klimovResults');
+const GollandTasksModel = require('./models/golland/gollandTasks');
+const KlimovTasksModel = require('./models/klimov/klimovTasks');
+const GollandTypesModel = require('./models/golland/gollandTypes');
+const KlimovTypesModel = require('./models/klimov/klimovTypes');
+const GollandRecommendationsModel = require('./models/golland/gollandRecommendations');
+const ProfessionsModel = require('./models/professions');
+const BelbinTasksModel = require('./models/belbin/belbinTasks');
+const BelbinTypesModel = require('./models/belbin/belbinTypes');
+const BelbinResultsModel = require('./models/belbin/belbinResults');
 
 const knex = Knex({
   client: 'mysql', 
@@ -41,7 +49,15 @@ Model.knex(knex);
 module.exports = {
   knex,
   UsersModel,
-  AuthUsersModel,
   GollandResultsModel,
+  GollandTasksModel,
+  GollandTypesModel,
+  GollandRecommendationsModel,
   KlimovResultsModel,
+  KlimovTasksModel,
+  KlimovTypesModel,
+  ProfessionsModel,
+  BelbinTasksModel,
+  BelbinTypesModel,
+  BelbinResultsModel,
 };

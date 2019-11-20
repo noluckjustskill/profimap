@@ -77,6 +77,9 @@ module.exports = {
     baseURL: `${process.env.BASE_URL}/api`,
   },
   auth: {
+    token: {
+      prefix: '',
+    },
     plugins: [
       '~/plugins/auth.js',
     ],
@@ -90,7 +93,8 @@ module.exports = {
           login: { url: `${process.env.BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
           user: { url: `${process.env.BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
           logout: false,
-        }
+        },
+        tokenType: false,
       }
     },
   },
