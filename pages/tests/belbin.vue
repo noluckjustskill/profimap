@@ -37,11 +37,13 @@
                 <span class="font-weight-light white--text">{{ current }}/{{ tasks.length }}</span>
               </template>
             </v-progress-linear>
-            <h3 class="mt-4 mb-0 font-weight-regular">
-              Выберите предпочитаемый род занятий:
+            <h3 class="mt-4 mb-0 subtitle-1 font-weight-regular">
+              Необходимо распределисть 10 баллов между вопросами.
+              Если Вы согласны с каким-либо утверждением на все 100%,
+              Вы можете отдать ему все 10 очков. Если же совсем не согласны, то можно выставить 0 баллов.
             </h3>
-            <h4 class="ma-0 font-weight-medium text-right">
-              Осталось {{ 10 - stepCounter() }} слотов
+            <h4 class="mt-1 mr-2 subtitle-2 text-right">
+              Осталось баллов: {{ 10 - stepCounter() }}
             </h4>
             <v-layout
               row
