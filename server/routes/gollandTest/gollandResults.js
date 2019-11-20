@@ -1,11 +1,7 @@
-const { GollandResultsModel } = require('../../database');
-const { mapKeys, omit } = require('lodash');
-const keyDictionary = require('../../config/golland/gollandSkillsDictionary.json');
+const { getProfileResult } = require('../../services/testGolland');
 
 const GollandResultsController = async (ctx) => {
-  const user = await GollandResultsModel.query().findOne({ userId: ctx.user.id }) || {};
-
-  ctx.body = mapKeys(omit(user, ['id', 'userId']), (val, key) => keyDictionary[key]);
+  ctx.body = await getProfileResult(ctx.user.id);
 };
 
 const GollandResultsRoute = '/gollandResults';

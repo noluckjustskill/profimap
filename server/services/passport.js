@@ -18,7 +18,7 @@ passport.serializeUser((userData, done) => {
 
     return user;
   }).then(profile => {
-    return AuthUser(profile.id);
+    return AuthUser(profile.toJSON());
   }).then(token => {
     done(null, { token });
   }).catch(err => {

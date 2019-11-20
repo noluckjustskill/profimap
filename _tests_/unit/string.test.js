@@ -1,4 +1,4 @@
-const { generate } = require('../server/utils/string');
+const { generate } = require('../../server/utils/string');
 
 test('generate(5) returns string', () => {
   expect(typeof(generate(5))).toBe('string');

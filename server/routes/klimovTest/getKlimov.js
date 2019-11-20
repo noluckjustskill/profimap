@@ -1,7 +1,7 @@
-const { tasks } = require('../../config/klimov/klimov.json');
+const { getTasks } = require('../../services/testKlimov');
 
 const GetKlimovController = async (ctx) => {
-  ctx.body = tasks;
+  ctx.body = await getTasks();
 };
 
 const GetKlimovRoute = '/getKlimov';

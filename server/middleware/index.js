@@ -1,11 +1,12 @@
 const { validateUser } = require('../services/user');
+const { UnauthorizedError } = require('http-custom-errors');
 
 module.exports = async (ctx, next) => {
   try {
     const user = await validateUser(ctx);
 
     if (!user) {
-      throw new Error('Not authorized');
+      throw new UnauthorizedError('Not authorized');
     }
 
     delete user.password;
@@ -13,8 +14,14 @@ module.exports = async (ctx, next) => {
 
     await next();
   } catch (err) {
-    err.status = err.statusCode || err.status || 500;
-    ctx.body = err.message;
+    const status = Number(err.code);
+    if (status) {
+      ctx.status = status;
+      ctx.body = err.message;
+    } else {
+      ctx.status = 500;
+    }
+
     ctx.app.emit('error', err, ctx);
   }
 };
