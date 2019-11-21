@@ -51,7 +51,7 @@
             >
               <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
                 <v-card
-                  :elevation="hover ? 8 : 3"
+                  :elevation="hover ? 5 : 3"
                   class="item-card"
                   color="primary"
                   @click="next(i)"
@@ -61,6 +61,13 @@
                     :height="cardImageHeight"
                     class="white"
                   />
+                  <div
+                    v-if="hover"
+                    :style="{ height: `${cardImageHeight}px`}"
+                    class="hint subtitle-1 white--text"
+                  >
+                    {{ item.descr }}
+                  </div>
                   <v-card-title class="card-title subtitle-1 white--text text-truncate">
                     {{ item.name }}
                   </v-card-title>
@@ -344,12 +351,32 @@
     cursor: pointer;
     width: 45%;
     max-width: 350px;
+    overflow: hidden;
 
     @media (max-width: 599px) {
       width: 100%;
       max-width: unset;
       margin-bottom: 10px;
     }
+  }
+  @keyframes fadeIn{
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  .hint {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fadeIn ease-in .3s;
   }
   .card-title {
     padding: 10px;
