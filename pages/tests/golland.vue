@@ -112,18 +112,65 @@
               width="200"
               class="mr-3 mb-3"
               color="primary"
+              @click="popupClick(item)"
             >
-              <nuxt-link :to="`/professions/${item.id}`" class="nuxtLink">
+              <v-img
+                :src="item.image"
+                :height="cardImageHeight / 1.5"
+                class="white"
+              />
+              <v-card-title class="card-title subtitle-2 white--text text-truncate">
+                {{ item.name }}
+              </v-card-title>
+            </v-card>
+            <v-dialog
+              v-model="popup"
+              width="500"
+              height="500"
+              :fullscreen="isMobile"
+              :hide-overlay="isMobile"
+            >
+              <v-card>
                 <v-img
-                  :src="item.image"
-                  :height="cardImageHeight / 1.5"
+                  :src="image"
+                  height="300"
+                  width="500"
                   class="white"
                 />
-                <v-card-title class="card-title subtitle-2 white--text text-truncate">
-                  {{ item.name }}
+                <v-btn
+                  color="primary"
+                  fab 
+                  dark
+                  small
+                  absolute
+                  right
+                  top
+                  class="mt-7"
+                  @click="popup = false"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-card-title 
+                  class="subtitle-1 mt-4 font-weight-medium"
+                >
+                  {{ name }}
                 </v-card-title>
-              </nuxt-link>
-            </v-card>
+                <v-card-text class="body-2">
+                  {{ descr }}
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <nuxt-link :to="`/professions/${id}`" class="nuxtLink" target="_blank">
+                    <v-btn
+                      :block="isMobile"
+                      color="primary"
+                    >
+                      Подробнее
+                    </v-btn>
+                  </nuxt-link>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-layout>
           <v-btn
             :block="isMobile"
@@ -160,6 +207,12 @@
       startTest: false,
       current: 0,
       result: [],
+      popup: false,
+
+      name: null,
+      image: null, 
+      descr: null,
+      id: null,
 
       calculated: null,
       recommendations: null,
@@ -227,6 +280,13 @@
         this.current = 0;
         this.result = [];
       },
+      popupClick({ id, name, image, smallDescr }) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.descr = smallDescr;
+        this.popup = true;
+      }
     },
   };
 </script>

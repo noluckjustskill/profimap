@@ -66,7 +66,7 @@ const getRecommendations = async (typeName) => {
     .leftJoinRelation('gollandType')
     .leftJoinRelation('profession')
     .where('gollandType.name', typeName)
-    .select('profession.id', 'profession.name', 'profession.image');
+    .select('profession.id', 'profession.name', 'profession.image', 'profession.smallDescr');
 
   const staticUrl = process.env.STATIC_URL;
 
