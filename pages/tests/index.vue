@@ -111,6 +111,21 @@
           </div>
         </nuxt-link>
       </v-flex>
+      <v-flex
+        xs12
+        class="block-wrap"
+      >
+        <nuxt-link to="tests/disk" class="test-link">
+          <div class="block second-block">
+            <h3 class="headline test-name">
+              Тест DISK
+            </h3>
+            <h4 class="subtitle-1 test-descr">
+              Как приумножить свою зарплату, заняв правильную роль в коллективе.
+            </h4>
+          </div>
+        </nuxt-link>
+      </v-flex>
     </v-layout>
   </div>
 </template>

@@ -1,0 +1,274 @@
+<template>
+  <div>
+    <h2 class="display-1 page-title">
+      Тест DISK
+    </h2>
+    <v-layout
+      row
+      wrap
+      align-start
+      justify-start
+    >
+      <v-flex
+        xs12
+        class="block-wrap"
+      >
+        <div v-if="!hasResult" class="block second-block">
+          <template v-if="!startTest">
+            <p class="my-2 font-weight-light">
+              Определите, как распределить роли в коллективе между сотрудниками, чтобы сделать компанию более эффективной.
+            </p>
+            <v-btn :disabled="!questions || !questions.length" color="primary" @click="startTest = true">
+              Поехали!
+            </v-btn>
+          </template>
+          <template v-else-if="result.length < questions.length">
+            <v-progress-linear
+              :value="Math.round(current/questions.length * 100)"
+              color="accent"
+              height="25"
+              reactive
+            >
+              <template v-slot="{ value }">
+                <span class="font-weight-light white--text">{{ current }}/{{ questions.length }}</span>
+              </template>
+            </v-progress-linear>
+            <h3 class="my-4 font-weight-regular">
+              {{ questions[current].name }}
+            </h3>
+            <v-layout
+              row
+              align-center
+              justify-space-around
+              class="my-5"
+            >
+              <v-hover v-for="(item, i) in questions[current].tasks" :key="i" v-slot:default="{ hover }">
+                <v-flex
+                  xs12
+                  sm6
+                  lg3
+                  class="pa-2"
+                >
+                  <v-card
+                    :elevation="hover ? 8 : 3"
+                    class="item-card"
+                    color="primary"
+                    @click="next(i)"
+                  >
+                    <v-card-title 
+                      class="card-title subtitle-2 white--text text-center pa-6"
+                      v-text="item"
+                    />
+                  </v-card>
+                </v-flex>
+              </v-hover>
+              <v-btn
+                :disabled="!current"
+                color="accent"
+                class="mt-6 white--text"
+                @click="back"
+              >
+                <v-icon left dark>
+                  mdi-arrow-left
+                </v-icon>
+                Предыдущий вопрос
+              </v-btn>
+            </v-layout>
+          </template>
+        </div>
+        <div v-else class="block second-block">
+          <h4 class="title">
+            Поздравляем!
+          </h4>
+          <h4 class="subtitle-1 mt-4 font-weight-medium">
+            Ваш результат - 
+            <template v-if="calculated">
+              {{ calculated }}
+            </template>
+            <template v-else>
+              <span class="caption font-weight-light gray">Загружаем</span>
+              <v-progress-circular
+                indeterminate
+                size="16"
+                width="2"
+                class="ml-1"
+              />
+            </template>
+          </h4>
+          <!-- eslint-disable-next-line -->
+          <p v-if="description" class="body-2" v-html="description" />
+          <v-btn
+            :block="isMobile"
+            color="accent"
+            class="mt-2 mr-1"
+            @click="restart"
+          >
+            <v-icon left>
+              mdi-cached
+            </v-icon>
+            Пройти заново
+          </v-btn>
+          <v-btn
+            :block="isMobile"
+            to="/tests"
+            color="primary"
+            class="mt-2"
+          >
+            Выбрать другой тест
+          </v-btn>
+        </div>
+      </v-flex>
+    </v-layout>
+  </div>
+</template>
+
+<script>
+  import { isEmpty, get } from 'lodash';
+
+  export default {
+    data: () => ({
+      hasResult: false,
+
+      startTest: false,
+      current: 0,
+      result: [],
+
+      calculated: null,
+      description: null,
+    }),
+    computed: {
+      cardImageHeight() {
+        return this.$vuetify.breakpoint.xsOnly ? 120 : 200;
+      },
+      isMobile() {
+        return this.$vuetify.breakpoint.xsOnly;
+      },
+    },
+    async asyncData({ $axios }) {
+      const result = await $axios.$get('diskResults').catch(() => ({}));
+      const questions = await $axios.$get('getDisk').catch(() => ([]));
+
+      return {
+        questions,
+        hasResult: !isEmpty(result),
+        calculated: get(result, 'name'),
+        description: get(result, 'text'),
+      };
+    },
+    methods: {
+      next(index) {
+        this.result.push(index);
+        this.current++;
+
+        if (this.current === this.questions.length) {
+          this.end();
+        }
+      },
+      back() {
+        if (!this.current) {
+          return;
+        }
+
+        this.current--;
+        this.result.pop();
+      },
+      end() {
+        this.$axios.$post('postDisk', {
+          result: this.result,
+        }).then(response => {
+          const { name, text } = response;
+          
+          if (!name) {
+            throw new Error('Can not fetch name');
+          }
+
+          this.hasResult = true;
+          this.calculated = name;
+          this.description = text;
+        }).catch(err => {
+          console.error(err);
+        });
+      },
+      restart() {
+        this.hasResult = false;
+
+        this.startTest = true;
+        this.current = 0;
+        this.result = [];
+      },
+    },
+  };
+</script>
+
+<style scoped lang="scss">
+  .row {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .page-title {
+    padding-left: 10px;
+    margin-top: 35px;
+    margin-bottom: 15px;
+  }
+  .page-title.second-title {
+    margin-top: 50px;
+  }
+  .block-wrap {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .block {
+    font-size: 18px;
+    font-weight: 500;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    padding: 45px 125px;
+    box-sizing: border-box;
+    background: white;
+  }
+  .block.second-block {
+    padding: 50px;
+    
+    @media (max-width: 599px) {
+      padding: 10%;
+    }
+  }
+  .text {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+  }
+  .h-type {
+    margin: 35px 0 10px;
+    font-weight: 600 !important;
+  }
+  .h-discr {
+    font-size: 1.1rem;
+    line-height: 23px;
+    opacity: 0.6;
+    font-weight: 400;
+  }
+  .item-card {
+    cursor: pointer;
+    width: 100%;
+  }
+  .card-title {
+    height: 200px;
+    justify-content: center;
+    line-height: 1.2;
+    word-break: break-word;
+
+    @media (max-width: 959px) {
+      font-size: 1rem !important;
+    }
+
+    @media (max-width: 599px) {
+      font-size: 0.8rem !important;
+      height: 200px;
+    }
+  }
+  .caption {
+    vertical-align: middle;
+  }
+</style>

@@ -24,6 +24,10 @@ const { BelbinResultsController, BelbinResultsRoute } = require('./belbinTest/be
 const { GetBelbinController, GetBelbinRoute } = require('./belbinTest/getBelbin');
 const { PostBelbinController, PostBelbinRoute } = require('./belbinTest/postBelbin');
 
+const { DiskResultsController, DiskResultsRoute } = require('./diskTest/diskResults');
+const { GetDiskController, GetDiskRoute } = require('./diskTest/getDisk');
+const { PostDiskController, PostDiskRoute } = require('./diskTest/postDisk');
+
 const router = new Router();
 
 router.post('/auth/login', LoginController);
@@ -47,5 +51,9 @@ router.post(`/api${PostKlimovRoute}`, PostKlimovController);
 router.get(`/api${BelbinResultsRoute}`, BelbinResultsController);
 router.get(`/api${GetBelbinRoute}`, GetBelbinController);
 router.post(`/api${PostBelbinRoute}`, PostBelbinController);
+
+router.get(`/api${DiskResultsRoute}`, DiskResultsController);
+router.get(`/api${GetDiskRoute}`, GetDiskController);
+router.post(`/api${PostDiskRoute}`, PostDiskController);
 
 module.exports = router;
