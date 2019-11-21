@@ -39,7 +39,7 @@
             <v-layout
               row
               align-center
-              justify-space-around
+              justify-center
               class="my-5"
             >
               <v-hover v-for="(item, i) in questions[current].tasks" :key="i" v-slot:default="{ hover }">
@@ -62,6 +62,8 @@
                   </v-card>
                 </v-flex>
               </v-hover>
+            </v-layout>
+            <div class="text-center">
               <v-btn
                 :disabled="!current"
                 color="accent"
@@ -73,7 +75,7 @@
                 </v-icon>
                 Предыдущий вопрос
               </v-btn>
-            </v-layout>
+            </div>
           </template>
         </div>
         <div v-else class="block second-block">
@@ -254,17 +256,17 @@
     width: 100%;
   }
   .card-title {
-    height: 200px;
+    height: 250px;
     justify-content: center;
-    line-height: 1.2;
+    line-height: 1.35;
     word-break: break-word;
 
     @media (max-width: 959px) {
-      font-size: 1rem !important;
+      font-size: 1.1rem !important;
     }
 
     @media (max-width: 599px) {
-      font-size: 0.8rem !important;
+      font-size: 0.95rem !important;
       height: 200px;
     }
   }
