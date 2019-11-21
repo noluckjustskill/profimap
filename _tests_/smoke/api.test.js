@@ -39,7 +39,7 @@ describe('getGolland Endpoint', () => {
         expect(res.body.every(cur => ( cur.length === 2 ))).toBe(true);
         expect(res.body.every(cur => {
           return cur.every(elem => {
-            return (difference(Object.keys(elem), ['name', 'image']).length === 0);
+            return (difference(Object.keys(elem), ['name', 'image', 'descr']).length === 0);
           });
         })).toBe(true);
         expect(res.body.every(cur => {
