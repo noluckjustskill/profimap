@@ -4,16 +4,25 @@
       <template v-slot:activator="{ on }">
         <v-avatar 
           :color="$vuetify.theme.themes.light.secondary" 
-          :size="$vuetify.breakpoint.mdAndDown ? 32 : 64"  
-          class="click"
+          :size="$vuetify.breakpoint.mdAndDown ? 28 : 36"
           v-on="on"
         >
           <img v-if="user.picture" :src="user.picture" alt="avatar">
           <span v-else>{{ userInitials }}</span>
         </v-avatar>
-        <div class="hidden-md-and-down userInfo click" v-on="on">
+        <div class="hidden-md-and-down userInfo">
           <div class="userName">
             {{ user.name }}
+            <v-btn
+              color="gray"
+              small
+              icon
+              v-on="on"
+            >
+              <v-icon>
+                {{ menu ? 'mdi-menu-up' : 'mdi-menu-down' }}
+              </v-icon>
+            </v-btn>
           </div>
           <!-- <div class="userMail">
             {{ subTitle }}

@@ -48,7 +48,7 @@
             >
               <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
                 <v-card
-                  :elevation="hover ? 8 : 3"
+                  :elevation="hover ? 3 : 1"
                   class="item-card mb-5"
                   color="primary"
                   @click="next(i)"
@@ -217,7 +217,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;

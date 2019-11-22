@@ -51,7 +51,7 @@
             >
               <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
                 <v-card
-                  :elevation="hover ? 5 : 3"
+                  :elevation="hover ? 3 : 1"
                   class="item-card"
                   color="primary"
                   @click="next(i)"
@@ -116,6 +116,7 @@
             <v-card
               v-for="(item, i) in recommendations"
               :key="`rcmd${i}`"
+              :elevation="1"
               width="200"
               class="mr-3 mb-3"
               color="primary"
@@ -146,16 +147,17 @@
                 />
                 <v-btn
                   color="primary"
+                  :elevation="0"
                   fab 
                   dark
                   small
                   absolute
-                  right
-                  top
-                  class="mt-7"
+                  class="mt-7 close text-center"
                   @click="popup = false"
                 >
-                  <v-icon>mdi-close</v-icon>
+                  <v-icon small>
+                    mdi-close
+                  </v-icon>
                 </v-btn>
                 <v-card-title 
                   class="subtitle-1 mt-4 font-weight-medium"
@@ -318,7 +320,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;
@@ -366,6 +368,10 @@
     100% {
       opacity:1;
     }
+  }
+  .close {
+    top: -20px;
+    right: 5px;
   }
   .hint {
     position: absolute;

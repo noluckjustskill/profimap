@@ -59,7 +59,7 @@
                 xs12
               >
                 <v-card
-                  :elevation="3"
+                  :elevation="1"
                   color="primary"
                   class="card ma-2"
                 >
@@ -297,7 +297,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;

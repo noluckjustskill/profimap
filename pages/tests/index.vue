@@ -22,7 +22,7 @@
             width="100%"
             height="174"
           />
-          <h3 class="headline text-center h-type">
+          <h3 class="headline font-weight-medium text-center h-type">
             Hard skills
           </h3>
           <h2 class="text-center h-discr">
@@ -43,7 +43,7 @@
             width="100%"
             height="174"
           />
-          <h3 class="headline text-center h-type">
+          <h3 class="headline font-weight-medium text-center h-type">
             Soft skills
           </h3>
           <h2 class="text-center h-discr">
@@ -67,7 +67,7 @@
       >
         <nuxt-link to="tests/golland" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест Голланда
             </h3>
             <h4 class="subtitle-1 test-descr">
@@ -83,7 +83,7 @@
       >
         <nuxt-link to="tests/klimov" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест Климова
             </h3>
             <h4 class="subtitle-1 test-descr">
@@ -100,7 +100,7 @@
       >
         <nuxt-link to="tests/belbin" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест Белбина
             </h3>
             <h4 class="subtitle-1 test-descr">
@@ -117,7 +117,7 @@
       >
         <nuxt-link to="tests/disk" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест DISK
             </h3>
             <h4 class="subtitle-1 test-descr">
@@ -150,7 +150,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 21%;
     box-sizing: border-box;
