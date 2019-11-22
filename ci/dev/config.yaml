@@ -5,7 +5,7 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
-        - base_url=http://dev.profimap.ru
+        - base_url=https://dev.profimap.ru
         - yandex_metrika=56011483
     restart: always
     environment:

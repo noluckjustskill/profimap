@@ -62,7 +62,7 @@
                     class="white"
                   />
                   <div
-                    v-if="hover"
+                    v-if="hover && !isMobile"
                     :style="{ height: `${cardImageHeight}px`}"
                     class="hint subtitle-1 white--text"
                   >
