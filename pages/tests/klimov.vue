@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
+    <h2 class="display-1 page-title font-weight-medium">
       Тест Климова
     </h2>
     <v-layout
@@ -22,16 +22,23 @@
               Предположим, что после соответствующего обучения Вы сможете выполнить любую работу.
               Но если бы Вам пришлось выбирать только из двух возможностей, что бы Вы предпочли?
             </p>
-            <v-btn :disabled="!professions || !professions.length" color="primary" @click="startTest = true">
-              Начать тест
+            <v-btn
+              :disabled="!professions || !professions.length"
+              rounded
+              depressed
+              color="primary"
+              @click="startTest = true"
+            >
+              <span class="body-2">Начать тест</span>
             </v-btn>
           </template>
           <template v-else-if="result.length < professions.length">
             <v-progress-linear
               :value="Math.round(current/professions.length * 100)"
-              color="accent"
+              color="primary"
               height="25"
               reactive
+              class="progress"
             >
               <template v-slot="{ value }">
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
@@ -59,25 +66,23 @@
                   />
                 </v-card>
               </v-hover>
+            </v-layout>
+            <div class="mt-6 text-center">
               <v-btn
                 :disabled="!current"
-                color="accent"
-                class="mt-6 white--text"
+                color="primary"
+                class="white--text"
+                rounded
+                depressed
                 @click="back"
               >
-                <v-icon left dark>
-                  mdi-arrow-left
-                </v-icon>
-                Предыдущий вопрос
+                <span class="body-2">Предыдущий вопрос</span>
               </v-btn>
-            </v-layout>
+            </div>
           </template>
         </div>
         <div v-else class="block second-block">
-          <h4 class="title">
-            Поздравляем!
-          </h4>
-          <h4 class="subtitle-1 mt-4 font-weight-medium">
+          <h4 class="title mb-2 font-weight-medium">
             Ваш результат - 
             <template v-if="calculated">
               {{ calculated }}
@@ -96,22 +101,24 @@
           <p v-if="description" class="body-2" v-html="description" />
           <v-btn
             :block="isMobile"
-            color="accent"
+            color="primary"
+            rounded
+            depressed
+            to="/tests"
             class="mt-2 mr-1"
-            @click="restart"
           >
-            <v-icon left>
-              mdi-cached
-            </v-icon>
-            Пройти заново
+            <span class="body-2">Выбрать другой тест</span>
           </v-btn>
           <v-btn
             :block="isMobile"
-            to="/tests"
-            color="primary"
+            outlined
+            rounded
+            depressed
+            color="accent"
             class="mt-2"
+            @click="restart"
           >
-            Выбрать другой тест
+            <span class="body-2">Пройти заново</span>
           </v-btn>
         </div>
       </v-flex>
@@ -230,6 +237,12 @@
       padding: 10%;
     }
   }
+  .body-2 {
+    text-transform: none;
+  }
+  .progress {
+    border-radius: 27px;
+  }
   .text {
     font-family: Roboto;
     font-style: normal;
@@ -247,6 +260,7 @@
     font-weight: 400;
   }
   .item-card {
+    border-radius: 43px;
     cursor: pointer;
     width: 100%;
   }

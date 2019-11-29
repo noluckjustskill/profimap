@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
-      Тест DISK
+    <h2 class="display-1 page-title font-weight-medium">
+      Тест DISС
     </h2>
     <v-layout
       row
@@ -18,16 +18,23 @@
             <p class="my-2 font-weight-light">
               Определите, как распределить роли в коллективе между сотрудниками, чтобы сделать компанию более эффективной.
             </p>
-            <v-btn :disabled="!questions || !questions.length" color="primary" @click="startTest = true">
-              Поехали!
+            <v-btn
+              :disabled="!questions || !questions.length"
+              rounded
+              depressed
+              color="primary"
+              @click="startTest = true"
+            >
+              <span class="body-2">Поехали!</span>
             </v-btn>
           </template>
           <template v-else-if="result.length < questions.length">
             <v-progress-linear
               :value="Math.round(current/questions.length * 100)"
-              color="accent"
+              color="primary"
               height="25"
               reactive
+              class="progress"
             >
               <template v-slot="{ value }">
                 <span class="font-weight-light white--text">{{ current }}/{{ questions.length }}</span>
@@ -79,10 +86,7 @@
           </template>
         </div>
         <div v-else class="block second-block">
-          <h4 class="title">
-            Поздравляем!
-          </h4>
-          <h4 class="subtitle-1 mt-4 font-weight-medium">
+          <h4 class="title mb-2 font-weight-medium">
             Ваш результат - 
             <template v-if="calculated">
               {{ calculated }}
@@ -101,22 +105,24 @@
           <p v-if="description" class="body-2" v-html="description" />
           <v-btn
             :block="isMobile"
-            color="accent"
+            color="primary"
+            rounded
+            depressed
+            to="/tests"
             class="mt-2 mr-1"
-            @click="restart"
           >
-            <v-icon left>
-              mdi-cached
-            </v-icon>
-            Пройти заново
+            <span class="body-2">Выбрать другой тест</span>
           </v-btn>
           <v-btn
             :block="isMobile"
-            to="/tests"
-            color="primary"
+            outlined
+            rounded
+            depressed
+            color="accent"
             class="mt-2"
+            @click="restart"
           >
-            Выбрать другой тест
+            <span class="body-2">Пройти заново</span>
           </v-btn>
         </div>
       </v-flex>
@@ -234,6 +240,12 @@
     @media (max-width: 599px) {
       padding: 10%;
     }
+  }
+  .body-2 {
+    text-transform: none;
+  }
+  .progress {
+    border-radius: 27px;
   }
   .text {
     font-family: Roboto;

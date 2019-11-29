@@ -6,9 +6,9 @@
       Мой профиль
     </h2>
     <v-list-item class="pa-0 profile-content">
-      <v-list-item-avatar :size="avatarSize" :color="$vuetify.theme.themes.light.secondary">
+      <v-list-item-avatar :size="avatarSize" :color="avatarColor">
         <img v-if="user.picture" :src="user.picture" alt="avatar">
-        <span v-else class="initials">{{ userInitials }}</span>
+        <span v-else class="display-1 font-weight-light white--text ma-0">{{ userInitials }}</span>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="headline font-weight-medium">
@@ -30,6 +30,9 @@
       },
       userInitials() {
         return initials(this.user.name);
+      },
+      avatarColor() {
+        return this.$dynamicColor(this.user.name);
       },
       avatarSize() {
         return this.$vuetify.breakpoint.mdAndDown ? 90: 120;
@@ -54,8 +57,8 @@
   .card {
     background-color: transparent !important;
   }
-  .initials {
-    font-size: 22px;
+  .display-1 {
+    letter-spacing: -0.1rem !important;
   }
   .font-weight-light {
     font-size: 12px;

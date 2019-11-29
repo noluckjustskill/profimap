@@ -35,7 +35,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/highcharts', mode: 'client' }
+    { src: '~/plugins/highcharts', mode: 'client' },
+    '~/plugins/dynamicColor',
   ],
   /*
   ** Nuxt.js dev-modules

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
+    <h2 class="display-1 font-weight-medium page-title">
       Тестирование
     </h2>
     <!-- <v-layout
@@ -118,7 +118,7 @@
         <nuxt-link to="tests/disk" class="test-link">
           <div class="block second-block">
             <h3 class="headline font-weight-medium test-name">
-              Тест DISK
+              Тест DISС
             </h3>
             <h4 class="subtitle-1 test-descr">
               Как приумножить свою зарплату, заняв правильную роль в коллективе.
