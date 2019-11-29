@@ -3,17 +3,26 @@
     <v-menu v-model="menu" offset-y offset-x>
       <template v-slot:activator="{ on }">
         <v-avatar 
-          :color="$vuetify.theme.themes.light.secondary" 
-          :size="$vuetify.breakpoint.mdAndDown ? 32 : 64"  
-          class="click"
+          :color="avatarColor"
+          :size="$vuetify.breakpoint.mdAndDown ? 28 : 36"
           v-on="on"
         >
           <img v-if="user.picture" :src="user.picture" alt="avatar">
-          <span v-else>{{ userInitials }}</span>
+          <span v-else class="subtitle-1 white--text">{{ userInitials }}</span>
         </v-avatar>
-        <div class="hidden-md-and-down userInfo click" v-on="on">
+        <div class="hidden-md-and-down userInfo">
           <div class="userName">
             {{ user.name }}
+            <v-btn
+              color="gray"
+              small
+              icon
+              v-on="on"
+            >
+              <v-icon>
+                {{ menu ? 'mdi-menu-up' : 'mdi-menu-down' }}
+              </v-icon>
+            </v-btn>
           </div>
           <!-- <div class="userMail">
             {{ subTitle }}
@@ -49,7 +58,10 @@
     },
     computed: {
       userInitials() {
-        return initials(this.user.name);
+        return initials(this.user.name).charAt(0);
+      },
+      avatarColor() {
+        return this.$dynamicColor(this.user.name);
       },
       subTitle() {
         return this.user.email;

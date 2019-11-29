@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
+    <h2 class="display-1 page-title font-weight-medium">
       Тест Белбина
     </h2>
     <v-layout
@@ -22,16 +22,23 @@
               Для определения естественной для сотрудника роли в коллективе, 
               а также тех ролей, от выполнения которых он предпочитает отказываться.
             </p>
-            <v-btn :disabled="!tasks || !tasks.length" color="primary" @click="startTest = true">
-              Начать тест
+            <v-btn
+              :disabled="!tasks || !tasks.length"
+              rounded
+              depressed
+              color="primary"
+              @click="startTest = true"
+            >
+              <span class="body-2">Начать тест</span>
             </v-btn>
           </template>
           <template v-else>
             <v-progress-linear
               :value="Math.round(current/tasks.length * 100)"
-              color="accent"
+              color="primary"
               height="25"
               reactive
+              class="progress"
             >
               <template v-slot="{ value }">
                 <span class="font-weight-light white--text">{{ current }}/{{ tasks.length }}</span>
@@ -59,7 +66,7 @@
                 xs12
               >
                 <v-card
-                  :elevation="3"
+                  :elevation="1"
                   color="primary"
                   class="card ma-2"
                 >
@@ -108,10 +115,7 @@
           </template>
         </div>
         <div v-else class="block second-block">
-          <h4 class="title">
-            Поздравляем!
-          </h4>
-          <h4 class="subtitle-1 mt-4 font-weight-medium">
+          <h4 class="title mb-2 font-weight-medium">
             Ваш результат - 
             <template v-if="calculated">
               {{ calculated }}
@@ -134,22 +138,24 @@
           </p>
           <v-btn
             :block="isMobile"
-            color="accent"
+            color="primary"
+            rounded
+            depressed
+            to="/tests"
             class="mt-2 mr-1"
-            @click="restart"
           >
-            <v-icon left>
-              mdi-cached
-            </v-icon>
-            Пройти заново
+            <span class="body-2">Выбрать другой тест</span>
           </v-btn>
           <v-btn
             :block="isMobile"
-            to="/tests"
-            color="primary"
+            outlined
+            rounded
+            depressed
+            color="accent"
             class="mt-2"
+            @click="restart"
           >
-            Выбрать другой тест
+            <span class="body-2">Пройти заново</span>
           </v-btn>
         </div>
       </v-flex>
@@ -297,7 +303,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;
@@ -309,6 +315,12 @@
     @media (max-width: 599px) {
       padding: 10%;
     }
+  }
+  .body-2 {
+    text-transform: none;
+  }
+  .progress {
+    border-radius: 27px;
   }
   .text {
     font-family: Roboto;

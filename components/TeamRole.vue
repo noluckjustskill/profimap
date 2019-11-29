@@ -7,23 +7,43 @@
     <v-card-title class="title">
       Роль в команде
     </v-card-title>
-    <v-list-item v-if="info.name" class="pl-7">
-      <v-list-item-avatar>
-        <v-img 
-          min-width="55"
-          min-height="55"
-          :src="info.image" 
-        />
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title class="type">
-          {{ info.name }}
-        </v-list-item-title>
-        <v-list-item-subtitle class="description">
-          {{ info.descr }}
-        </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
+    <template v-if="info.name || disk.name">
+      <v-list-item v-if="info.name" class="pl-7">
+        <v-list-item-avatar>
+          <v-img 
+            min-width="55"
+            min-height="55"
+            :src="info.image" 
+          />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title class="type">
+            {{ info.name }}
+          </v-list-item-title>
+          <v-list-item-subtitle class="description">
+            {{ info.descr }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider v-if="disk.name" class="px-4 py-2" />
+      <v-list-item v-if="disk.name" class="pl-7">
+        <v-list-item-avatar>
+          <v-img 
+            min-width="55"
+            min-height="55"
+            :src="disk.image" 
+          />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title class="type">
+            Тип {{ disk.name }}
+          </v-list-item-title>
+          <v-list-item-subtitle class="description">
+            {{ disk.text }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </template>
     <div v-else class="no-data text-center">
       <nuxt-link to="/tests/belbin" class="link">
         <h4 class="subtitle-1 mt-2">
@@ -40,6 +60,7 @@
     data() {
       return {
         info: {},
+        disk: {},
         loaded: false,
       };
     },
@@ -47,6 +68,9 @@
       this.$axios.$get('belbinResults').then(response => {
         this.loaded = true;
         this.info = response;
+      });
+      this.$axios.$get('diskResults').then(response => {
+        this.disk = response;
       });
     },
   };
@@ -67,7 +91,7 @@
 }
 
 .results {
-  border: 1px solid #c0c0c0;
+  border: 1px solid #E5E5E5;
   border-radius: 5px;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
+    <h2 class="display-1 page-title font-weight-medium">
       Тест Голланда
     </h2>
     <v-layout
@@ -25,13 +25,20 @@
               что необходимо делать. Вам нужно определить,
               можете ли вы успешно заниматься данным видом деятельности и хотите ли вы этим заниматься.
             </p>
-            <v-btn :disabled="!professions || !professions.length" color="primary" @click="startTest = true">
-              Начать тест
+            <v-btn
+              :disabled="!professions || !professions.length"
+              rounded
+              depressed
+              color="primary"
+              @click="startTest = true"
+            >
+              <span class="body-2">Начать тест</span>
             </v-btn>
           </template>
           <template v-else-if="result.length < professions.length">
             <v-progress-linear
               :value="Math.round(current/professions.length * 100)"
+              class="progress"
               color="primary"
               height="25"
               reactive
@@ -51,7 +58,7 @@
             >
               <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
                 <v-card
-                  :elevation="hover ? 8 : 3"
+                  :elevation="hover ? 3 : 1"
                   class="item-card"
                   color="primary"
                   @click="next(i)"
@@ -61,30 +68,35 @@
                     :height="cardImageHeight"
                     class="white"
                   />
+                  <div
+                    v-if="hover && !isMobile"
+                    :style="{ height: `${cardImageHeight}px`}"
+                    class="hint subtitle-1 white--text"
+                  >
+                    {{ item.descr }}
+                  </div>
                   <v-card-title class="card-title subtitle-1 white--text text-truncate">
                     {{ item.name }}
                   </v-card-title>
                 </v-card>
               </v-hover>
+            </v-layout>
+            <div class="mt-6 text-center">
               <v-btn
                 :disabled="!current"
-                color="accent"
-                class="mt-6 white--text"
+                color="primary"
+                class="white--text"
+                rounded
+                depressed
                 @click="back"
               >
-                <v-icon left dark>
-                  mdi-arrow-left
-                </v-icon>
-                Предыдущий вопрос
+                <span class="body-2">Предыдущий вопрос</span>
               </v-btn>
-            </v-layout>
+            </div>
           </template>
         </div>
         <div v-else class="block second-block">
-          <h4 class="title">
-            Поздравляем!
-          </h4>
-          <h4 class="subtitle-1 mt-4 font-weight-medium">
+          <h4 class="title mb-2 font-weight-medium">
             Ваш тип личности - 
             <template v-if="calculated">
               {{ calculated }}
@@ -99,7 +111,7 @@
               />
             </template>
           </h4>
-          <p v-if="description" class="body-2">
+          <p v-if="description" class="body-2 descr">
             {{ description }}
           </p>
           <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-3">
@@ -109,40 +121,91 @@
             <v-card
               v-for="(item, i) in recommendations"
               :key="`rcmd${i}`"
+              :elevation="1"
               width="200"
-              class="mr-3 mb-3"
+              class="rcmd-card mr-3 mb-3"
               color="primary"
+              @click="popupClick(item)"
             >
-              <nuxt-link :to="`/professions/${item.id}`" class="nuxtLink">
+              <v-img
+                :src="item.image"
+                :height="cardImageHeight / 1.5"
+                class="white"
+              />
+              <v-card-title class="card-title subtitle-2 white--text text-truncate">
+                {{ item.name }}
+              </v-card-title>
+            </v-card>
+            <v-dialog
+              v-model="popup"
+              width="500"
+              height="500"
+              :fullscreen="isMobile"
+              :hide-overlay="isMobile"
+            >
+              <v-card>
                 <v-img
-                  :src="item.image"
-                  :height="cardImageHeight / 1.5"
+                  :src="image"
+                  height="300"
+                  width="500"
                   class="white"
                 />
-                <v-card-title class="card-title subtitle-2 white--text text-truncate">
-                  {{ item.name }}
+                <v-btn
+                  color="primary"
+                  :elevation="0"
+                  fab 
+                  dark
+                  small
+                  absolute
+                  class="mt-7 close text-center"
+                  @click="popup = false"
+                >
+                  <v-icon small>
+                    mdi-close
+                  </v-icon>
+                </v-btn>
+                <v-card-title 
+                  class="subtitle-1 mt-4 font-weight-medium"
+                >
+                  {{ name }}
                 </v-card-title>
-              </nuxt-link>
-            </v-card>
+                <v-card-text class="body-2">
+                  {{ descr }}
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <nuxt-link :to="`/professions/${id}`" class="nuxtLink" target="_blank">
+                    <v-btn
+                      :block="isMobile"
+                      color="primary"
+                    >
+                      Подробнее
+                    </v-btn>
+                  </nuxt-link>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-layout>
           <v-btn
             :block="isMobile"
-            color="accent"
+            color="primary"
+            rounded
+            depressed
+            to="/tests"
             class="mt-2 mr-1"
-            @click="restart"
           >
-            <v-icon left>
-              mdi-cached
-            </v-icon>
-            Пройти заново
+            <span class="body-2">Выбрать другой тест</span>
           </v-btn>
           <v-btn
             :block="isMobile"
-            to="/tests"
-            color="primary"
+            outlined
+            rounded
+            depressed
+            color="accent"
             class="mt-2"
+            @click="restart"
           >
-            Выбрать другой тест
+            <span class="body-2">Пройти заново</span>
           </v-btn>
         </div>
       </v-flex>
@@ -160,6 +223,12 @@
       startTest: false,
       current: 0,
       result: [],
+      popup: false,
+
+      name: null,
+      image: null, 
+      descr: null,
+      id: null,
 
       calculated: null,
       recommendations: null,
@@ -227,6 +296,13 @@
         this.current = 0;
         this.result = [];
       },
+      popupClick({ id, name, image, smallDescr }) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.descr = smallDescr;
+        this.popup = true;
+      }
     },
   };
 </script>
@@ -251,7 +327,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 125px;
     box-sizing: border-box;
@@ -263,6 +339,15 @@
     @media (max-width: 599px) {
       padding: 10%;
     }
+  }
+  .body-2 {
+    text-transform: none;
+  }
+  .progress {
+    border-radius: 27px;
+  }
+  .item-card, .rcmd-card {
+    border-radius: 27px;
   }
   .text {
     font-family: Roboto;
@@ -280,16 +365,43 @@
     opacity: 0.6;
     font-weight: 400;
   }
+  .descr {
+    line-height: 30px;
+  }
   .item-card {
     cursor: pointer;
     width: 45%;
     max-width: 350px;
+    overflow: hidden;
 
     @media (max-width: 599px) {
       width: 100%;
       max-width: unset;
       margin-bottom: 10px;
     }
+  }
+  @keyframes fadeIn{
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  .close {
+    top: -20px;
+    right: 5px;
+  }
+  .hint {
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fadeIn ease-in .3s;
   }
   .card-title {
     padding: 10px;

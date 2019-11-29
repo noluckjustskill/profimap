@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
+    <h2 class="display-1 font-weight-medium page-title">
       Тестирование
     </h2>
     <!-- <v-layout
@@ -22,7 +22,7 @@
             width="100%"
             height="174"
           />
-          <h3 class="headline text-center h-type">
+          <h3 class="headline font-weight-medium text-center h-type">
             Hard skills
           </h3>
           <h2 class="text-center h-discr">
@@ -43,7 +43,7 @@
             width="100%"
             height="174"
           />
-          <h3 class="headline text-center h-type">
+          <h3 class="headline font-weight-medium text-center h-type">
             Soft skills
           </h3>
           <h2 class="text-center h-discr">
@@ -67,7 +67,7 @@
       >
         <nuxt-link to="tests/golland" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест Голланда
             </h3>
             <h4 class="subtitle-1 test-descr">
@@ -83,7 +83,7 @@
       >
         <nuxt-link to="tests/klimov" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест Климова
             </h3>
             <h4 class="subtitle-1 test-descr">
@@ -100,13 +100,28 @@
       >
         <nuxt-link to="tests/belbin" class="test-link">
           <div class="block second-block">
-            <h3 class="headline test-name">
+            <h3 class="headline font-weight-medium test-name">
               Тест Белбина
             </h3>
             <h4 class="subtitle-1 test-descr">
               Определите, что вы можете делать в команде лучше всех:
               генерировать идеи, выполнять задачи, доводить дело до конца
               или налаживать общение между сотрудниками?
+            </h4>
+          </div>
+        </nuxt-link>
+      </v-flex>
+      <v-flex
+        xs12
+        class="block-wrap"
+      >
+        <nuxt-link to="tests/disk" class="test-link">
+          <div class="block second-block">
+            <h3 class="headline font-weight-medium test-name">
+              Тест DISС
+            </h3>
+            <h4 class="subtitle-1 test-descr">
+              Как приумножить свою зарплату, заняв правильную роль в коллективе.
             </h4>
           </div>
         </nuxt-link>
@@ -135,7 +150,7 @@
   .block {
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
     padding: 45px 21%;
     box-sizing: border-box;
