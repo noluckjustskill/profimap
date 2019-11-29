@@ -112,7 +112,7 @@
 
 <style scoped>
   .skills {
-    border: 1px solid #c0c0c0;
+    border: 1px solid #E5E5E5;
     border-radius: 5px;
   }
   .no-data {

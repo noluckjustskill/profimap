@@ -15,17 +15,19 @@ const getTasks = async() => {
     .leftJoinRelation('left')
     .leftJoinRelation('right')
     .select(
-      'left.name as leftName', 'left.image as leftImage',
-      'right.name as rightName', 'right.image as rightImage',
+      'left.name as leftName', 'left.smallDescr as leftDescr', 'left.image as leftImage',
+      'right.name as rightName', 'right.smallDescr as rightDescr', 'right.image as rightImage',
     );
 
   const staticUrl = process.env.STATIC_URL;
 
   return tasks.map(task => ([{
     name: task.leftName,
+    descr: task.leftDescr,
     image: `${staticUrl}/${task.leftImage}`,
   }, {
     name: task.rightName,
+    descr: task.rightDescr,
     image: `${staticUrl}/${task.rightImage}`,
   }]));
 };
@@ -66,7 +68,7 @@ const getRecommendations = async (typeName) => {
     .leftJoinRelation('gollandType')
     .leftJoinRelation('profession')
     .where('gollandType.name', typeName)
-    .select('profession.id', 'profession.name', 'profession.image');
+    .select('profession.id', 'profession.name', 'profession.image', 'profession.smallDescr');
 
   const staticUrl = process.env.STATIC_URL;
 

@@ -5,6 +5,7 @@
       clipped-left
       :height="$vuetify.breakpoint.mdAndDown ? 50 : 88"
       app
+      class="bar"
     >
       <v-layout
         row
@@ -75,6 +76,9 @@
 </script>
 
 <style scoped>
+  .bar {
+    box-shadow: 0px 2px 1px -1px #E5E5E5;
+  }
   .button {
     text-align: right;
     padding: 5px 5px 0 0;

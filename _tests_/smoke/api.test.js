@@ -39,7 +39,7 @@ describe('getGolland Endpoint', () => {
         expect(res.body.every(cur => ( cur.length === 2 ))).toBe(true);
         expect(res.body.every(cur => {
           return cur.every(elem => {
-            return (difference(Object.keys(elem), ['name', 'image']).length === 0);
+            return (difference(Object.keys(elem), ['name', 'image', 'descr']).length === 0);
           });
         })).toBe(true);
         expect(res.body.every(cur => {
@@ -153,7 +153,7 @@ describe('getProfession Endpoint', () => {
 
         expect(res.statusCode).toEqual(200);
         expect(Object.values(res.body).every(val => !isObject(val))).toBe(true);
-        expect(res.body.id == id).toBe(true);
+        expect(res.body.id).toBe(id);
 
         done();
       });
@@ -174,7 +174,7 @@ describe('recommendations Endpoint', () => {
           return Object.values(cur).every(val => !isObject(val));
         })).toBe(true);
         expect(res.body.every(cur => {
-          return (difference(Object.keys(cur), ['id', 'name', 'image']).length === 0);
+          return (difference(Object.keys(cur), ['id', 'name', 'image', 'smallDescr']).length === 0);
         })).toBe(true);
 
         done();

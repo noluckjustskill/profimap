@@ -28,7 +28,7 @@
           v-for="(item, i) in items"
           :key="i"
           :to="item.to"
-          class="tab"
+          class="tab font-weight-medium"
         >
           {{ item.title }}
         </v-tab>
@@ -101,7 +101,6 @@
     margin: 0;
   }
   .tab {
-    font-weight: 500;
     line-height: 15px;
     letter-spacing: 0.4px;
   }
