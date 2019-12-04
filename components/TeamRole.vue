@@ -8,7 +8,7 @@
       Роль в команде
     </v-card-title>
     <template v-if="info.name || disk.name">
-      <v-list-item v-if="info.name" class="pl-7">
+      <v-list-item v-if="info.name" class="pl-7 pr-7">
         <v-list-item-avatar>
           <v-img 
             min-width="55"
@@ -26,7 +26,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-divider v-if="disk.name" class="px-4 py-2" />
-      <v-list-item v-if="disk.name" class="pl-7">
+      <v-list-item v-if="disk.name" class="pl-7 pr-7">
         <v-list-item-avatar>
           <v-img 
             min-width="55"

@@ -4,6 +4,7 @@
     wrap
     align-start
     justify-start
+    class="mt-6"
   >
     <v-flex 
       xs12 
