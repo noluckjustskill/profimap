@@ -23,12 +23,13 @@
         :color="$vuetify.theme.themes.light.primary"
         :centered="centered"
         :fixed-tabs="fixed"
+        height="88"
       >
         <v-tab
           v-for="(item, i) in items"
           :key="i"
           :to="item.to"
-          class="tab font-weight-medium"
+          class="tab"
         >
           {{ item.title }}
         </v-tab>
@@ -103,5 +104,8 @@
   .tab {
     line-height: 15px;
     letter-spacing: 0.4px;
+    text-transform: none;
+    font-size: 18px;
+    font-weight: 500;
   }
 </style>

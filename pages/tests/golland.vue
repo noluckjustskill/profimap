@@ -114,10 +114,10 @@
           <p v-if="description" class="body-2 descr">
             {{ description }}
           </p>
-          <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-3">
+          <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-10">
             Профессии, которые вам подходят:
           </h4>
-          <v-layout row :justify-center="isMobile" class="mt-1 mb-3">
+          <v-layout row :justify-center="isMobile" class="mt-3 mb-3">
             <v-card
               v-for="(item, i) in recommendations"
               :key="`rcmd${i}`"
@@ -129,10 +129,10 @@
             >
               <v-img
                 :src="item.image"
-                :height="cardImageHeight / 1.5"
+                height="90"
                 class="white"
               />
-              <v-card-title class="card-title subtitle-2 white--text text-truncate">
+              <v-card-title class="small-title white--text text-truncate">
                 {{ item.name }}
               </v-card-title>
             </v-card>
@@ -201,7 +201,7 @@
             outlined
             rounded
             depressed
-            color="accent"
+            color="primary"
             class="mt-2"
             @click="restart"
           >
@@ -236,7 +236,7 @@
     }),
     computed: {
       cardImageHeight() {
-        return this.$vuetify.breakpoint.xsOnly ? 120 : 200;
+        return this.$vuetify.breakpoint.xsOnly ? 170 : 275;
       },
       isMobile() {
         return this.$vuetify.breakpoint.xsOnly;
@@ -350,8 +350,6 @@
     border-radius: 27px;
   }
   .text {
-    font-family: Roboto;
-    font-style: normal;
     font-weight: 500;
     font-size: 20px;
   }
@@ -367,11 +365,13 @@
   }
   .descr {
     line-height: 30px;
+    max-width: 590px;
+    color:rgba(0, 0, 0, 0.7);
   }
   .item-card {
     cursor: pointer;
-    width: 45%;
-    max-width: 350px;
+    width: 49%;
+    max-width: 450px;
     overflow: hidden;
 
     @media (max-width: 599px) {
@@ -379,6 +379,10 @@
       max-width: unset;
       margin-bottom: 10px;
     }
+  }
+  .rcmd-card {
+    max-width: 165px;
+    height: 125px;
   }
   @keyframes fadeIn{
     0% {
@@ -412,5 +416,13 @@
   }
   .nuxtLink {
     text-decoration: none;
+  }
+  .title {
+    font-size: 24px;
+  }
+  .small-title {
+    font-size: 14px;
+    padding: 0;
+    justify-content: center;
   }
 </style>

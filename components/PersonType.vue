@@ -7,7 +7,7 @@
     <v-card-title class="title">
       Тип личности
     </v-card-title>
-    <v-list-item v-if="info.name" class="pl-7">
+    <v-list-item v-if="info.name" class="pl-7 pr-7">
       <v-list-item-avatar>
         <v-img 
           min-width="55"
@@ -78,8 +78,6 @@
 }
 
 .title {
-  font-family: Roboto;
-  font-style: normal;
   font-weight: 500;
   font-size: 20px;
   color: black;

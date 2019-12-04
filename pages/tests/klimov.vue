@@ -98,7 +98,7 @@
             </template>
           </h4>
           <!-- eslint-disable-next-line -->
-          <p v-if="description" class="body-2" v-html="description" />
+          <p v-if="description" class="descr body-2" v-html="description" />
           <v-btn
             :block="isMobile"
             color="primary"
@@ -114,7 +114,7 @@
             outlined
             rounded
             depressed
-            color="accent"
+            color="primary"
             class="mt-2"
             @click="restart"
           >
@@ -278,5 +278,10 @@
   }
   .caption {
     vertical-align: middle;
+  }
+  .descr {
+    line-height: 30px;
+    max-width: 590px;
+    color:rgba(0, 0, 0, 0.7);
   }
 </style>
