@@ -1,19 +1,20 @@
 const passport = require('koa-passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const VkontakteStrategy = require('passport-vkontakte').Strategy;
 const { get } = require('lodash');
 
-const { findOAtuhUser, createOAuthUser, AuthUser } = require('../services/user');
+const { findOAuthUser, createOAuthUser, AuthUser } = require('../services/user');
 
-passport.serializeUser((userData, done) => {
-  const { name, picture, email } = get(userData, '_json', {});
-
-  if (!email) {
-    done(true, null);
-  }
-
-  findOAtuhUser(userData.id).then(user => {
+passport.serializeUser(({
+  id,
+  name,
+  email,
+  picture,
+}, done) => {
+  const externalId = String(id);
+  findOAuthUser(externalId, email).then(user => {
     if (!user) {
-      return createOAuthUser(userData.id, name, email, picture);
+      return createOAuthUser(externalId, name, email, picture);
     }
 
     return user;
@@ -31,7 +32,33 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google-redirect',
 }, (accessToken, refreshToken, profile, done) => {
-  done(null, profile);
+  const { id, name, picture, email } = get(profile, '_json', {});
+  if (!email) {
+    done(true, null);
+  }
+
+  done(null, {
+    id,
+    name,
+    email,
+    picture,
+  });
+}));
+
+passport.use(new VkontakteStrategy({
+  clientID: process.env.VKONTAKTE_CLIENT_ID,
+  clientSecret: process.env.VKONTAKTE_CLIENT_SECRET,
+  callbackURL: '/auth/vkontakte-redirect',
+}, (accessToken, refreshToken, profile, done) => {
+  const { id, displayName } = profile;
+  if (!id) {
+    done(true, null);
+  }
+
+  done(null, {
+    id,
+    name: displayName,
+  });
 }));
 
 module.exports = passport;

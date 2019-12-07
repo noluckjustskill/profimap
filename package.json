@@ -48,6 +48,7 @@
     "nuxt-rfg-icon": "^0.6.4",
     "objection": "^1.6.11",
     "passport-google-oauth20": "^2.0.0",
+    "passport-vkontakte": "^0.3.2",
     "vue-chartjs": "^3.4.2"
   },
   "devDependencies": {

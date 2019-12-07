@@ -60,28 +60,48 @@
                     type="password"
                   />
 
-                  <div class="flex-grow-1">
-                    <v-btn
-                      class="ma-2" 
-                      tile
-                      outlined
-                      :icon="hideGoogleText"
-                      color="primary"
-                      href="/auth/google" 
-                    >
-                      <v-icon :left="!hideGoogleText">
-                        mdi-google
-                      </v-icon>
-                      {{ !hideGoogleText ? 'Вход через Google' : null }}
-                    </v-btn>
-                    <v-btn
-                      :disabled="!email || !password"
-                      color="primary" 
-                      type="submit"
-                    >
-                      Войти
-                    </v-btn>
-                  </div>
+                  <v-layout row wrap class="mt-3 px-4">
+                    <v-flex xs12 class="mb-2">
+                      <v-btn
+                        block
+                        :disabled="!email || !password"
+                        color="primary" 
+                        type="submit"
+                      >
+                        Войти
+                      </v-btn>
+                    </v-flex>
+                    <v-flex xs12 md6 :class="!isMobile ? 'pr-2' : 'pb-2'">
+                      <v-btn
+                        tile
+                        outlined
+                        icon
+                        block
+                        color="accent"
+                        href="/auth/google" 
+                      >
+                        <v-icon left>
+                          mdi-google
+                        </v-icon>
+                        Вход через Google
+                      </v-btn>
+                    </v-flex>
+                    <v-flex xs12 md6>
+                      <v-btn
+                        tile
+                        outlined
+                        icon
+                        block
+                        color="accent"
+                        href="/auth/vkontakte" 
+                      >
+                        <v-icon left>
+                          mdi-vk
+                        </v-icon>
+                        Вход через VK.com
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
                 </v-form>
               </v-card-text>
             </v-card>
@@ -115,8 +135,8 @@
       preloader: true,
     }),
     computed: {
-      hideGoogleText() {
-        return this.$vuetify.breakpoint.xsOnly;
+      isMobile() {
+        return this.$vuetify.breakpoint.smAndDown;
       },
     },
     mounted() {
@@ -155,8 +175,4 @@
 </script>
 
 <style scoped>
-  .flex-grow-1 {
-    margin-top: 10px;
-    text-align: right;
-  }
 </style>

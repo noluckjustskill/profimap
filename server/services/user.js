@@ -10,10 +10,17 @@ const findUserLocal = async (email, password) => {
     .select('id', 'externalId', 'name', 'email', 'picture');
 };
 
-const findOAtuhUser = async (id) => {
+const findOAuthUser = async (externalId, email) => {
   return UsersModel
     .query()
-    .findOne({ externalId: id, password: null })
+    .findOne((builder) => {
+      const build = builder.where({ externalId, password: null });
+      if (email) {
+        build.orWhere({ email, password: null });
+      }
+
+      return build;
+    })
     .select('id', 'externalId', 'name', 'email', 'picture');
 };
 
@@ -55,7 +62,7 @@ const validateUser = async (ctx) => {
 
 module.exports = {
   findUserLocal,
-  findOAtuhUser,
+  findOAuthUser,
   createOAuthUser,
   AuthUser,
   validateUser,
