@@ -8,6 +8,11 @@ const {
   GoogleAuthRedirectController,
   GooglePassportController
 } = require('./google');
+const {
+  VkontakteAuthController,
+  VkontakteAuthRedirectController,
+  VkontaktePassportController
+} = require('./vkontakte');
 
 const { GollandResultsController, GollandResultsRoute } = require('./gollandTest/gollandResults');
 const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGolland');
@@ -33,6 +38,9 @@ const router = new Router();
 router.post('/auth/login', LoginController);
 router.get('/auth/google', UserIsAuth, GoogleAuthController);
 router.get('/auth/google-redirect', GooglePassportController, GoogleAuthRedirectController);
+
+router.get('/auth/vkontakte', UserIsAuth, VkontakteAuthController);
+router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAuthRedirectController);
 
 router.use('/api/*', MiddleWare);
 router.get(`/api${MeRoute}`, MeController);

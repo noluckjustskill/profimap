@@ -12,7 +12,6 @@ const GooglePassportController = passport.authenticate('google', { failureRedire
 const GoogleAuthRedirectController = async (ctx) => {
   const user = get(ctx, 'state.session.passport.user');
   
-  
   if (ctx.isAuthenticated() && user) {
     ctx.redirect(`/login?token=${user.token}`);
     return;
