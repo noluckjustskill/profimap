@@ -1,10 +1,11 @@
 const passport = require('../services/passport');
+const AuthConfig = require('../config/auth.json');
 
 const { get } = require('lodash');
 
 const VkontakteAuthController = passport.authenticate('vkontakte', {
-  display: 'page',
-  scope: ['email'],
+  display: AuthConfig.vkontakte.display,
+  scope: AuthConfig.vkontakte.scopes,
 });
 
 const VkontaktePassportController = passport.authenticate('vkontakte', { failureRedirect: '/login' });
