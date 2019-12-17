@@ -5,7 +5,8 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
-        - base_url=https://dev.panel.profimap.ru
+        - base_url=http://127.0.0.1:3000
+        - browser_base_url=https://dev.panel.profimap.ru
         - yandex_metrika=56011483
     restart: always
     environment:
@@ -22,6 +23,7 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - VKONTAKTE_CLIENT_ID=${VKONTAKTE_CLIENT_ID}
       - VKONTAKTE_CLIENT_SECRET=${VKONTAKTE_CLIENT_SECRET}
+      - SENDGRID_KEY=${SENDGRID_KEY}
       - STATIC_DIR=${STATIC_DIR}
       - STATIC_URL=${STATIC_URL}
     network_mode: 'host'

@@ -67,6 +67,7 @@
       const recomendations = await $axios.$get('recommendations').catch(() => ([]));
       return { recomendations };
     },
+    middleware: 'authenticated',
   };
 </script>
 

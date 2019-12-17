@@ -32,13 +32,13 @@ module.exports = class Users extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['name'],
       properties: {
         id: { type: 'integer' },
         name: { type: 'string' },
         email: { type: ['string', 'null'] },
-        externalId: { type: 'string' },
-        password: { type: 'string' },
+        externalId: { type: ['string', 'null'] },
+        status: { type: 'string' },
+        password: { type: ['string', 'null'] },
         picture: { type: ['string', 'null'] },
       }
     };

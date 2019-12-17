@@ -98,6 +98,7 @@
         redirect('/');
       }
     },
+    middleware: 'authenticated',
   };
 </script>
 

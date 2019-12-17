@@ -35,6 +35,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/axios.js',
     { src: '~/plugins/highcharts', mode: 'client' },
     '~/plugins/dynamicColor',
   ],
@@ -76,6 +77,7 @@ module.exports = {
   */
   axios: {
     baseURL: `${process.env.BASE_URL}/api`,
+    browserBaseURL: `${process.env.BROWSER_BASE_URL}/api`,
   },
   auth: {
     token: {
@@ -98,9 +100,6 @@ module.exports = {
         tokenType: false,
       }
     },
-  },
-  router: {
-    middleware: ['auth'],
   },
   /*
   ** vuetify module configuration

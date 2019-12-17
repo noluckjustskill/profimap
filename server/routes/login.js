@@ -11,7 +11,7 @@ const LoginController = async (ctx) => {
     return;
   }
 
-  const token = await UserService.AuthUser(user.toJSON());
+  const token = await UserService.authUser(user.toJSON());
 
   ctx.body = { token };
 };
