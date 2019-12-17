@@ -1,6 +1,7 @@
 <template>
   <v-app light>
-    <v-app-bar 
+    <v-app-bar
+      v-if="user"
       v-model="drawer"
       clipped-left
       :height="$vuetify.breakpoint.mdAndDown ? 50 : 88"
@@ -18,7 +19,7 @@
           <HeaderBar :items="itemsBar" />
         </v-flex>
         <v-flex xs3 fill-height>
-          <UserBar v-if="user" :user="user" />
+          <UserBar :user="user" />
         </v-flex>
       </v-layout>
     </v-app-bar>
@@ -63,7 +64,8 @@
     },
     computed: {
       user() {
-        return this.$store.state.auth.user;
+        const user = this.$store.state.auth.user;
+        return user && user.status === 'active' ? user : null;
       },
     },
     methods: {

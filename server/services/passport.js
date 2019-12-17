@@ -3,7 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const VkontakteStrategy = require('passport-vkontakte').Strategy;
 const { get } = require('lodash');
 
-const { findOAuthUser, createOAuthUser, AuthUser } = require('../services/user');
+const { findOAuthUser, createOAuthUser, authUser } = require('../services/user');
 
 passport.serializeUser(({
   id,
@@ -19,7 +19,7 @@ passport.serializeUser(({
 
     return user;
   }).then(profile => {
-    return AuthUser(profile.toJSON());
+    return authUser(profile.toJSON());
   }).then(token => {
     done(null, { token });
   }).catch(err => {

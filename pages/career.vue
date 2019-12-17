@@ -16,6 +16,7 @@
     components: {
       CareerChart,
     },
+    middleware: 'authenticated',
   };
 </script>
 

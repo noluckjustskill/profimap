@@ -130,6 +130,12 @@
   </div>
 </template>
 
+<script>
+  export default {
+    middleware: 'authenticated',
+  };
+</script>
+
 <style scoped lang="scss">
   .row {
     max-width: 100%;

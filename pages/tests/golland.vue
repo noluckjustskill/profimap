@@ -1,5 +1,6 @@
 <template>
   <div>
+    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
       Тест Голланда
     </h2>
@@ -187,6 +188,7 @@
             </v-dialog>
           </v-layout>
           <v-btn
+            v-if="activeUser"
             :block="isMobile"
             color="primary"
             rounded
@@ -197,6 +199,7 @@
             <span class="body-2">Выбрать другой тест</span>
           </v-btn>
           <v-btn
+            v-if="activeUser"
             :block="isMobile"
             outlined
             rounded
@@ -207,6 +210,17 @@
           >
             <span class="body-2">Пройти заново</span>
           </v-btn>
+          <v-btn
+            v-if="!activeUser"
+            :block="isMobile"
+            color="primary"
+            rounded
+            depressed
+            class="mt-2 mr-1"
+            @click="showInviteForm = true"
+          >
+            <span class="body-2">Сохранить результат</span>
+          </v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -215,8 +229,12 @@
 
 <script>
   import { isEmpty, get } from 'lodash';
+  import InviteForm from '../../components/InviteForm';
 
   export default {
+    components: {
+      InviteForm,
+    },
     data: () => ({
       hasResult: false,
 
@@ -233,6 +251,8 @@
       calculated: null,
       recommendations: null,
       description: null,
+
+      showInviteForm: false,
     }),
     computed: {
       cardImageHeight() {
@@ -241,6 +261,10 @@
       isMobile() {
         return this.$vuetify.breakpoint.xsOnly;
       },
+      activeUser() {
+        return this.$store.state.auth.user
+          && this.$store.state.auth.user.status === 'active';
+      }
     },
     async asyncData({ $axios }) {
       const result = await $axios.$get('gollandProfile').catch(() => ({}));
@@ -285,6 +309,12 @@
           this.calculated = name;
           this.recommendations = recommendations;
           this.description = description;
+
+          if (!this.activeUser) {
+            setTimeout(() => {
+              this.showInviteForm = true;
+            }, 3000);
+          }
         }).catch(err => {
           console.error(err);
         });

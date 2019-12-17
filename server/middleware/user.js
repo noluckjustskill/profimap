@@ -1,7 +1,9 @@
+const { get } = require('lodash');
 const { validateUser } = require('../services/user');
 
 const UserIsAuth = async (ctx, next) => {
-  const user = await validateUser(ctx);
+  const token = get(ctx, 'headers.authorization', ctx.cookies.get('auth.local'));
+  const user = await validateUser(token);
 
   if (user) {
     ctx.redirect('/');
