@@ -93,8 +93,8 @@ module.exports = {
     strategies: {
       local: {
         endpoints: {
-          login: { url: `${process.env.BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
-          user: { url: `${process.env.BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
+          login: { url: `${process.env.BROWSER_BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
+          user: { url: `${process.env.BROWSER_BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
           logout: false,
         },
         tokenType: false,
