@@ -89,7 +89,7 @@ const createInvation = async (userId, code) => {
 };
 
 const sendMail = async ({ email, name, password, code }) => {
-  const link = `${process.env.BASE_URL}/auth/activate?code=${code}`;
+  const link = `${process.env.BROWSER_BASE_URL}/auth/activate?code=${code}`;
     
   const personalization = new Personalization({
     to: email,
