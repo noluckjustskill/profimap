@@ -42,7 +42,7 @@ router.post('/auth/signup', SignupController);
 router.post('/auth/login', LoginController);
 router.get('/auth/google', UserIsAuth, GoogleAuthController);
 router.get('/auth/google-redirect', GooglePassportController, GoogleAuthRedirectController);
-router.get('/auth/activate', ActivateController);
+router.get('/auth/activate', UserIsAuth, ActivateController);
 
 router.get('/auth/vkontakte', UserIsAuth, VkontakteAuthController);
 router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAuthRedirectController);
