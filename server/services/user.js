@@ -19,9 +19,9 @@ const findOAuthUser = async (externalId, email) => {
   return UsersModel
     .query()
     .findOne((builder) => {
-      const build = builder.where({ externalId, password: null, status: 'active' });
+      const build = builder.where({ externalId });
       if (email) {
-        build.orWhere({ email, password: null, status: 'active' });
+        build.orWhere({ email });
       }
 
       return build;

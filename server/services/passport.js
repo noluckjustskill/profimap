@@ -12,7 +12,8 @@ passport.serializeUser(({
   picture,
 }, done) => {
   const externalId = String(id);
-  findOAuthUser(externalId, email).then(user => {
+  
+  return findOAuthUser(externalId, email).then(user => {
     if (!user) {
       return createOAuthUser(externalId, name, email, picture);
     }
