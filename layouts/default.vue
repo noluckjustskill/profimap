@@ -4,7 +4,7 @@
       v-if="user"
       v-model="drawer"
       clipped-left
-      :height="$vuetify.breakpoint.mdAndDown ? 50 : 88"
+      :height="isMobile ? 50 : 88"
       app
       class="bar"
     >
@@ -63,6 +63,9 @@
       };
     },
     computed: {
+      isMobile() {
+        return this.$vuetify.breakpoint.mdAndDown;
+      },
       user() {
         const user = this.$store.state.auth.user;
         return user && user.status === 'active' ? user : null;

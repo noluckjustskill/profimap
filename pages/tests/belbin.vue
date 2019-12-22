@@ -154,7 +154,7 @@
             outlined
             rounded
             depressed
-            color="accent"
+            color="primary"
             class="mt-2"
             @click="restart"
           >

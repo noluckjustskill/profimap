@@ -121,7 +121,7 @@
             outlined
             rounded
             depressed
-            color="accent"
+            color="primary"
             class="mt-2"
             @click="restart"
           >
@@ -309,7 +309,7 @@
 
     @media (max-width: 599px) {
       font-size: 0.95rem !important;
-      height: 200px;
+      height: 220px;
     }
   }
   .caption {

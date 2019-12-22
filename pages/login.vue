@@ -38,7 +38,7 @@
                   Войти с помощью
                 </h2>  
                 <v-layout row wrap class="mt-6 px-4">
-                  <v-flex xs12 md6 :class="!isMobile ? 'pr-2' : 'pb-2'">
+                  <v-flex xs12 md6 class="google-btn">
                     <v-btn
                       block
                       x-large
@@ -139,11 +139,6 @@
       snackbarText: '',
       preloader: true,
     }),
-    computed: {
-      isMobile() {
-        return this.$vuetify.breakpoint.smAndDown;
-      },
-    },
     created() {
       const token = this.$route.query.token;
 
@@ -180,8 +175,14 @@
 </script>
 
 <style lang="scss" scoped>
-.page::-webkit-scrollbar {
-  display: none;
+.google-btn {
+  padding-right: 8px;
+  padding-bottom: 0px;
+
+  @media (max-width: 960px) {
+    padding-right: 0;
+    padding-bottom: 8px
+  }
 }
 
 .title-info {

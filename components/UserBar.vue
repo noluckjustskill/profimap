@@ -4,7 +4,7 @@
       <template v-slot:activator="{ on }">
         <v-avatar 
           :color="avatarColor"
-          :size="$vuetify.breakpoint.mdAndDown ? 28 : 36"
+          :size="isMobile ? 28 : 36"
           v-on="on"
         >
           <img v-if="user.picture" :src="user.picture" alt="avatar">
@@ -57,6 +57,9 @@
       return { menu: false };
     },
     computed: {
+      isMobile() {
+        return this.$vuetify.breakpoint.mdAndDown;
+      },
       userInitials() {
         return initials(this.user.name).charAt(0);
       },
