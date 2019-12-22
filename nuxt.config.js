@@ -30,6 +30,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '@mdi/font/css/materialdesignicons.css',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -107,6 +108,12 @@ module.exports = {
   */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    defaultAssets: {
+      font: {
+        family: 'Roboto',
+      },
+      icons: false,
+    },
     theme: {
       themes: {
         light: {

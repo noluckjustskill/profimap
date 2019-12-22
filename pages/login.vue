@@ -20,6 +20,7 @@
     <v-content class="hero" :class="{ white: preloader }">
       <v-container
         class="fill-height"
+        justify-center
         fluid
       >
         <v-row
