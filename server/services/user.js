@@ -30,12 +30,15 @@ const findOAuthUser = async (externalId, email) => {
 };
 
 const createOAuthUser = async (id, name, email, picture) => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
   return UsersModel.query().insert({
     externalId: id,
     name,
     email,
     picture,
     status: 'active',
+    createdAt: now.getFullYear() + '-' + month + '-' + now.getDate(), 
   });
 };
 
@@ -110,6 +113,11 @@ const sendMail = async ({ email, name, password, code }) => {
 };
 
 const authUser = async (user) => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  await UsersModel.query().findById(user.id).patch({ 
+    lastLogin: now.getFullYear() + '-' + month + '-' + now.getDate() 
+  });
   const token = jwt.sign(
     user,
     process.env.JWT_SECRET,
