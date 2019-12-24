@@ -144,7 +144,9 @@
       const token = this.$route.query.token;
 
       if (token) {
-        this.$auth.setUserToken(token).catch(() => {
+        this.$auth.setUserToken(token).then(() => {
+          this.$router.push('/');
+        }).catch(() => {
           this.preloader = false;
         });
       } else {

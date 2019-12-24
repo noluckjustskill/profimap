@@ -38,6 +38,7 @@ const knex = Knex({
     password: DB_USER_PASSWORD,
     database: DB_NAME
   },
+  timezone: 'UTC',
   ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
