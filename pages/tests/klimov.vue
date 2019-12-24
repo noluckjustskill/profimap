@@ -1,5 +1,6 @@
 <template>
   <div>
+    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
       Тест Климова
     </h2>
@@ -98,8 +99,9 @@
             </template>
           </h4>
           <!-- eslint-disable-next-line -->
-          <p v-if="description" class="body-2" v-html="description" />
+          <p v-if="description" class="descr body-2" v-html="description" />
           <v-btn
+            v-if="activeUser"
             :block="isMobile"
             color="primary"
             rounded
@@ -110,15 +112,27 @@
             <span class="body-2">Выбрать другой тест</span>
           </v-btn>
           <v-btn
+            v-if="activeUser"
             :block="isMobile"
             outlined
             rounded
             depressed
-            color="accent"
+            color="primary"
             class="mt-2"
             @click="restart"
           >
             <span class="body-2">Пройти заново</span>
+          </v-btn>
+          <v-btn
+            v-if="!activeUser"
+            :block="isMobile"
+            color="primary"
+            rounded
+            depressed
+            class="mt-2 mr-1"
+            @click="showInviteForm = true"
+          >
+            <span class="body-2">Сохранить результат</span>
           </v-btn>
         </div>
       </v-flex>
@@ -128,8 +142,12 @@
 
 <script>
   import { isEmpty, get } from 'lodash';
+  import InviteForm from '../../components/InviteForm';
 
   export default {
+    components: {
+      InviteForm,
+    },
     data: () => ({
       hasResult: false,
 
@@ -139,6 +157,8 @@
 
       calculated: null,
       description: null,
+
+      showInviteForm: false,
     }),
     computed: {
       cardImageHeight() {
@@ -147,6 +167,10 @@
       isMobile() {
         return this.$vuetify.breakpoint.xsOnly;
       },
+      activeUser() {
+        return this.$store.state.auth.user
+          && this.$store.state.auth.user.status === 'active';
+      }
     },
     async asyncData({ $axios }) {
       const result = await $axios.$get('klimovResults').catch(() => ({}));
@@ -189,6 +213,12 @@
           this.hasResult = true;
           this.calculated = name;
           this.description = fullText;
+
+          if (!this.activeUser) {
+            setTimeout(() => {
+              this.showInviteForm = true;
+            }, 3000);
+          }
         }).catch(err => {
           console.error(err);
         });
@@ -278,5 +308,10 @@
   }
   .caption {
     vertical-align: middle;
+  }
+  .descr {
+    line-height: 30px;
+    max-width: 590px;
+    color:rgba(0, 0, 0, 0.7);
   }
 </style>

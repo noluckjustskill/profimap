@@ -64,4 +64,7 @@
     font-size: 12px;
     margin-top: 5px;
   }
+  .avatar {
+    border: 10px solid rgba(0, 0, 0, 0.1);
+  }
 </style>

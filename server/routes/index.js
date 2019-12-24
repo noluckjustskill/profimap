@@ -1,6 +1,9 @@
 const Router = require('koa-router');
 const MiddleWare = require('../middleware');
 const { MeController, MeRoute } = require('./me');
+const { InviteController, InviteRoute } = require('./invite');
+const { SignupController } = require('./signup');
+const { ActivateController } = require('./activate');
 const { LoginController } = require('./login');
 const { UserIsAuth } = require('../middleware/user');
 const {
@@ -8,6 +11,11 @@ const {
   GoogleAuthRedirectController,
   GooglePassportController
 } = require('./google');
+const {
+  VkontakteAuthController,
+  VkontakteAuthRedirectController,
+  VkontaktePassportController
+} = require('./vkontakte');
 
 const { GollandResultsController, GollandResultsRoute } = require('./gollandTest/gollandResults');
 const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGolland');
@@ -30,12 +38,20 @@ const { PostDiskController, PostDiskRoute } = require('./diskTest/postDisk');
 
 const router = new Router();
 
+router.post('/auth/signup', SignupController);
 router.post('/auth/login', LoginController);
+router.get('/auth/activate', UserIsAuth, ActivateController);
+
 router.get('/auth/google', UserIsAuth, GoogleAuthController);
 router.get('/auth/google-redirect', GooglePassportController, GoogleAuthRedirectController);
 
+router.get('/auth/vkontakte', UserIsAuth, VkontakteAuthController);
+router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAuthRedirectController);
+
 router.use('/api/*', MiddleWare);
 router.get(`/api${MeRoute}`, MeController);
+
+router.post(`/api${InviteRoute}`, InviteController);
 
 router.get(`/api${GollandResultsRoute}`, GollandResultsController);
 router.get(`/api${GetGollandRoute}`, GetGollandController);

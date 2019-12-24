@@ -1,71 +1,74 @@
 <template>
-  <v-layout
-    v-if="!$vuetify.breakpoint.mdAndDown"
-    row
-    wrap
-    align-center
-    justify-start
-    class="header-layout"
-  >
-    <v-flex xs3>
-      <nuxt-link to="/">
-        <v-img
-          :src="require('~/assets/logo.png')"
-          :height="48"
-          :max-width="125"
-          class="ml-2"
-        />
-      </nuxt-link>
-    </v-flex>
-    <v-flex xs9>
-      <v-tabs
-        v-model="tab"
-        :color="$vuetify.theme.themes.light.primary"
-        :centered="centered"
-        :fixed-tabs="fixed"
-      >
-        <v-tab
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          class="tab font-weight-medium"
-        >
-          {{ item.title }}
-        </v-tab>
-      </v-tabs>
-    </v-flex>
-  </v-layout>
-  <div v-else>
-    <v-navigation-drawer
-      v-model="drawer"
-      clipped
-      app
-      hide-overlay
+  <div>
+    <v-layout
+      row
+      wrap
+      align-center
+      justify-start
+      class="header-layout hidden-md-and-down"
     >
-      <div>
-        <v-btn icon right @click="drawer = !drawer">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </div>
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
+      <v-flex xs3>
+        <nuxt-link to="/">
+          <v-img
+            :src="require('~/assets/logo.png')"
+            :height="48"
+            :max-width="125"
+            class="ml-2"
+          />
+        </nuxt-link>
+      </v-flex>
+      <v-flex xs9>
+        <v-tabs
+          v-model="tab"
+          :color="$vuetify.theme.themes.light.primary"
+          :centered="centered"
+          :fixed-tabs="fixed"
+          height="88"
         >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <div>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+          <v-tabs-slider />
+          <v-tab
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            class="tab"
+          >
+            {{ item.title }}
+          </v-tab>
+        </v-tabs>
+      </v-flex>
+    </v-layout>
+    <div class="hidden-md-and-up">
+      <v-navigation-drawer
+        v-model="drawer"
+        clipped
+        app
+        hide-overlay
+      >
+        <div>
+          <v-btn icon right @click="drawer = !drawer">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <div>
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      </div>
     </div>
   </div>
 </template>
@@ -87,7 +90,7 @@
       },
     },
     data: () => ({
-      tab: '/',
+      tab: null,
       drawer: false,
       overlay: false
     }),
@@ -103,5 +106,8 @@
   .tab {
     line-height: 15px;
     letter-spacing: 0.4px;
+    text-transform: none;
+    font-size: 18px;
+    font-weight: 500;
   }
 </style>

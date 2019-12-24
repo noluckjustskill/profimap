@@ -13,6 +13,7 @@ const {
 const Knex = require('knex');
 const { Model, knexSnakeCaseMappers } = require('objection');
 const UsersModel = require('./models/users');
+const InvitedUsersModel = require('./models/invitedUsers');
 const GollandResultsModel = require('./models/golland/gollandResults');
 const KlimovResultsModel = require('./models/klimov/klimovResults');
 const GollandTasksModel = require('./models/golland/gollandTasks');
@@ -37,6 +38,7 @@ const knex = Knex({
     password: DB_USER_PASSWORD,
     database: DB_NAME
   },
+  timezone: 'UTC',
   ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
@@ -52,6 +54,7 @@ Model.knex(knex);
 module.exports = {
   knex,
   UsersModel,
+  InvitedUsersModel,
   GollandResultsModel,
   GollandTasksModel,
   GollandTypesModel,

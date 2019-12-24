@@ -5,7 +5,7 @@
     tile
   >
     <v-list>
-      <v-subheader class="subtitle-1 font-weight-bold">
+      <v-subheader class="title">
         Вас может заинтересовать:
       </v-subheader>
       <v-layout row wrap class="list ma-0">
@@ -17,7 +17,7 @@
         >
           <nuxt-link :to="`professions/${item.id}`" class="nuxtLink">
             <v-list-item>
-              <v-list-item-avatar>
+              <v-list-item-avatar class="mr-3">
                 <v-img :src="item.image" />
               </v-list-item-avatar>
               <v-list-item-content>
@@ -100,7 +100,9 @@
   color: #1782FF !important;
 }
 
-.subtitle-1 {
+.title {
+  font-weight: 500;
+  font-size: 20px;
   color: black;
 }
 

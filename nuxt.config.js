@@ -30,11 +30,13 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '@mdi/font/css/materialdesignicons.css',
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/axios.js',
     { src: '~/plugins/highcharts', mode: 'client' },
     '~/plugins/dynamicColor',
   ],
@@ -76,6 +78,7 @@ module.exports = {
   */
   axios: {
     baseURL: `${process.env.BASE_URL}/api`,
+    browserBaseURL: `${process.env.BROWSER_BASE_URL}/api`,
   },
   auth: {
     token: {
@@ -91,16 +94,13 @@ module.exports = {
     strategies: {
       local: {
         endpoints: {
-          login: { url: `${process.env.BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
-          user: { url: `${process.env.BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
+          login: { url: `${process.env.BROWSER_BASE_URL}/auth/login`, method: 'post', propertyName: 'token' },
+          user: { url: `${process.env.BROWSER_BASE_URL}/api/me`, method: 'get', propertyName: 'me' },
           logout: false,
         },
         tokenType: false,
       }
     },
-  },
-  router: {
-    middleware: ['auth'],
   },
   /*
   ** vuetify module configuration
@@ -108,6 +108,12 @@ module.exports = {
   */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    defaultAssets: {
+      font: {
+        family: 'Roboto',
+      },
+      icons: false,
+    },
     theme: {
       themes: {
         light: {

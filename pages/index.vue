@@ -4,6 +4,7 @@
     wrap
     align-start
     justify-start
+    class="mt-6"
   >
     <v-flex 
       xs12 
@@ -66,6 +67,7 @@
       const recomendations = await $axios.$get('recommendations').catch(() => ([]));
       return { recomendations };
     },
+    middleware: 'authenticated',
   };
 </script>
 
