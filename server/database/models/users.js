@@ -40,7 +40,7 @@ module.exports = class Users extends Model {
         status: { type: 'string' },
         password: { type: ['string', 'null'] },
         picture: { type: ['string', 'null'] },
-        createdAt: { type: ['string', 'null'] }, 
+        createdAt: { type: 'string' }, 
         lastLogin: { type: ['string', 'null'] },
       }
     };

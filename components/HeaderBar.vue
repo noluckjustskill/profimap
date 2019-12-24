@@ -25,6 +25,7 @@
           :fixed-tabs="fixed"
           height="88"
         >
+          <v-tabs-slider />
           <v-tab
             v-for="(item, i) in items"
             :key="i"
@@ -89,7 +90,7 @@
       },
     },
     data: () => ({
-      tab: '/',
+      tab: null,
       drawer: false,
       overlay: false
     }),
