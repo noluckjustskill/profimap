@@ -3,7 +3,7 @@
     <h2 class="display-1 font-weight-medium page-title">
       Тестирование
     </h2>
-    <!-- <v-layout
+    <v-layout
       row
       wrap
       align-start
@@ -15,20 +15,19 @@
         xs12
         class="block-wrap"
       >
-        <div class="block">
-          <v-img
-            :src="require('~/assets/gear.png')"
-            contain
-            width="100%"
-            height="174"
-          />
-          <h3 class="headline font-weight-medium text-center h-type">
-            Hard skills
-          </h3>
-          <h2 class="text-center h-discr">
-            Оцените свои технические навыки
-          </h2>
-        </div>
+        <nuxt-link to="tests/golland" class="test-link">
+          <div class="block">
+            <v-img
+              :src="require('~/assets/golland-icon.png')"
+              contain
+              width="100%"
+              height="174"
+            />
+            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
+              Тест "Профессиональный тип личности"
+            </h3>
+          </div>
+        </nuxt-link>
       </v-flex>
       <v-flex
         lg6
@@ -36,93 +35,57 @@
         xs12
         class="block-wrap"
       >
-        <div class="block">
-          <v-img
-            :src="require('~/assets/heart.png')"
-            contain
-            width="100%"
-            height="174"
-          />
-          <h3 class="headline font-weight-medium text-center h-type">
-            Soft skills
-          </h3>
-          <h2 class="text-center h-discr">
-            Узнайте о своих социальных навыках
-          </h2>
-        </div>
-      </v-flex>
-    </v-layout>
-    <h2 class="display-1 page-title second-title">
-      Другие тесты
-    </h2> -->
-    <v-layout
-      row
-      wrap
-      align-start
-      justify-start
-    >
-      <v-flex
-        xs12
-        class="block-wrap"
-      >
-        <nuxt-link to="tests/golland" class="test-link">
-          <div class="block second-block">
-            <h3 class="headline font-weight-medium test-name">
-              Тест Голланда
-            </h3>
-            <h4 class="subtitle-1 test-descr">
-              Оценка профессиональных предпочтений,
-              опросник позволяет соотнести склонности, способности, интеллект с различными профессиями.
-            </h4>
-          </div>
-        </nuxt-link>
-      </v-flex>
-      <v-flex
-        xs12
-        class="block-wrap"
-      >
         <nuxt-link to="tests/klimov" class="test-link">
-          <div class="block second-block">
-            <h3 class="headline font-weight-medium test-name">
-              Тест Климова
+          <div class="block">
+            <v-img
+              :src="require('~/assets/klimov-icon.png')"
+              contain
+              width="100%"
+              height="174"
+            />
+            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
+              Тест<br>"Профессиональная область"
             </h3>
-            <h4 class="subtitle-1 test-descr">
-              В основу данного теста положена идея
-              о делении всех существующих профессий на 5 типов
-              по признаку предмета или объекта, с которым взаимодействует человек в процессе труда.
-            </h4>
           </div>
         </nuxt-link>
       </v-flex>
       <v-flex
+        lg6
+        md6
         xs12
         class="block-wrap"
       >
         <nuxt-link to="tests/belbin" class="test-link">
-          <div class="block second-block">
-            <h3 class="headline font-weight-medium test-name">
-              Тест Белбина
+          <div class="block">
+            <v-img
+              :src="require('~/assets/belbin-icon.png')"
+              contain
+              width="100%"
+              height="174"
+            />
+            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
+              Тест<br>"Командные роли"
             </h3>
-            <h4 class="subtitle-1 test-descr">
-              Определите, что вы можете делать в команде лучше всех:
-              генерировать идеи, выполнять задачи, доводить дело до конца
-              или налаживать общение между сотрудниками?
-            </h4>
           </div>
         </nuxt-link>
       </v-flex>
       <v-flex
+        lg6
+        md6
         xs12
         class="block-wrap"
       >
         <nuxt-link to="tests/disk" class="test-link">
-          <div class="block second-block">
-            <h3 class="headline font-weight-medium test-name">
-              Тест DISС
+          <div class="block">
+            <v-img
+              :src="require('~/assets/disk-icon.png')"
+              contain
+              width="100%"
+              height="174"
+            />
+            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
+              Тест<br>"Характеристика личности"
             </h3>
-            <h4 class="subtitle-1 test-descr">
-              Как приумножить свою зарплату, заняв правильную роль в коллективе.
-            </h4>
           </div>
         </nuxt-link>
       </v-flex>
@@ -158,7 +121,7 @@
     font-weight: 500;
     border: 1px solid #E5E5E5;
     border-radius: 5px;
-    padding: 45px 21%;
+    padding: 45px 15%;
     box-sizing: border-box;
     background: white;
   }
@@ -169,29 +132,10 @@
       padding: 10%;
     }
   }
-  .text {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-  }
-  .h-type {
-    margin: 35px 0 10px;
-    font-weight: 600 !important;
-  }
-  .h-discr {
-    font-size: 1.1rem;
-    line-height: 23px;
-    opacity: 0.6;
-    font-weight: 400;
-  }
   .test-link {
     text-decoration: none;
   }
-  .test-name {
-    color: #1782FF;
-  }
-  .test-descr {
-    color: rgba(0, 0, 0, 0.3);
+  .headline {
+    color: rgba(0, 0, 0, 0.9);
   }
 </style>

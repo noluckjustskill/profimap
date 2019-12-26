@@ -2,7 +2,7 @@
   <div>
     <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
-      Тест Климова
+      Тест "Профессиональная область"
     </h2>
     <v-layout
       row
@@ -16,12 +16,11 @@
       >
         <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
-            <h4 class="title">
-              Что это?
-            </h4>
-            <p class="my-2 font-weight-light">
-              Предположим, что после соответствующего обучения Вы сможете выполнить любую работу.
-              Но если бы Вам пришлось выбирать только из двух возможностей, что бы Вы предпочли?
+            <p class="mb-2 font-weight-light">
+              В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к 
+              конкретным профессиям. Выбери те, которые привлекают тебя больше всего.
+              <!-- Предположим, что после соответствующего обучения Вы сможете выполнить любую работу.
+              Но если бы Вам пришлось выбирать только из двух возможностей, что бы Вы предпочли? -->
             </p>
             <v-btn
               :disabled="!professions || !professions.length"
