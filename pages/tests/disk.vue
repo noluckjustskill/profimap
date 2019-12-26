@@ -2,7 +2,7 @@
   <div>
     <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
-      Тест DISС
+      Тест "Характеристика личности"
     </h2>
     <v-layout
       row
@@ -16,8 +16,11 @@
       >
         <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
-            <p class="my-2 font-weight-light">
-              Определите, как распределить роли в коллективе между сотрудниками, чтобы сделать компанию более эффективной.
+            <p class="mb-2 font-weight-light">
+              Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, 
+              как ты мыслишь и как принимаешь решения. Выбирай наиболее близкие для тебя решения.
+              <!-- Определите, как распределить роли в коллективе между сотрудниками, чтобы сделать 
+              компанию более эффективной. -->
             </p>
             <v-btn
               :disabled="!questions || !questions.length"
