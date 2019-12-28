@@ -33,7 +33,7 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google-redirect',
 }, (accessToken, refreshToken, profile, done) => {
-  const { id, name, picture, email } = get(profile, '_json', {});
+  const { sub: id, name, picture, email } = get(profile, '_json', {});
   if (!email) {
     done(true, null);
   }

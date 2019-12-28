@@ -5,7 +5,8 @@ const {
 } = require('../database');
 const { keyWithMaxValue } = require('../utils/object');
 const { answers } = require('../config/disk/disk.json');
-const { maxBy } = require('lodash');
+
+const staticUrl = process.env.STATIC_URL;
 
 const getTasks = async () => {
   const list = await DiskTasksModel
@@ -19,29 +20,21 @@ const getTasks = async () => {
 };
 
 const getProfileResult = async (userId) => {
-  const ids = await DiskResultsModel
+  const types = await DiskTypesModel.query().select('*');
+  const resultsList = await DiskResultsModel
     .query()
     .where({ userId })
-    .max('result as max')
-    .select('diskTypeId')
-    .groupBy('id');
+    .select('diskTypeId', 'result');
+  const results = resultsList.reduce((acc, curr) => {
+    acc[curr.diskTypeId] = curr.result;
+    return acc;
+  }, {});
 
-  if (!ids || !ids.length) {
-    return null;
-  }
-
-  const { diskTypeId } = maxBy(ids, res => res.max);
-    
-  const { image, ...descr } = await DiskTypesModel
-    .query()
-    .findById(diskTypeId);
-  
-  const staticUrl = process.env.STATIC_URL;
-
-  return {
-    ...descr,
-    image: `${staticUrl}/${image}`,
-  };
+  return types.map((type) => ({
+    ...type,
+    image: `${staticUrl}/${type.image}`,
+    result: results[type.id] || 0,
+  }));
 };
 
 const insertResult = async (userId, result = []) => {
@@ -72,7 +65,6 @@ const insertResult = async (userId, result = []) => {
 
   const profileType = keyWithMaxValue(profileTypes);
   const diskType = await DiskTypesModel.query().findOne({ name: profileType });
-  const staticUrl = process.env.STATIC_URL;
 
   return {
     ...diskType,

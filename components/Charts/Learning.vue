@@ -8,14 +8,13 @@
     </v-card-title>
     <Preloader v-if="!myChart && !noData" :width="loaderSize" :height="loaderSize" />
     <canvas ref="canvas" height="250" class="px-4" />
-    <div v-if="!myChart && noData" class="no-data text-center">
-      <h3 class="headline">
-        Для Вас нет статистики :(
-      </h3>
+    <div v-if="myChart && noData" class="my-3 text-center">
       <nuxt-link to="/tests/golland" class="link">
-        <h4 class="subtitle-1 mt-2">
-          Пройдите тест Голланда,
-          чтобы наша система смогла узнать вас получше
+        <h4 class="subtitle-1">
+          Узнать свои скиллы
+          <v-icon small>
+            mdi-open-in-new
+          </v-icon>
         </h4>
       </nuxt-link>
     </div>
@@ -25,7 +24,6 @@
 <script>
   import Chart from 'chart.js';
   import hexToRgba from 'hex-to-rgba';
-  import { isEmpty } from 'lodash';
 
   import Preloader from '../Preloader';
 
@@ -60,6 +58,9 @@
             tooltips: {
               enabled: true,
               callbacks: { // https://github.com/chartjs/Chart.js/issues/6188#issuecomment-497251833
+                title: (tooltipItems, data) => {
+                  return data.labels[tooltipItems[0].index];
+                },
                 label: (tooltipItem, data) => {
                   return 'Уровень : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + '%';
                 }
@@ -74,7 +75,7 @@
         return hexToRgba(this.$vuetify.theme.themes.light.primary, 0.2);
       },
       loaderSize() {
-        return this.$vuetify.breakpoint.smAndDown ? 150 : 200;
+        return this.$vuetify.breakpoint.smAndDown ? 160 : 250;
       },
     },
     mounted() {
@@ -85,11 +86,10 @@
         const ctx = this.$refs.canvas;
         const result = await this.$axios.$get('gollandResults');
         
-        if (isEmpty(result)) {
-          this.noData = true;
-          ctx.classList.add('d-none');
+        this.noData = !Object.values(result).every(Boolean);
 
-          return;
+        if (!this.noData) {
+          this.$store.commit('updateProfileProgress', 'golland');
         }
 
         const config = {
@@ -114,9 +114,6 @@
   .skills {
     border: 1px solid #E5E5E5;
     border-radius: 5px;
-  }
-  .no-data {
-    margin: 50px 0;
   }
   .link {
     text-decoration: none;

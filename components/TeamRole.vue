@@ -1,54 +1,44 @@
 <template>
   <v-card
     v-if="loaded"
-    class="elevation-0 results pb-4 mt-2"
+    class="elevation-0 results mt-2"
+    :class="{'pb-2': hasBelbinResult}"
     tile
   >
-    <v-card-title class="title">
+    <v-card-title class="title pb-2">
       Роль в команде
     </v-card-title>
-    <template v-if="info.name || disk.name">
-      <v-list-item v-if="info.name" class="pl-7 pr-7">
-        <v-list-item-avatar>
-          <v-img 
-            min-width="55"
-            min-height="55"
-            :src="info.image" 
-          />
+    <v-hover
+      v-for="type in belbinTypesResult"
+      :key="type.id" 
+      v-slot:default="{ hover }"
+    >
+      <v-list-item 
+        class="pl-7 pr-7"
+      >
+        <v-list-item-avatar tile>
+          <v-img :src="type.image" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="type">
-            {{ info.name }}
+            {{ type.name }}
+            <template v-if="hasBelbinResult">
+              — {{ `${Math.round(type.result * 100)}%` }}
+            </template>
           </v-list-item-title>
-          <v-list-item-subtitle class="description">
-            {{ info.descr }}
+          <v-list-item-subtitle class="type-text description" :class="{ 'text-truncate': !hover, expand: hover }">
+            {{ type.descr }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-divider v-if="disk.name" class="px-4 py-2" />
-      <v-list-item v-if="disk.name" class="pl-7 pr-7">
-        <v-list-item-avatar>
-          <v-img 
-            min-width="55"
-            min-height="55"
-            :src="disk.image" 
-          />
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title class="type">
-            Тип {{ disk.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle class="description">
-            {{ disk.text }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-    <div v-else class="no-data text-center">
+    </v-hover>
+    <div v-if="!hasBelbinResult" class="my-3 text-center">
       <nuxt-link to="/tests/belbin" class="link">
-        <h4 class="subtitle-1 mt-2">
-          Пройдите тест Белбина,
-          чтобы узнать Вашу роль в команде
+        <h4 class="subtitle-1">
+          Узнать свою роль в команде
+          <v-icon small>
+            mdi-open-in-new
+          </v-icon>
         </h4>
       </nuxt-link>
     </div>
@@ -59,28 +49,26 @@
   export default {
     data() {
       return {
-        info: {},
-        disk: {},
         loaded: false,
+        hasBelbinResult: false,
+        belbinTypesResult: [],
       };
     },
-    mounted() {
+    created() {
       this.$axios.$get('belbinResults').then(response => {
         this.loaded = true;
-        this.info = response;
-      });
-      this.$axios.$get('diskResults').then(response => {
-        this.disk = response;
+        this.hasBelbinResult = (response || []).some(t => t.result);
+        this.belbinTypesResult = (response || []).sort((a, b) => b.result - a.result);
+
+        if (this.hasBelbinResult) {
+          this.$store.commit('updateProfileProgress', 'belbin');
+        }
       });
     },
   };
 </script>
 
-<style scoped>
-.no-data {
-  margin: 50px 0;
-}
-
+<style lang="scss" scoped>
 .link {
   text-decoration: none;
 }
@@ -95,30 +83,27 @@
   border-radius: 5px;
 }
 
-.title {
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  color: black;
-}
-
-.type {
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  color: black;
-}
-.description {
+.type-text {
+  overflow: hidden;
   margin-top: 6px;
-  font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
   line-height: 16px;
   color: rgba(0, 0, 0, 0.6);
+  text-align: justify;
   white-space: normal;
+
+  &.description {
+    white-space: nowrap;
+    height: auto;
+    max-height: 16px;
+    transition: max-height 2.5s ease-out;
+
+    &.expand {
+      max-height: 400px;
+      white-space: normal;
+    }
+  }
 }
 </style>
