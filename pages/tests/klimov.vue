@@ -140,7 +140,7 @@
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
 
   export default {
@@ -172,14 +172,15 @@
       }
     },
     async asyncData({ $axios }) {
-      const result = await $axios.$get('klimovResults').catch(() => ({}));
+      const results = await $axios.$get('klimovResults').catch(() => ([]));
+      const maxResult = results.sort((a, b) => b.result - a.result).shift();
       const professions = await $axios.$get('getKlimov').catch(() => ([]));
 
       return {
         professions,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        description: get(result, 'fullText'),
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'fullText'),
       };
     },
     methods: {
@@ -213,11 +214,11 @@
           this.calculated = name;
           this.description = fullText;
 
-          if (!this.activeUser) {
-            setTimeout(() => {
-              this.showInviteForm = true;
-            }, 3000);
-          }
+          // if (!this.activeUser) {
+          //   setTimeout(() => {
+          //     this.showInviteForm = true;
+          //   }, 3000);
+          // }
         }).catch(err => {
           console.error(err);
         });

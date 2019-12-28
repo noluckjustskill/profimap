@@ -178,7 +178,7 @@
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
 
   export default {
@@ -217,15 +217,16 @@
       }
     },
     async asyncData({ $axios }) {
-      const result = await $axios.$get('belbinResults').catch(() => ({}));
+      const results = await $axios.$get('belbinResults').catch(() => ([]));
+      const maxResult = results.sort((a, b) => b.result - a.result).shift();
       const tasks = await $axios.$get('getBelbin').catch(() => ([]));
 
       return {
         tasks,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        description: get(result, 'descr'),
-        func:get(result, 'func'),
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'descr'),
+        func: get(maxResult, 'func'),
       };
     },
     methods: {
@@ -293,11 +294,11 @@
           this.description = descr;
           this.func = func;
 
-          if (!this.activeUser) {
-            setTimeout(() => {
-              this.showInviteForm = true;
-            }, 3000);
-          }
+          // if (!this.activeUser) {
+          //   setTimeout(() => {
+          //     this.showInviteForm = true;
+          //   }, 3000);
+          // }
         }).catch(err => {
           console.error(err);
         });

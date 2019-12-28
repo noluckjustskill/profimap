@@ -1,7 +1,7 @@
 <template>
   <v-card
     v-if="items.length"
-    class="elevation-0 recomendation"
+    class="elevation-0 recomendation mt-2"
     tile
   >
     <v-list>
