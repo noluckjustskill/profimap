@@ -95,6 +95,11 @@
 
 <script>
   export default {
+    head () {
+      return {
+        title: 'Тестирование',
+      };
+    },
     middleware: 'authenticated',
   };
 </script>

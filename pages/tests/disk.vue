@@ -155,6 +155,16 @@
     components: {
       InviteForm,
     },
+    head () {
+      return {
+        title: 'Характеристика личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, как ты мыслишь и как принимаешь решения.',
+        }],
+      };
+    },
     data: () => ({
       hasResult: false,
 

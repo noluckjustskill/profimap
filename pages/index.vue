@@ -69,6 +69,11 @@
       Recomendation,
       CharacterType,
     },
+    head () {
+      return {
+        title: 'Портфолио',
+      };
+    },
     async asyncData({ $axios }) {
       const recomendations = await $axios.$get('recommendations').catch(() => ([]));
       return { recomendations };

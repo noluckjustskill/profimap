@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   mode: 'universal',
+  dev: process.env.NODE_ENV !== 'production',
   /*
   ** Headers of the page
   */
@@ -11,7 +12,8 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
+      { hid: 'keywords', name: 'keywords', content: 'профориентация тест, тест на профориентацию бесплатно онлайн, профориентация для школьников, центр профориентации, профессии, выбрать профессию, профессии будущего, карьера' },
     ],
     link: [],
   },
@@ -56,10 +58,15 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
+    '@nuxtjs/sentry',
     ['nuxt-rfg-icon', { masterPicture: './assets/logo-big.png' }],
-    ['@nuxtjs/robots', {
+    ['@nuxtjs/robots', process.env.NODE_ENV === 'production' ? {
       UserAgent: '*',
-      Disallow: '/'
+      Allow: '/tests',
+      Disallow: '/',
+    } : {
+      UserAgent: '*',
+      Disallow: '/',
     }],
     [
       '@nuxtjs/yandex-metrika',
@@ -70,7 +77,7 @@ module.exports = {
         trackLinks: true,
         accurateTrackBounce: true,
       }
-    ]
+    ],
   ],
   /*
   ** Axios module configuration
@@ -132,14 +139,32 @@ module.exports = {
       },
     }
   },
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+    config: {
+      environment: process.env.NODE_ENV,
+    },
+  },
   /*
   ** Build configuration
   */
   build: {
-    /*
-    ** You can extend webpack config here
-    */
-    extend (config, ctx) {
+    extend(config, { isDev, isClient }) {
+      config.module.rules.forEach(rule => {
+        if (String(rule.test) === String(/\.(png|jpe?g|gif|svg|webp)$/)) {
+          rule.use.push({
+            loader: 'image-webpack-loader',
+            options: {
+              svgo: {
+                plugins: [
+                  { removeViewBox: false },
+                  { removeDimensions: true }
+                ]
+              }
+            }
+          });
+        }
+      });
     }
   }
 };

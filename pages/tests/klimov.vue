@@ -147,6 +147,16 @@
     components: {
       InviteForm,
     },
+    head () {
+      return {
+        title: 'Профессиональная область',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к конкретным профессиям.',
+        }],
+      };
+    },
     data: () => ({
       hasResult: false,
 

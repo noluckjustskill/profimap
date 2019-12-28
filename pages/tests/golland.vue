@@ -234,6 +234,16 @@
     components: {
       InviteForm,
     },
+    head () {
+      return {
+        title: 'Профессиональный тип личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять.',
+        }],
+      };
+    },
     data: () => ({
       hasResult: false,
 
