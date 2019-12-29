@@ -8,40 +8,61 @@
     <v-card-title class="title pb-2">
       Роль в команде
     </v-card-title>
-    <v-hover
-      v-for="type in belbinTypesResult"
-      :key="type.id" 
-      v-slot:default="{ hover }"
-    >
-      <v-list-item 
-        class="pl-7 pr-7"
+    <template v-if="!hasBelbinResult">
+      <v-hover
+        v-for="type in belbinTypesResult"
+        :key="type.id" 
+        v-slot:default="{ hover }"
       >
-        <v-list-item-avatar tile>
-          <v-img :src="type.image" />
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title class="type">
-            {{ type.name }}
-            <template v-if="hasBelbinResult">
-              — {{ `${Math.round(type.result * 100)}%` }}
-            </template>
-          </v-list-item-title>
-          <v-list-item-subtitle class="type-text description" :class="{ 'text-truncate': !hover, expand: hover }">
-            {{ type.descr }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-hover>
-    <div v-if="!hasBelbinResult" class="my-3 text-center">
-      <nuxt-link to="/tests/belbin" class="link">
-        <h4 class="subtitle-1">
-          Узнать свою роль в команде
-          <v-icon small>
-            mdi-open-in-new
-          </v-icon>
-        </h4>
-      </nuxt-link>
-    </div>
+        <v-list-item 
+          class="pl-7 pr-7"
+        >
+          <v-list-item-avatar tile>
+            <v-img :src="type.image" />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title class="type">
+              {{ type.name }}
+              <template v-if="hasBelbinResult">
+                — {{ `${Math.round(type.result * 100)}%` }}
+              </template>
+            </v-list-item-title>
+            <v-list-item-subtitle class="type-text description" :class="{ 'text-truncate': !hover, expand: hover }">
+              {{ type.descr }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-hover>
+      <div class="my-3 text-center">
+        <nuxt-link to="/tests/belbin" class="link">
+          <h4 class="subtitle-1">
+            Узнать свою роль в команде
+            <v-icon small>
+              mdi-open-in-new
+            </v-icon>
+          </h4>
+        </nuxt-link>
+      </div>
+    </template>
+    <v-list-item
+      v-else
+      class="pl-7 pr-7"
+    >
+      <v-list-item-avatar tile>
+        <v-img :src="belbinTypesResult[0].image" />
+      </v-list-item-avatar>
+      <v-list-item-content>
+        <v-list-item-title class="type">
+          {{ belbinTypesResult[0].name }}
+          <template>
+            — {{ `${Math.round(belbinTypesResult[0].result * 100)}%` }}
+          </template>
+        </v-list-item-title>
+        <v-list-item-subtitle class="type-text">
+          {{ belbinTypesResult[0].descr }}
+        </v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
   </v-card>
 </template>
 
