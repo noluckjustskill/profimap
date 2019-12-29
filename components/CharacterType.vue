@@ -8,36 +8,54 @@
     <v-card-title class="title pb-2">
       Склад характера
     </v-card-title>
+    <template v-if="!hasDiskResult">
+      <v-list-item
+        v-for="type in diskTypesResult"
+        :key="type.id"
+        class="pl-7 pr-7"
+      >
+        <v-list-item-avatar tile>
+          <v-img :src="type.image" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title class="type">
+            {{ `Тип ${type.name}` }}
+          </v-list-item-title>
+          <v-list-item-subtitle class="type-text">
+            {{ type.text }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <div class="my-3 text-center">
+        <nuxt-link to="/tests/disk" class="link">
+          <h4 class="subtitle-1">
+            Узнать свой склад характера
+            <v-icon small>
+              mdi-open-in-new
+            </v-icon>
+          </h4>
+        </nuxt-link>
+      </div>
+    </template>
     <v-list-item
-      v-for="type in diskTypesResult"
-      :key="type.id"
+      v-else
       class="pl-7 pr-7"
     >
       <v-list-item-avatar tile>
-        <v-img :src="type.image" />
+        <v-img :src="diskTypesResult[0].image" />
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="type">
-          {{ `Тип ${type.name}` }}
-          <template v-if="hasDiskResult">
-            — {{ `${Math.round(type.result * 100)}%` }}
+          {{ `Тип ${diskTypesResult[0].name}` }}
+          <template>
+            — {{ `${Math.round(diskTypesResult[0].result * 100)}%` }}
           </template>
         </v-list-item-title>
         <v-list-item-subtitle class="type-text">
-          {{ type.text }}
+          {{ diskTypesResult[0].text }}
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-    <div v-if="!hasDiskResult" class="my-3 text-center">
-      <nuxt-link to="/tests/disk" class="link">
-        <h4 class="subtitle-1">
-          Узнать свой склад характера
-          <v-icon small>
-            mdi-open-in-new
-          </v-icon>
-        </h4>
-      </nuxt-link>
-    </div>
   </v-card>
 </template>
 
