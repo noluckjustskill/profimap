@@ -149,22 +149,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    extend(config, { isDev, isClient }) {
-      config.module.rules.forEach(rule => {
-        if (String(rule.test) === String(/\.(png|jpe?g|gif|svg|webp)$/)) {
-          rule.use.push({
-            loader: 'image-webpack-loader',
-            options: {
-              svgo: {
-                plugins: [
-                  { removeViewBox: false },
-                  { removeDimensions: true }
-                ]
-              }
-            }
-          });
-        }
-      });
-    }
+    extend(config, { isDev, isClient }) {}
   }
 };
