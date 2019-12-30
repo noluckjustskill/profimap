@@ -39,9 +39,12 @@ const getProfileResult = async (userId) => {
     .where('gollandResults.userId', userId)
     .select('gollandType.name', 'gollandResults.result');
 
-  return mapKeys(
-    mapValues(keyBy(arr, 'name'), 'result'),
-    (val, key) => keyDictionary[key],
+  return Object.assign(
+    ...Object.values(keyDictionary).map(key => ({ [key]: 0 })),
+    mapKeys(
+      mapValues(keyBy(arr, 'name'), 'result'),
+      (val, key) => keyDictionary[key],
+    )
   );
 };
 

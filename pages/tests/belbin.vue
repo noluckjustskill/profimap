@@ -2,7 +2,7 @@
   <div>
     <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
-      Тест Белбина
+      Тест "Командные роли"
     </h2>
     <v-layout
       row
@@ -16,12 +16,12 @@
       >
         <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
-            <h4 class="title">
-              Что это?
-            </h4>
-            <p class="my-2 font-weight-light">
-              Для определения естественной для сотрудника роли в коллективе, 
-              а также тех ролей, от выполнения которых он предпочитает отказываться.
+            <p class="mb-2 font-weight-light">
+              В современных профессиях важно уметь работать в команде: придумывать и создавать 
+              свои проекты, претворять их в жизнь, набирать людей и налаживать общение между 
+              сотрудниками или координировать весь процесс. Пройди тест и узнай свою роль в команде!
+              <!-- Для определения естественной для сотрудника роли в коллективе, 
+              а также тех ролей, от выполнения которых он предпочитает отказываться. -->
             </p>
             <v-btn
               :disabled="!tasks || !tasks.length"
@@ -178,12 +178,22 @@
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
 
   export default {
     components: {
       InviteForm,
+    },
+    head () {
+      return {
+        title: 'Командные роли',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В современных профессиях важно уметь работать в команде: придумывать и создавать свои проекты, претворять их в жизнь, набирать людей и налаживать общение между сотрудниками или координировать весь процесс.',
+        }],
+      };
     },
     data: () => ({
       hasResult: false,
@@ -217,15 +227,16 @@
       }
     },
     async asyncData({ $axios }) {
-      const result = await $axios.$get('belbinResults').catch(() => ({}));
+      const results = await $axios.$get('belbinResults').catch(() => ([]));
+      const maxResult = results.sort((a, b) => b.result - a.result).shift();
       const tasks = await $axios.$get('getBelbin').catch(() => ([]));
 
       return {
         tasks,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        description: get(result, 'descr'),
-        func:get(result, 'func'),
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'descr'),
+        func: get(maxResult, 'func'),
       };
     },
     methods: {
@@ -293,11 +304,11 @@
           this.description = descr;
           this.func = func;
 
-          if (!this.activeUser) {
-            setTimeout(() => {
-              this.showInviteForm = true;
-            }, 3000);
-          }
+          // if (!this.activeUser) {
+          //   setTimeout(() => {
+          //     this.showInviteForm = true;
+          //   }, 3000);
+          // }
         }).catch(err => {
           console.error(err);
         });

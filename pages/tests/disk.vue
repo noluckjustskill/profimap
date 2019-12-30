@@ -2,7 +2,7 @@
   <div>
     <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
-      Тест DISС
+      Тест "Характеристика личности"
     </h2>
     <v-layout
       row
@@ -16,8 +16,11 @@
       >
         <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
-            <p class="my-2 font-weight-light">
-              Определите, как распределить роли в коллективе между сотрудниками, чтобы сделать компанию более эффективной.
+            <p class="mb-2 font-weight-light">
+              Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, 
+              как ты мыслишь и как принимаешь решения. Выбирай наиболее близкие для тебя решения.
+              <!-- Определите, как распределить роли в коллективе между сотрудниками, чтобы сделать 
+              компанию более эффективной. -->
             </p>
             <v-btn
               :disabled="!questions || !questions.length"
@@ -145,12 +148,22 @@
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
 
   export default {
     components: {
       InviteForm,
+    },
+    head () {
+      return {
+        title: 'Характеристика личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, как ты мыслишь и как принимаешь решения.',
+        }],
+      };
     },
     data: () => ({
       hasResult: false,
@@ -177,14 +190,15 @@
       }
     },
     async asyncData({ $axios }) {
-      const result = await $axios.$get('diskResults').catch(() => ({}));
+      const results = await $axios.$get('diskResults').catch(() => ([]));
+      const maxResult = results.sort((a, b) => b.result - a.result).shift();
       const questions = await $axios.$get('getDisk').catch(() => ([]));
 
       return {
         questions,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        description: get(result, 'text'),
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'text'),
       };
     },
     methods: {
@@ -218,11 +232,11 @@
           this.calculated = name;
           this.description = text;
 
-          if (!this.activeUser) {
-            setTimeout(() => {
-              this.showInviteForm = true;
-            }, 3000);
-          }
+          // if (!this.activeUser) {
+          //   setTimeout(() => {
+          //     this.showInviteForm = true;
+          //   }, 3000);
+          // }
         }).catch(err => {
           console.error(err);
         });

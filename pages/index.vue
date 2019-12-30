@@ -4,7 +4,7 @@
     wrap
     align-start
     justify-start
-    class="mt-6"
+    class="mt-5"
   >
     <v-flex 
       xs12 
@@ -13,15 +13,15 @@
       <v-layout
         row
         wrap
-        align-start
+        align-end
         justify-space-between
         class="row"
       >
         <v-flex md6 xs12>
           <UserInfo />
         </v-flex>
-        <v-flex md6 xs12 class="recommendation">
-          <Recomendation :items="recomendations" />
+        <v-flex md6 xs12 class="progress">
+          <ProfileProgress />
         </v-flex>
       </v-layout>
     </v-flex>
@@ -32,6 +32,7 @@
       class="block-wrap"
     >
       <Learning />
+      <CharacterType />
     </v-flex>
     <v-flex
       lg6
@@ -42,26 +43,36 @@
       <!-- <Skills> -->
       <PersonType />
       <TeamRole />
+      <Recomendation :items="recomendations" />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
   import UserInfo from '../components/UserInfo';
+  import ProfileProgress from '../components/ProfileProgress';
   //import Skills from '../components/Skills';
   import PersonType from '../components/PersonType';
   import TeamRole from '../components/TeamRole';
   import Learning from '../components/Charts/Learning';
   import Recomendation from '../components/Recomendations';
+  import CharacterType from '../components/CharacterType';
 
   export default {
     components: {
       UserInfo,
+      ProfileProgress,
       //Skills,
       PersonType,
       TeamRole,
       Learning,
-      Recomendation
+      Recomendation,
+      CharacterType,
+    },
+    head () {
+      return {
+        title: 'Портфолио',
+      };
     },
     async asyncData({ $axios }) {
       const recomendations = await $axios.$get('recommendations').catch(() => ([]));
@@ -86,7 +97,7 @@
     font-weight: 500;
     font-size: 20px;
   }
-  .recommendation {
+  .progress {
     padding-left: 10px;
     @media (max-width: 959px) {
       padding: 0;

@@ -3,13 +3,22 @@
     v-model="isOpened"
     width="500"
     height="500"
-    persistent
     :fullscreen="isMobile"
     :hide-overlay="isMobile"
   >
     <v-card>
       <v-card-title v-if="!message" class="headline">
         Сохранить результат
+        <v-btn
+          text
+          icon
+          class="btn"
+          @click="isOpened = false"
+        >
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
       </v-card-title>
       <v-card-text v-if="!message">
         <v-form @submit.prevent="signUp">
@@ -27,7 +36,7 @@
             name="email"
             type="text"
           />
-          <v-layout row wrap class="mt-3 px-4">
+          <v-layout row wrap class="mt-3 px-2">
             <v-flex xs12 class="mb-2">
               <v-btn
                 block
@@ -106,3 +115,14 @@
     },
   };
 </script>
+
+<style lang="scss" scoped>
+  .headline {
+    position: relative;
+
+    .btn {
+      position: absolute;
+      right: 24px;
+    }
+  }
+</style>

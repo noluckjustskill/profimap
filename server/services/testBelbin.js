@@ -6,7 +6,6 @@ const {
 const { keyWithMaxValue } = require('../utils/object');
 const { answers, sum } = require('../config/belbin/belbin.json');
 const keyDictionary = require('../config/belbin/belbinSkillsDictionary.json');
-const { maxBy } = require('lodash');
 
 const staticUrl = process.env.STATIC_URL;
 
@@ -30,28 +29,22 @@ const getTasks = async () => {
 };
 
 const getProfileResult = async (userId) => {
-  const ids = await BelbinResultsModel
+  const types = await BelbinTypesModel.query().select('*');
+  const resultsList = await BelbinResultsModel
     .query()
     .where({ userId })
-    .max('result as max')
-    .select('belbinTypeId')
-    .groupBy('id');
+    .select('belbinTypeId', 'result');
+  const results = resultsList.reduce((acc, curr) => {
+    acc[curr.belbinTypeId] = curr.result;
+    return acc;
+  }, {});
 
-  if (!ids || !ids.length) {
-    return null;
-  }
-
-  const { belbinTypeId } = maxBy(ids, res => res.max);
-    
-  const { name, image, ...descr } = await BelbinTypesModel
-    .query()
-    .findById(belbinTypeId);
-
-  return {
-    ...descr,
-    name: keyDictionary[name],
-    image: `${staticUrl}/${image}`,
-  };
+  return types.map((type) => ({
+    ...type,
+    name: keyDictionary[type.name],
+    image: `${staticUrl}/${type.image}`,
+    result: results[type.id] || 0,
+  }));
 };
 
 const insertResult = async (userId, result = {}) => {

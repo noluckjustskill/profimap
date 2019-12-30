@@ -2,7 +2,7 @@
   <div>
     <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
-      Тест Голланда
+      Тест "Профессиональный тип личности"
     </h2>
     <v-layout
       row
@@ -16,15 +16,14 @@
       >
         <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
-            <h4 class="title">
-              Что это?
-            </h4>
-            <p class="my-2 font-weight-light">
-              Вам будут предложены 43 пары профессий.
+            <p class="mb-2 font-weight-light">
+              В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять. 
+              Выбери те, которые тебе нравятся больше всего.
+              <!-- Вам будут предложены 43 пары профессий.
               Из каждой пары вам нужно будет выбрать один вариант, который вам больше нравится и лучше всего подходит,
               но не с точки зрения престижности, а с точки зрения содержания работы и вашего отношения к тому,
               что необходимо делать. Вам нужно определить,
-              можете ли вы успешно заниматься данным видом деятельности и хотите ли вы этим заниматься.
+              можете ли вы успешно заниматься данным видом деятельности и хотите ли вы этим заниматься. -->
             </p>
             <v-btn
               :disabled="!professions || !professions.length"
@@ -235,6 +234,16 @@
     components: {
       InviteForm,
     },
+    head () {
+      return {
+        title: 'Профессиональный тип личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять.',
+        }],
+      };
+    },
     data: () => ({
       hasResult: false,
 
@@ -310,11 +319,11 @@
           this.recommendations = recommendations;
           this.description = description;
 
-          if (!this.activeUser) {
-            setTimeout(() => {
-              this.showInviteForm = true;
-            }, 3000);
-          }
+          // if (!this.activeUser) {
+          //   setTimeout(() => {
+          //     this.showInviteForm = true;
+          //   }, 3000);
+          // }
         }).catch(err => {
           console.error(err);
         });

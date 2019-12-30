@@ -23,8 +23,10 @@ RUN npm install
 ARG base_url
 ARG browser_base_url
 ARG yandex_metrika
+ARG sentry_dsn
 ENV BASE_URL $base_url
 ENV BROWSER_BASE_URL $browser_base_url
 ENV YANDEX_METRIKA $yandex_metrika 
+ENV SENTRY_DSN $sentry_dsn
 
 RUN npm run build

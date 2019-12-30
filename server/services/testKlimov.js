@@ -6,7 +6,8 @@ const {
 const { keyWithMaxValue } = require('../utils/object');
 const { answers } = require('../config/klimov/klimov.json');
 const keyDictionary = require('../config/klimov/klimovSkillsDictionary.json');
-const { maxBy } = require('lodash');
+
+const staticUrl = process.env.STATIC_URL;
 
 const getTasks = async () => {
   const tasks = await KlimovTasksModel
@@ -23,30 +24,22 @@ const getTasks = async () => {
 };
 
 const getProfileResult = async (userId) => {
-  const ids = await KlimovResultsModel
+  const types = await KlimovTypesModel.query().select('*');
+  const resultsList = await KlimovResultsModel
     .query()
     .where({ userId })
-    .max('result as max')
-    .select('klimovTypeId')
-    .groupBy('id');
+    .select('klimovTypeId', 'result');
+  const results = resultsList.reduce((acc, curr) => {
+    acc[curr.klimovTypeId] = curr.result;
+    return acc;
+  }, {});
 
-  if (!ids || !ids.length) {
-    return null;
-  }
-
-  const { klimovTypeId } = maxBy(ids, res => res.max);
-    
-  const { name, image, ...descr } = await KlimovTypesModel
-    .query()
-    .findById(klimovTypeId);
-  
-  const staticUrl = process.env.STATIC_URL;
-
-  return {
-    ...descr,
-    name: keyDictionary[name],
-    image: `${staticUrl}/${image}`,
-  };
+  return types.map((type) => ({
+    ...type,
+    name: keyDictionary[type.name],
+    image: `${staticUrl}/${type.image}`,
+    result: results[type.id] || 0,
+  }));
 };
 
 const insertResult = async (userId, result = []) => {
@@ -77,7 +70,6 @@ const insertResult = async (userId, result = []) => {
 
   const profileType = keyWithMaxValue(profileTypes);
   const klimovType = await KlimovTypesModel.query().findOne({ name: profileType });
-  const staticUrl = process.env.STATIC_URL;
 
   return {
     ...klimovType,

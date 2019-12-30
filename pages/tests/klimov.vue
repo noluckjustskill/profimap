@@ -2,7 +2,7 @@
   <div>
     <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
     <h2 class="display-1 page-title font-weight-medium">
-      Тест Климова
+      Тест "Профессиональная область"
     </h2>
     <v-layout
       row
@@ -16,12 +16,11 @@
       >
         <div v-if="!hasResult" class="block second-block">
           <template v-if="!startTest">
-            <h4 class="title">
-              Что это?
-            </h4>
-            <p class="my-2 font-weight-light">
-              Предположим, что после соответствующего обучения Вы сможете выполнить любую работу.
-              Но если бы Вам пришлось выбирать только из двух возможностей, что бы Вы предпочли?
+            <p class="mb-2 font-weight-light">
+              В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к 
+              конкретным профессиям. Выбери те, которые привлекают тебя больше всего.
+              <!-- Предположим, что после соответствующего обучения Вы сможете выполнить любую работу.
+              Но если бы Вам пришлось выбирать только из двух возможностей, что бы Вы предпочли? -->
             </p>
             <v-btn
               :disabled="!professions || !professions.length"
@@ -141,12 +140,22 @@
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
 
   export default {
     components: {
       InviteForm,
+    },
+    head () {
+      return {
+        title: 'Профессиональная область',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к конкретным профессиям.',
+        }],
+      };
     },
     data: () => ({
       hasResult: false,
@@ -173,14 +182,15 @@
       }
     },
     async asyncData({ $axios }) {
-      const result = await $axios.$get('klimovResults').catch(() => ({}));
+      const results = await $axios.$get('klimovResults').catch(() => ([]));
+      const maxResult = results.sort((a, b) => b.result - a.result).shift();
       const professions = await $axios.$get('getKlimov').catch(() => ([]));
 
       return {
         professions,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        description: get(result, 'fullText'),
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'fullText'),
       };
     },
     methods: {
@@ -214,11 +224,11 @@
           this.calculated = name;
           this.description = fullText;
 
-          if (!this.activeUser) {
-            setTimeout(() => {
-              this.showInviteForm = true;
-            }, 3000);
-          }
+          // if (!this.activeUser) {
+          //   setTimeout(() => {
+          //     this.showInviteForm = true;
+          //   }, 3000);
+          // }
         }).catch(err => {
           console.error(err);
         });

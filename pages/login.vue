@@ -124,6 +124,11 @@
   
   export default {
     layout: 'login',
+    head () {
+      return {
+        title: 'Время выбирать профессию! Куда и как поступать?',
+      };
+    },
     components: {
       Preloader
     },

@@ -7,34 +7,76 @@
     <v-card-title class="title">
       Тип личности
     </v-card-title>
-    <v-list-item v-if="info.name" class="pl-7 pr-7">
+    <template v-if="!hasResult">
+      <v-layout 
+        justify-space-between 
+        align-center 
+        class="px-4"
+      >
+        <v-flex
+          v-for="type in typesResult"
+          :key="type.id"
+          xl3
+          sm2
+          class="text-center"
+        >
+          <v-tooltip dark bottom open-on-click>
+            <template v-slot:activator="{ on }">
+              <v-badge>
+                <v-img
+                  :src="type.image"
+                  width="40"
+                  height="40"
+                  v-on="on"
+                />
+              </v-badge>
+            </template>
+            <div class="text-center hint">
+              <h3 class="subtitle-2">
+                {{ type.name }}
+              </h3>
+              <v-divider />
+              <span class="caption">{{ type.shortText }}</span>
+            </div>
+          </v-tooltip>
+        </v-flex>
+      </v-layout>
+      <div class="mt-3 text-center">
+        <nuxt-link to="/tests/klimov" class="link">
+          <h4 class="subtitle-1">
+            Узнать свой тип личности
+            <v-icon small>
+              mdi-open-in-new
+            </v-icon>
+          </h4>
+        </nuxt-link>
+      </div>
+    </template>
+    <v-list-item v-else>
       <v-list-item-avatar>
-        <v-img 
-          min-width="55"
-          min-height="55"
-          :src="info.image" 
-        />
+        <v-badge>
+          <template v-slot:badge>
+            <span class="caption">
+              {{ `${Math.round(typesResult[0].result * 100)}%` }}
+            </span>
+          </template>
+          <v-img
+            :src="typesResult[0].image"
+            width="40"
+            height="40"
+            v-on="on"
+          />
+        </v-badge>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="type">
-          {{ info.name }}
+          {{ typesResult[0].name }}
         </v-list-item-title>
         <v-list-item-subtitle class="description">
-          {{ info.descr }}
+          {{ typesResult[0].shortText }}
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-    <div v-else class="no-data text-center">
-      <h3 class="headline">
-        Мы Вас не знаем...
-      </h3>
-      <nuxt-link to="/tests/klimov" class="link">
-        <h4 class="subtitle-1 mt-2">
-          Пройдите тест Климова,
-          чтобы наша система смогла определить Ваш тип личности
-        </h4>
-      </nuxt-link>
-    </div>
   </v-card>
 </template>
 
@@ -42,25 +84,33 @@
   export default {
     data() {
       return {
-        info: {},
         loaded: false,
+        hasResult: false,
+        typesResult: [],
       };
     },
-    mounted() {
+    created() {
       this.$axios.$get('klimovResults').then(response => {
         this.loaded = true;
+        this.hasResult = (response || []).some(t => t.result);
+        this.typesResult = (response || []).sort((a, b) => b.result - a.result);
 
-        this.info.name = response.name;
-        this.info.descr = response.shortText;
-        this.info.image = response.image;
+        if (this.hasResult) {
+          this.$store.commit('updateProfileProgress', 'klimov');
+        }
       });
     },
   };
 </script>
 
 <style scoped>
-.no-data {
-  margin: 50px 0;
+.results {
+  border: 1px solid #E5E5E5;
+  border-radius: 5px;
+}
+
+.hint {
+  max-width: 250px;
 }
 
 .link {
@@ -72,17 +122,6 @@
   line-height: 1.3rem;
 }
 
-.results {
-  border: 1px solid #E5E5E5;
-  border-radius: 5px;
-}
-
-.title {
-  font-weight: 500;
-  font-size: 20px;
-  color: black;
-}
-
 .type {
   font-family: Roboto;
   font-style: normal;
@@ -90,9 +129,12 @@
   font-size: 16px;
   line-height: 19px;
   color: black;
+  margin-left: 10px;
 }
+
 .description {
   margin-top: 6px;
+  margin-left: 10px;
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
@@ -101,4 +143,5 @@
   color: rgba(0, 0, 0, 0.6);
   white-space: normal;
 }
+
 </style>
