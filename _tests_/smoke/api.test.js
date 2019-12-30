@@ -22,7 +22,7 @@ describe('Login Endpoint', () => {
 
         done();
       });
-  });
+  }, 10000);
 });
 
 //=================Golland============================
@@ -122,7 +122,7 @@ describe('getKlimov Endpoint', () => {
 });
 
 describe('klimovResults Endpoint', () => {
-  it('should return dictionary with information about suitable type', (done) => {
+  it('should return array of dictionaries with information about types', (done) => {
     request(app.callback())
       .get('/api/klimovResults')
       .set('Authorization', token)
@@ -131,7 +131,111 @@ describe('klimovResults Endpoint', () => {
         if (err) done(err);
 
         expect(res.statusCode).toEqual(200);
-        expect(Object.values(res.body).every(val => !isObject(val))).toBe(true);
+        expect(res.body.every(cur => {
+          return Object.values(cur).every(val => !isObject(val));
+        })).toBe(true);
+        // expect(res.body.every(cur => {
+        //   return (difference(Object.keys(cur), 
+        //     ['id', 'name', 'image', 'shortText', 'fullText', 'result']).length === 0);
+        // })).toBe(true);
+
+        done();
+      });
+  });
+});
+
+//=================Belbin=============================
+
+describe('getBelbin Endpoint', () => {
+  it('should return arrays with 8 strings - variants for Belbin test', (done) => {
+    request(app.callback())
+      .get('/api/getBelbin')
+      .set('Authorization', token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) done(err);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.every(cur => ( Array.isArray(cur) ))).toBe(true);
+        expect(res.body.every(cur => ( cur.length === 8 ) )).toBe(true);
+        expect(res.body.every(cur => {
+          return cur.every(elem => {
+            return Object.values(elem).every(element => isString(element));
+          });
+        })).toBe(true);
+
+        done();
+      });
+  });
+});
+
+describe('belbinResults Endpoint', () => {
+  it('should return array of dictionaries with information about types', (done) => {
+    request(app.callback())
+      .get('/api/belbinResults')
+      .set('Authorization', token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) done(err);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.every(cur => {
+          return Object.values(cur).every(val => !isObject(val));
+        })).toBe(true);
+        // expect(res.body.every(cur => {
+        //   return (difference(Object.keys(cur), ['id', 'name', 'image', 'descr', 'func', 'result']).length === 0);
+        // })).toBe(true);
+
+        done();
+      });
+  });
+});
+
+//=================DISK=============================
+
+describe('getDisk Endpoint', () => {
+  it('should return question and dictionary with variants of anwer for Belbin test', (done) => {
+    request(app.callback())
+      .get('/api/getDisk')
+      .set('Authorization', token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) done(err);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.every(cur => {
+          return (difference(Object.keys(cur), ['name', 'tasks']).length === 0);
+        })).toBe(true);
+        expect(res.body.every(cur => {
+          return isString(cur.name);
+        })).toBe(true);
+        expect(res.body.every(cur => {
+          return cur.tasks.every(elem => {
+            return isString(elem);
+          });
+        })).toBe(true);
+
+        done();
+      });
+  });
+});
+
+describe('diskResults Endpoint', () => {
+  it('should return array of dictionaries with information about types', (done) => {
+    request(app.callback())
+      .get('/api/diskResults')
+      .set('Authorization', token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) done(err);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.every(cur => {
+          return Object.values(cur).every(val => !isObject(val));
+        })).toBe(true);
+        // expect(res.body.every(cur => {
+        //   return (difference(Object.keys(cur), ['id', 'name', 'image', 'text', 'result']).length === 0);
+        // })).toBe(true);
 
         done();
       });
