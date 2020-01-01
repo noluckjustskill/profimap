@@ -28,8 +28,7 @@ module.exports = async (ctx, next) => {
       ctx.body = err.message;
     } else {
       ctx.status = 500;
+      ctx.app.emit('error', err, ctx);
     }
-
-    ctx.app.emit('error', err, ctx);
   }
 };

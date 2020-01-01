@@ -113,7 +113,7 @@ const sendMail = async ({ email, name, password, code }) => {
 const authUser = async (user) => {
   await UsersModel.query().findById(user.id).patch({ 
     lastLogin: knex.raw('now()'),
-  });
+  }).catch((err) => logger.log('error', err));
 
   const token = jwt.sign(
     user,
