@@ -39,7 +39,7 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios.js',
-    // { src: '~/plugins/highcharts', mode: 'client' },
+    { src: '~/plugins/highcharts', mode: 'client' },
     '~/plugins/dynamicColor',
   ],
   /*
