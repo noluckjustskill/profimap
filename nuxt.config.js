@@ -39,7 +39,7 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios.js',
-    { src: '~/plugins/highcharts', mode: 'client' },
+    // { src: '~/plugins/highcharts', mode: 'client' },
     '~/plugins/dynamicColor',
   ],
   /*
@@ -142,7 +142,7 @@ module.exports = {
   sentry: {
     dsn: process.env.SENTRY_DSN,
     config: {
-      environment: process.env.NODE_ENV,
+      environment: process.env.NODE_ENV || 'development',
     },
   },
   /*
