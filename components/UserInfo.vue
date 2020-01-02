@@ -6,7 +6,7 @@
       Мой профиль
     </h2>
     <v-list-item class="pa-0 profile-content">
-      <v-list-item-avatar :size="avatarSize" :color="avatarColor">
+      <v-list-item-avatar :size="avatarSize" :color="avatarColor" class="avatar">
         <img v-if="user.picture" :src="user.picture" alt="avatar">
         <span v-else class="display-1 font-weight-light white--text ma-0">{{ userInitials }}</span>
       </v-list-item-avatar>
@@ -65,6 +65,6 @@
     margin-top: 5px;
   }
   .avatar {
-    border: 10px solid rgba(0, 0, 0, 0.1);
+    justify-content: center;
   }
 </style>

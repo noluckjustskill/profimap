@@ -2,7 +2,6 @@ require('dotenv').config();
 
 module.exports = {
   mode: 'universal',
-  dev: process.env.NODE_ENV !== 'production',
   /*
   ** Headers of the page
   */
@@ -145,26 +144,19 @@ module.exports = {
       environment: process.env.NODE_ENV,
     },
   },
+  render: {
+    http2: {
+      push: true,
+      pushAssets: (req, res, publicPath, preloadFiles) => preloadFiles
+        .filter(f => f.asType === 'script' && f.file === 'runtime.js')
+        .map(f => `<${publicPath}${f.file}>; rel=preload; as=${f.asType}`),
+    },
+  },
   /*
   ** Build configuration
   */
   build: {
-    extend(config, { isDev, isClient }) {
-      config.module.rules.forEach(rule => {
-        if (String(rule.test) === String(/\.(png|jpe?g|gif|svg|webp)$/)) {
-          rule.use.push({
-            loader: 'image-webpack-loader',
-            options: {
-              svgo: {
-                plugins: [
-                  { removeViewBox: false },
-                  { removeDimensions: true }
-                ]
-              }
-            }
-          });
-        }
-      });
+    extend(config, ctx) {
     }
   }
 };

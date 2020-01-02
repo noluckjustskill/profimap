@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:10-alpine
 
 RUN apk add --no-cache --virtual .gyp \
   python \
@@ -20,10 +20,13 @@ RUN npm install
 
 # build necessary, even if no static files are needed,
 # since it builds the server as well
+ARG node_env
 ARG base_url
 ARG browser_base_url
 ARG yandex_metrika
 ARG sentry_dsn
+
+ENV NODE_ENV $node_env
 ENV BASE_URL $base_url
 ENV BROWSER_BASE_URL $browser_base_url
 ENV YANDEX_METRIKA $yandex_metrika 
