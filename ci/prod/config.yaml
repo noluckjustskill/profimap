@@ -5,7 +5,8 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
-        - node_env=production
+        # - node_env=production
+        - node_env=development
         - base_url=http://127.0.0.1:3001
         - browser_base_url=https://panel.profimap.ru
         - yandex_metrika=${YANDEX_METRIKA}
@@ -36,4 +37,5 @@ services:
     ports:
       - '3001:3001'
     command:
-      'npm start'
+      # 'npm start'
+      'npm run start:dev'
