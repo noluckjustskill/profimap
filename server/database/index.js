@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 // Init db connection
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV !== 'production';
 const {
   DB_HOST,
   DB_PORT,
@@ -42,12 +42,12 @@ const knex = Knex({
   ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
-      warn: (msg) => logger.log('warning', msg),
-      error: (msg) => logger.log('error', msg),
-      debug: (msg) => logger.log('info', msg),
+      warn: console.warn,
+      error: console.error,
+      debug: console.debug,
     }
   } : {
-    error: (msg) => logger.log('error', msg),
+    error: console.error,
   }),
 });
 
