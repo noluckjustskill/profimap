@@ -5,15 +5,15 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
-        - node_env=development
-        - base_url=http://127.0.0.1:3000
-        - browser_base_url=https://dev.panel.profimap.ru
+        - node_env=production
+        - base_url=http://127.0.0.1:3002
+        - browser_base_url=https://stg.panel.profimap.ru
         - yandex_metrika=${YANDEX_METRIKA}
         - sentry_dsn=${SENTRY_DSN}
     restart: always
     environment:
       - HOST=127.0.0.1
-      - PORT=3000
+      - PORT=3002
       - LOG_LEVEL=info
       - SLACK_WEBHOOK=${SLACK_WEBHOOK}
       - DB_HOST=${DB_HOST}
@@ -34,6 +34,6 @@ services:
     volumes:
       - ${STATIC_DIR}:/opt/images:ro
     ports:
-      - '3000:3000'
+      - '3002:3002'
     command:
-      'npm run start:dev'
+      'npm start'

@@ -5,7 +5,7 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
-        - NODE_ENV=production
+        - node_env=production
         - base_url=http://127.0.0.1:3001
         - browser_base_url=https://panel.profimap.ru
         - yandex_metrika=${YANDEX_METRIKA}

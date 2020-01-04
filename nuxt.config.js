@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   mode: 'universal',
+  dev: (process.env.NODE_ENV !== 'production'),
   /*
   ** Headers of the page
   */
@@ -38,7 +39,6 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios.js',
-    { src: '~/plugins/highcharts', mode: 'client' },
     '~/plugins/dynamicColor',
   ],
   /*
@@ -57,7 +57,6 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
-    '@nuxtjs/sentry',
     ['nuxt-rfg-icon', { masterPicture: './assets/logo-big.png' }],
     ['@nuxtjs/robots', process.env.NODE_ENV === 'production' ? {
       UserAgent: '*',
@@ -137,23 +136,6 @@ module.exports = {
           : css;
       },
     }
-  },
-  sentry: {
-    dsn: process.env.SENTRY_DSN,
-    config: {
-      environment: process.env.NODE_ENV || 'development',
-    },
-  },
-  /*
-  ** Renderer configuration
-  */
-  render: {
-    http2: {
-      push: true,
-      pushAssets: (req, res, publicPath, preloadFiles) => preloadFiles
-        .filter(f => f.asType === 'script' && f.file === 'runtime.js')
-        .map(f => `<${publicPath}${f.file}>; rel=preload; as=${f.asType}`),
-    },
   },
   render: {
     http2: {
