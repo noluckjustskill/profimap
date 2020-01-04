@@ -4,12 +4,9 @@ const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
 
 const app = require('./koa');
-const { initLogger } = require('./logger');
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js');
-
-global.logger = initLogger(process.env.LOG_LEVEL);
 
 async function start () {
   // Instantiate nuxt.js
@@ -27,9 +24,6 @@ async function start () {
   } else {
     await nuxt.ready();
   }
-
-  // Error handling
-  app.on('error', (err, ctx) => logger.log('error', `${ctx.path} - ${err.message} (code: ${err.code})`));
 
   // Init SSR
   app.use((ctx) => {

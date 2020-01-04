@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   mode: 'universal',
+  dev: (process.env.NODE_ENV !== 'production'),
   /*
   ** Headers of the page
   */
@@ -38,7 +39,7 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios.js',
-    { src: '~/plugins/highcharts', mode: 'client' },
+    // { src: '~/plugins/highcharts', mode: 'client' },
     '~/plugins/dynamicColor',
   ],
   /*
@@ -57,7 +58,6 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
-    '@nuxtjs/sentry',
     ['nuxt-rfg-icon', { masterPicture: './assets/logo-big.png' }],
     ['@nuxtjs/robots', process.env.NODE_ENV === 'production' ? {
       UserAgent: '*',
@@ -137,12 +137,6 @@ module.exports = {
           : css;
       },
     }
-  },
-  sentry: {
-    dsn: process.env.SENTRY_DSN,
-    config: {
-      environment: process.env.NODE_ENV,
-    },
   },
   render: {
     http2: {

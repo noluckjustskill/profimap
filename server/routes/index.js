@@ -1,5 +1,4 @@
 const Router = require('koa-router');
-const { koaLogger } = require('../logger');
 const MiddleWare = require('../middleware');
 const { MeController, MeRoute } = require('./me');
 const { InviteController, InviteRoute } = require('./invite');
@@ -38,9 +37,6 @@ const { GetDiskController, GetDiskRoute } = require('./diskTest/getDisk');
 const { PostDiskController, PostDiskRoute } = require('./diskTest/postDisk');
 
 const router = new Router();
-
-router.use('/auth/*', koaLogger(process.env.LOG_LEVEL));
-router.use('/api/*', koaLogger(process.env.LOG_LEVEL));
 
 router.post('/auth/signup', SignupController);
 router.post('/auth/login', LoginController);

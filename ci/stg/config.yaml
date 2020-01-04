@@ -6,14 +6,14 @@ services:
       dockerfile: Dockerfile
       args:
         - node_env=production
-        - base_url=http://127.0.0.1:3001
-        - browser_base_url=https://panel.profimap.ru
+        - base_url=http://127.0.0.1:3002
+        - browser_base_url=https://stg.panel.profimap.ru
         - yandex_metrika=${YANDEX_METRIKA}
         - sentry_dsn=${SENTRY_DSN}
     restart: always
     environment:
       - HOST=127.0.0.1
-      - PORT=3001
+      - PORT=3002
       - LOG_LEVEL=info
       - SLACK_WEBHOOK=${SLACK_WEBHOOK}
       - DB_HOST=${DB_HOST}
@@ -34,6 +34,6 @@ services:
     volumes:
       - ${STATIC_DIR}:/opt/images:ro
     ports:
-      - '3001:3001'
+      - '3002:3002'
     command:
       'npm start'
