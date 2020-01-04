@@ -31,7 +31,30 @@
     <v-footer 
       app
     >
-      <span>&copy; 2019</span>
+      <span>&copy; Profimap | 2019</span>
+      <span class="links">
+        <v-btn
+          class="mr-2" 
+          href="https://vk.com/profimap"
+          target="_blank"
+          text
+          icon
+          x-small
+          color="blue"
+        >
+          <v-icon> mdi-vk </v-icon>
+        </v-btn>
+        <v-btn 
+          href="https://www.instagram.com/prof1map/?igshid=8xyua4f3xstv"
+          target="_blank"
+          text
+          icon
+          x-small
+          color="#FF29F7"
+        >
+          <v-icon> mdi-instagram </v-icon>
+        </v-btn>
+      </span>
     </v-footer>
   </v-app>
 </template>
@@ -100,5 +123,9 @@
   .header-layout{
     max-width: 1016px;
     margin: 0 auto;
+  }
+  .links{
+    margin-left: auto;
+    margin-right: 10px;
   }
 </style>
