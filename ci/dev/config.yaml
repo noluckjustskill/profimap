@@ -5,9 +5,10 @@ services:
       context: ../../
       dockerfile: Dockerfile
       args:
+        - NODE_ENV=development
         - base_url=http://127.0.0.1:3000
         - browser_base_url=https://dev.panel.profimap.ru
-        - yandex_metrika=56011483
+        - yandex_metrika=${YANDEX_METRIKA}
         - sentry_dsn=${SENTRY_DSN}
     restart: always
     environment:
