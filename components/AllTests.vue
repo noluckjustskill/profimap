@@ -70,16 +70,16 @@
   };
 </script>
 
-<style>
+<style lang="scss" scoped>
   .title {
     color: rgb(90, 90, 90);
-    padding-left: 20px;
+    padding-left: 10px;
   }
   .layout {
     padding: 10px;
   }
   .block-wrap {
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
   }
   .block {
