@@ -6,7 +6,7 @@ const UserIsAuth = async (ctx, next) => {
     const token = get(ctx, 'headers.authorization', ctx.cookies.get('auth.local'));
     const user = await validateUser(token);
 
-    if (user) {
+    if (user && user.status === 'active') {
       ctx.redirect('/');
       return;
     }

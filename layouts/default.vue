@@ -31,7 +31,7 @@
     <v-footer 
       app
     >
-      <span>&copy; Profimap | 2019–2020</span>
+      <span class="caption">&copy; Profimap | 2019–2020</span>
       <span class="links">
         <v-btn
           class="mr-2" 

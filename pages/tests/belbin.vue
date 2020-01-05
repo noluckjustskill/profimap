@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Командные роли"
     </h2>
@@ -174,16 +178,19 @@
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="!activeUser && hasResult" :curr="'belbin'" />
   </div>
 </template>
 
 <script>
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
     },
     head () {
       return {
@@ -206,6 +213,7 @@
       description: null,
       func: null,
       
+      userCanContinue: true,
       showInviteForm: false,
     }),
     computed: {
@@ -227,12 +235,16 @@
       }
     },
     async asyncData({ $axios }) {
-      const results = await $axios.$get('belbinResults').catch(() => ([]));
-      const maxResult = results.sort((a, b) => b.result - a.result).shift();
-      const tasks = await $axios.$get('getBelbin').catch(() => ([]));
+      const { error } = await $axios.$get('can-continue');
+      const [results, tasks] = await Promise.all([
+        $axios.$get('belbinResults').catch(() => ([])),
+        $axios.$get('getBelbin').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
 
       return {
         tasks,
+        userCanContinue: !Boolean(error),
         hasResult: results.some(t => t.result),
         calculated: get(maxResult, 'name'),
         description: get(maxResult, 'descr'),
@@ -303,12 +315,6 @@
           this.calculated = name;
           this.description = descr;
           this.func = func;
-
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
         }).catch(err => {
           console.error(err);
         });

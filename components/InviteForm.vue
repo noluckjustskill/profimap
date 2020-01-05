@@ -1,15 +1,20 @@
 <template>
   <v-dialog
     v-model="isOpened"
-    max-width="500"
+    max-width="600"
     height="500"
+    :persistent="persistent"
     :fullscreen="isMobile"
     :hide-overlay="isMobile"
   >
     <v-card class="dialog-card">
       <v-card-title v-if="!message" class="headline">
-        Сохранить результат
+        {{ persistent ? 'Для продолжения необходимо авторизоваться' : 'Сохранить результат' }}
+        <h4 v-if="persistent" class="hint body-2 text-center mt-2">
+          Тебе будут доступны все тесты и информация о себе
+        </h4>
         <v-btn
+          v-if="!persistent"
           text
           icon
           class="btn"
@@ -48,6 +53,39 @@
               </v-btn>
             </v-flex>
           </v-layout>
+          <h3 class="my-3 text-center subtitle-1">
+            ИЛИ
+          </h3>
+          <v-layout row wrap class="mt-6 px-4">
+            <v-flex xs12 md6 class="google-btn">
+              <v-btn
+                block
+                x-large
+                href="/auth/google" 
+              >
+                <img 
+                  class="mr-2" 
+                  width="18" 
+                  height="18"
+                  :src="require('~/assets/icon-google.png')"
+                >
+                Google
+              </v-btn>
+            </v-flex>
+            <v-flex xs12 md6>
+              <v-btn
+                block
+                x-large
+                href="/auth/vkontakte" 
+                color="accent"
+              >
+                <v-icon left>
+                  mdi-vk
+                </v-icon>
+                ВКонтакте
+              </v-btn>
+            </v-flex>
+          </v-layout>
         </v-form>
       </v-card-text>
       <v-card-text v-else class="text-center body-1 pt-5">
@@ -69,7 +107,11 @@
       opened: {
         type: Boolean,
         default: false
-      }
+      },
+      persistent: {
+        type: Boolean,
+        default: false,
+      },
     },
     data: () => ({
       email: null,
@@ -117,15 +159,29 @@
 </script>
 
 <style lang="scss" scoped>
+  .google-btn {
+    padding-right: 8px;
+    padding-bottom: 0px;
+
+    @media (max-width: 960px) {
+      padding-right: 0;
+      padding-bottom: 8px
+    }
+  }
   .dialog-card {
     max-width: 100%;
   }
   .headline {
     position: relative;
+    justify-content: center;
+    word-break: break-word;
 
     .btn {
       position: absolute;
       right: 24px;
     }
+  }
+  .hint {
+    color: #919191;
   }
 </style>

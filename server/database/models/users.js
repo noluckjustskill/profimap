@@ -1,6 +1,8 @@
 const { Model } = require('objection');
 const GollandResults = require('./golland/gollandResults');
 const KlimovResults = require('./klimov/klimovResults');
+const BelbinResults = require('./belbin/belbinResults');
+const DiskResults = require('./disk/diskResults');
 
 module.exports = class Users extends Model {
   static get tableName() {
@@ -11,7 +13,7 @@ module.exports = class Users extends Model {
   }
   static get relationMappings() {
     return {
-      gollandResults: {
+      GollandResults: {
         relation: Model.HasManyRelation,
         modelClass: GollandResults,
         join: {
@@ -26,7 +28,23 @@ module.exports = class Users extends Model {
           from: 'users.id',
           to: 'klimovResults.userId'
         }
-      }
+      },
+      BelbinResults: {
+        relation: Model.HasManyRelation,
+        modelClass: BelbinResults,
+        join: {
+          from: 'users.id',
+          to: 'belbinResults.userId'
+        }
+      },
+      DiskResults: {
+        relation: Model.HasManyRelation,
+        modelClass: DiskResults,
+        join: {
+          from: 'users.id',
+          to: 'diskResults.userId'
+        }
+      },
     };
   }
   static get jsonSchema() {

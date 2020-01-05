@@ -17,10 +17,13 @@ const {
   VkontaktePassportController
 } = require('./vkontakte');
 
+const { CanContinueController, CanContinueRoute } = require('./canContinue');
+
 const { GollandResultsController, GollandResultsRoute } = require('./gollandTest/gollandResults');
 const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGolland');
 const { PostGollandController, PostGollandRoute } = require('./gollandTest/postGolland');
 const { GollandProfileController, GollandProfileRoute } = require('./gollandTest/gollandProfile');
+
 const { RecommendationsController, RecommendationsRoute } = require('./recommendations');
 const { ProfessionController, ProfessionRoute } = require('./profession');
 
@@ -52,11 +55,13 @@ router.use('/api/*', MiddleWare);
 router.get(`/api${MeRoute}`, MeController);
 
 router.post(`/api${InviteRoute}`, InviteController);
+router.get(`/api${CanContinueRoute}`, CanContinueController);
 
 router.get(`/api${GollandResultsRoute}`, GollandResultsController);
 router.get(`/api${GetGollandRoute}`, GetGollandController);
 router.post(`/api${PostGollandRoute}`, PostGollandController);
 router.get(`/api${GollandProfileRoute}`, GollandProfileController);
+
 router.get(`/api${RecommendationsRoute}`, RecommendationsController);
 router.get(`/api${ProfessionRoute}`, ProfessionController);
 

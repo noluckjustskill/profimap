@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Профессиональный тип личности"
     </h2>
@@ -223,16 +227,19 @@
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="!activeUser && hasResult" :curr="'golland'" />
   </div>
 </template>
 
 <script>
   import { isEmpty, get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
     },
     head () {
       return {
@@ -261,6 +268,7 @@
       recommendations: null,
       description: null,
 
+      userCanContinue: true,
       showInviteForm: false,
     }),
     computed: {
@@ -276,11 +284,15 @@
       }
     },
     async asyncData({ $axios }) {
-      const result = await $axios.$get('gollandProfile').catch(() => ({}));
-      const professions = await $axios.$get('getGolland').catch(() => ([]));
+      const { error } = await $axios.$get('can-continue');
+      const [result, professions] = await Promise.all([
+        $axios.$get('gollandProfile').catch(() => ({})),
+        $axios.$get('getGolland').catch(() => ([]))
+      ]);
 
       return {
         professions,
+        userCanContinue: !Boolean(error),
         hasResult: !isEmpty(result),
         calculated: get(result, 'name'),
         recommendations: get(result, 'recommendations'),
@@ -318,12 +330,6 @@
           this.calculated = name;
           this.recommendations = recommendations;
           this.description = description;
-
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
         }).catch(err => {
           console.error(err);
         });
