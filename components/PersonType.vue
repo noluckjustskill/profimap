@@ -5,13 +5,13 @@
     tile
   >
     <v-card-title class="title">
-      Тип личности
+      Профессиональная область
     </v-card-title>
     <template v-if="!hasResult">
       <v-layout 
         justify-space-between 
         align-center 
-        class="px-4"
+        class="px-4 ml-6"
       >
         <v-flex
           v-for="type in typesResult"
@@ -22,14 +22,12 @@
         >
           <v-tooltip dark bottom open-on-click>
             <template v-slot:activator="{ on }">
-              <v-badge>
-                <v-img
-                  :src="type.image"
-                  width="40"
-                  height="40"
-                  v-on="on"
-                />
-              </v-badge>
+              <v-img
+                :src="type.image"
+                width="40"
+                height="40"
+                v-on="on"
+              />
             </template>
             <div class="text-center hint">
               <h3 class="subtitle-2">
@@ -44,7 +42,7 @@
       <div class="mt-3 text-center">
         <nuxt-link to="/tests/klimov" class="link">
           <h4 class="subtitle-1">
-            Узнать свой тип личности
+            Узнать свою профессиональную область
             <v-icon small>
               mdi-open-in-new
             </v-icon>
@@ -56,7 +54,7 @@
       <v-list-item-avatar>
         <v-badge>
           <template v-slot:badge>
-            <span class="caption">
+            <span class="caption" style="line-height: 0">
               {{ `${Math.round(typesResult[0].result * 100)}%` }}
             </span>
           </template>

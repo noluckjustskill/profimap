@@ -4,14 +4,14 @@
     tile
   >
     <v-card-title class="title">
-      Софт скиллы
+      Тип личности
     </v-card-title>
     <Preloader v-if="!myChart && !noData" :width="loaderSize" :height="loaderSize" />
     <canvas ref="canvas" height="250" class="px-4" />
     <div v-if="myChart && noData" class="my-3 text-center">
       <nuxt-link to="/tests/golland" class="link">
         <h4 class="subtitle-1">
-          Узнать свои скиллы
+          Узнать свой тип личности
           <v-icon small>
             mdi-open-in-new
           </v-icon>
