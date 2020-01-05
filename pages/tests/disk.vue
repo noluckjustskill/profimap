@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Характеристика личности"
     </h2>
@@ -144,16 +148,19 @@
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="!activeUser && hasResult" :curr="'disk'" />
   </div>
 </template>
 
 <script>
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
     },
     head () {
       return {
@@ -175,6 +182,7 @@
       calculated: null,
       description: null,
       
+      userCanContinue: true,
       showInviteForm: false,
     }),
     computed: {
@@ -190,12 +198,16 @@
       }
     },
     async asyncData({ $axios }) {
-      const results = await $axios.$get('diskResults').catch(() => ([]));
-      const maxResult = results.sort((a, b) => b.result - a.result).shift();
-      const questions = await $axios.$get('getDisk').catch(() => ([]));
+      const { error } = await $axios.$get('can-continue');
+      const [results, questions] = await Promise.all([
+        $axios.$get('diskResults').catch(() => ([])),
+        $axios.$get('getDisk').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
 
       return {
         questions,
+        userCanContinue: !Boolean(error),
         hasResult: results.some(t => t.result),
         calculated: get(maxResult, 'name'),
         description: get(maxResult, 'text'),
@@ -231,12 +243,6 @@
           this.hasResult = true;
           this.calculated = name;
           this.description = text;
-
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
         }).catch(err => {
           console.error(err);
         });
