@@ -3,6 +3,9 @@ require('dotenv').config();
 module.exports = {
   mode: 'universal',
   dev: (process.env.NODE_ENV !== 'production'),
+  env: {
+    SENTRY_DSN: process.env.SENTRY_DSN,
+  },
   /*
   ** Headers of the page
   */
@@ -40,6 +43,7 @@ module.exports = {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/dynamicColor',
+    '~/plugins/sentry',
   ],
   /*
   ** Nuxt.js dev-modules

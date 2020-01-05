@@ -1,12 +1,12 @@
 <template>
   <v-dialog
     v-model="isOpened"
-    width="500"
+    max-width="500"
     height="500"
     :fullscreen="isMobile"
     :hide-overlay="isMobile"
   >
-    <v-card>
+    <v-card class="dialog-card">
       <v-card-title v-if="!message" class="headline">
         Сохранить результат
         <v-btn
@@ -117,6 +117,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .dialog-card {
+    max-width: 100%;
+  }
   .headline {
     position: relative;
 
