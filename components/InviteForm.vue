@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="isOpened"
-    max-width="600"
+    max-width="630"
     height="500"
     :persistent="persistent"
     :fullscreen="isMobile"
@@ -14,13 +14,13 @@
           Тебе будут доступны все тесты и информация о себе
         </h4>
         <v-btn
-          v-if="!persistent"
           text
           icon
+          small
           class="btn"
-          @click="isOpened = false"
+          @click="close"
         >
-          <v-icon>
+          <v-icon small>
             mdi-close
           </v-icon>
         </v-btn>
@@ -141,6 +141,13 @@
       }
     },
     methods: {
+      close() {
+        if (this.persistent) {
+          this.$router.go(-1);
+        } else {
+          this.isOpened = false;
+        }
+      },
       signUp() {
         this.loading = true;
 
@@ -178,7 +185,8 @@
 
     .btn {
       position: absolute;
-      right: 24px;
+      right: 10px;
+      top: 10px;
     }
   }
   .hint {

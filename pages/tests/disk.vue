@@ -148,7 +148,7 @@
         </div>
       </v-flex>
     </v-layout>
-    <AllTests v-if="!activeUser && hasResult" :curr="'disk'" />
+    <AllTests v-if="!activeUser && hasResult" :curr="testName" />
   </div>
 </template>
 
@@ -156,6 +156,8 @@
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
   import AllTests from '../../components/AllTests';
+
+  const testName = 'disk';
 
   export default {
     components: {
@@ -173,6 +175,7 @@
       };
     },
     data: () => ({
+      testName,
       hasResult: false,
 
       startTest: false,
@@ -197,7 +200,7 @@
           && this.$store.state.auth.user.status === 'active';
       }
     },
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, store }) {
       const { error } = await $axios.$get('can-continue');
       const [results, questions] = await Promise.all([
         $axios.$get('diskResults').catch(() => ([])),
@@ -207,7 +210,7 @@
 
       return {
         questions,
-        userCanContinue: !Boolean(error),
+        userCanContinue: !error || store.state.guestFirstTest === testName,
         hasResult: results.some(t => t.result),
         calculated: get(maxResult, 'name'),
         description: get(maxResult, 'text'),
@@ -243,6 +246,10 @@
           this.hasResult = true;
           this.calculated = name;
           this.description = text;
+
+          if (!this.activeUser) {
+            this.$store.commit('updateGuestFirstTest', testName);
+          }
         }).catch(err => {
           console.error(err);
         });
