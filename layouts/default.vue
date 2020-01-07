@@ -29,6 +29,7 @@
       </v-container>
     </v-content>
     <v-bottom-navigation
+      v-if="user"
       v-model="tab"
       color="primary"
       class="hidden-md-and-up tabs"
