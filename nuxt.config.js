@@ -44,6 +44,7 @@ module.exports = {
     '~/plugins/axios.js',
     '~/plugins/dynamicColor',
     '~/plugins/sentry',
+    '~/plugins/constants',
   ],
   /*
   ** Nuxt.js dev-modules

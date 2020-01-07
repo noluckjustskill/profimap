@@ -46,27 +46,7 @@
     },
     computed: {
       list() {
-        return [{
-          name: 'golland',
-          text: 'Тип личности',
-          link: '/tests/golland',
-          icon: require('~/assets/golland-icon.png'),
-        }, {
-          name: 'klimov',
-          text: 'Проф. область',
-          link: '/tests/klimov',
-          icon: require('~/assets/klimov-icon.png'),
-        }, {
-          name: 'belbin',
-          text: 'Роль в команде',
-          link: '/tests/belbin',
-          icon: require('~/assets/belbin-icon.png'),
-        }, {
-          name: 'disk',
-          text: 'Хар-ка личности',
-          link: '/tests/disk',
-          icon: require('~/assets/disk-icon.png'),
-        }].filter(({ name }) => name !== this.curr);
+        return this.$constants.allTests.filter(({ name }) => name !== this.curr);
       },
     },
   };
