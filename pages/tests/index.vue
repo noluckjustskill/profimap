@@ -10,81 +10,23 @@
       justify-start
     >
       <v-flex
-        lg6 
-        md6
-        xs12
-        class="block-wrap"
-      >
-        <nuxt-link to="tests/golland" class="test-link">
-          <div class="block">
-            <v-img
-              :src="require('~/assets/golland-icon.png')"
-              contain
-              width="100%"
-              height="174"
-            />
-            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
-              Тест "Профессиональный тип личности"
-            </h3>
-          </div>
-        </nuxt-link>
-      </v-flex>
-      <v-flex
+        v-for="(test, i) in $constants.allTests"
+        :key="i"
         lg6
         md6
         xs12
         class="block-wrap"
       >
-        <nuxt-link to="tests/klimov" class="test-link">
+        <nuxt-link :to="test.link" class="test-link">
           <div class="block">
             <v-img
-              :src="require('~/assets/klimov-icon.png')"
+              :src="test.icon"
               contain
               width="100%"
               height="174"
             />
             <h3 class="headline font-weight-medium text-center mt-8 mb-2">
-              Тест<br>"Профессиональная область"
-            </h3>
-          </div>
-        </nuxt-link>
-      </v-flex>
-      <v-flex
-        lg6
-        md6
-        xs12
-        class="block-wrap"
-      >
-        <nuxt-link to="tests/belbin" class="test-link">
-          <div class="block">
-            <v-img
-              :src="require('~/assets/belbin-icon.png')"
-              contain
-              width="100%"
-              height="174"
-            />
-            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
-              Тест<br>"Командные роли"
-            </h3>
-          </div>
-        </nuxt-link>
-      </v-flex>
-      <v-flex
-        lg6
-        md6
-        xs12
-        class="block-wrap"
-      >
-        <nuxt-link to="tests/disk" class="test-link">
-          <div class="block">
-            <v-img
-              :src="require('~/assets/disk-icon.png')"
-              contain
-              width="100%"
-              height="174"
-            />
-            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
-              Тест<br>"Характеристика личности"
+              Тест<br>"{{ test.text }}"
             </h3>
           </div>
         </nuxt-link>
@@ -126,7 +68,7 @@
     font-weight: 500;
     border: 1px solid #E5E5E5;
     border-radius: 5px;
-    padding: 45px 15%;
+    padding: 45px 8%;
     box-sizing: border-box;
     background: white;
   }
