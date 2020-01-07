@@ -13,7 +13,9 @@
       <v-flex
         v-for="(test, i) in list"
         :key="i"
-        xs4
+        lg4
+        sm6
+        xs12
         class="block-wrap"
       >
         <nuxt-link :to="test.link" class="test-link">

@@ -140,7 +140,7 @@
         </div>
       </v-flex>
     </v-layout>
-    <AllTests v-if="!activeUser && hasResult" :curr="testName" />
+    <AllTests v-if="hasResult" :curr="testName" />
   </div>
 </template>
 
