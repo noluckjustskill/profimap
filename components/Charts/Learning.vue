@@ -57,12 +57,16 @@
             },
             tooltips: {
               enabled: true,
+              height: 120,
               callbacks: { // https://github.com/chartjs/Chart.js/issues/6188#issuecomment-497251833
                 title: (tooltipItems, data) => {
                   return data.labels[tooltipItems[0].index];
                 },
                 label: (tooltipItem, data) => {
                   return 'Уровень : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + '%';
+                },
+                afterLabel: (tooltipItem, data) => {
+                  return data.datasets[tooltipItem.datasetIndex].descr[tooltipItem.index];
                 }
               },
             },
@@ -99,7 +103,19 @@
             datasets: [{
               backgroundColor: this.bgColor,
               pointBackgroundColor: this.$vuetify.theme.themes.light.primary,
-              data: Object.values(result).map(v => v * 100),
+              data: Object.values(result).map(v => Math.round(v.result * 100)),
+              pointRadius: 4,
+              pointHoverRadius: 5,
+              descr: Object.values(result).map(v => {
+                const arr = [];
+                while (v.descr.length > 65) {
+                  const a = v.descr.lastIndexOf(' ', 65);
+                  arr.push(v.descr.substring(0, a));
+                  v.descr = v.descr.substring(a+1, v.descr.length);
+                }
+                arr.push(v.descr);
+                return arr;
+              }),
             }],
           },
         };
