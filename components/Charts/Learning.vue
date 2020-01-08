@@ -81,6 +81,9 @@
       loaderSize() {
         return this.$vuetify.breakpoint.smAndDown ? 160 : 250;
       },
+      radarDescrLength() {
+        return this.$vuetify.breakpoint.mdAndDown ? 48 : 65;
+      },
     },
     mounted() {
       this.fetchResult();
@@ -108,8 +111,8 @@
               pointHoverRadius: 5,
               descr: Object.values(result).map(v => {
                 const arr = [];
-                while (v.descr.length > 65) {
-                  const a = v.descr.lastIndexOf(' ', 65);
+                while (v.descr.length > this.radarDescrLength) {
+                  const a = v.descr.lastIndexOf(' ', this.radarDescrLength);
                   arr.push(v.descr.substring(0, a));
                   v.descr = v.descr.substring(a+1, v.descr.length);
                 }
