@@ -38,6 +38,10 @@ const getProfileResult = async (userId) => {
     .leftJoinRelation('gollandType')
     .where('gollandResults.userId', userId)
     .select('gollandType.name', 'gollandType.descr', 'gollandResults.result');
+  if (!Object.values(arr).length) {
+    const array = await GollandTypesModel.query().select('name');
+    return array.map(el => keyDictionary[el.name]);
+  }
 
   return mapKeys(keyBy(arr, 'name'), (val, key) => keyDictionary[key]);
 };

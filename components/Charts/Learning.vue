@@ -93,13 +93,15 @@
         const ctx = this.$refs.canvas;
         const result = await this.$axios.$get('gollandResults');
         
-        this.noData = !Object.values(result).every(Boolean);
+        if (Array.isArray(result)) {
+          this.noData = true;
+        }
 
         if (!this.noData) {
           this.$store.commit('updateProfileProgress', 'golland');
         }
 
-        const config = {
+        const config = !this.noData ? {
           ...this.config, 
           data: {
             labels: Object.keys(result),
@@ -121,8 +123,19 @@
               }),
             }],
           },
+        } : {
+          ...this.config, 
+          data: {
+            labels: result, 
+            datasets: [{
+              backgroundColor: this.bgColor,
+              pointBackgroundColor: this.$vuetify.theme.themes.light.primary,
+              data: [0, 0, 0, 0, 0, 0],
+              pointRadius: 4,
+              pointHoverRadius: 5,
+            }]
+          },
         };
-
         this.myChart = new Chart(ctx, config);
       },
     },
