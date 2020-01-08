@@ -4,7 +4,14 @@ const { Personalization } = require('@sendgrid/helpers/classes');
 const jwt = require('jsonwebtoken');
 const { knex } = require('../database');
 const { generate } = require('../utils/string');
-const { UsersModel, InvitedUsersModel } = require('../database');
+const {
+  UsersModel,
+  InvitedUsersModel,
+  GollandResultsModel,
+  KlimovResultsModel,
+  BelbinResultsModel,
+  DiskResultsModel,
+} = require('../database');
 const { templateId, emailFrom } = require('../config/email.json');
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
@@ -47,6 +54,21 @@ const createTempUser = async () => {
   delete user.password;
 
   return user;
+};
+
+const updateOAuthUser = async (token, externalId, name, email, picture) => {
+  const user = await validateUser(token);
+  if (!user) {
+    return createOAuthUser(externalId, name, email, picture);
+  }
+
+  return UsersModel.query().updateAndFetchById(user.id, {
+    externalId,
+    name,
+    email,
+    picture,
+    status: 'active',
+  });
 };
 
 const updateUser = async (id, userData = {}) => {
@@ -113,7 +135,7 @@ const sendMail = async ({ email, name, password, code }) => {
 const authUser = async (user) => {
   await UsersModel.query().findById(user.id).patch({ 
     lastLogin: knex.raw('now()'),
-  });
+  }).catch((err) => logger.log('error', err));
 
   const token = jwt.sign(
     user,
@@ -128,15 +150,21 @@ const authUser = async (user) => {
 };
 
 const validateUser = async (token) => {
-  if (!token) {
-    return false;
-  }
-  
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    return user;
   } catch (err) {
-    return false;
+    return null;
   }
+};
+
+const checkProfileProgress = async (user) => {
+  if (!user || user.status === 'active') return false;
+
+  return Promise.all(
+    [GollandResultsModel, KlimovResultsModel, BelbinResultsModel, DiskResultsModel]
+      .map(model => model.query().where({ userId: user.id }).resultSize())
+  ).then(results => results.some(Boolean)).catch(() => false);
 };
 
 module.exports = {
@@ -145,8 +173,10 @@ module.exports = {
   createOAuthUser,
   createTempUser,
   updateUser,
+  updateOAuthUser,
   authUser,
   validateUser,
+  checkProfileProgress,
   checkUserByEmail,
   inviteUser,
   createInvation,

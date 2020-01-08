@@ -43,7 +43,7 @@
       <!-- <Skills> -->
       <PersonType />
       <TeamRole />
-      <Recomendation :items="recomendations" />
+      <!-- <Recomendation :items="recomendations" /> -->
     </v-flex>
   </v-layout>
 </template>
@@ -55,7 +55,7 @@
   import PersonType from '../components/PersonType';
   import TeamRole from '../components/TeamRole';
   import Learning from '../components/Charts/Learning';
-  import Recomendation from '../components/Recomendations';
+  //import Recomendation from '../components/Recomendations';
   import CharacterType from '../components/CharacterType';
 
   export default {
@@ -66,7 +66,7 @@
       PersonType,
       TeamRole,
       Learning,
-      Recomendation,
+      //Recomendation,
       CharacterType,
     },
     head () {

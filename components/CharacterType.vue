@@ -6,7 +6,7 @@
     tile
   >
     <v-card-title class="title pb-2">
-      Склад характера
+      Характеристика личности
     </v-card-title>
     <template v-if="!hasDiskResult">
       <v-list-item
@@ -29,7 +29,7 @@
       <div class="my-3 text-center">
         <nuxt-link to="/tests/disk" class="link">
           <h4 class="subtitle-1">
-            Узнать свой склад характера
+            Узнать свою характеристику личности
             <v-icon small>
               mdi-open-in-new
             </v-icon>

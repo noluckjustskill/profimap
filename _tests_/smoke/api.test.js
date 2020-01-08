@@ -54,7 +54,7 @@ describe('getGolland Endpoint', () => {
 });
 
 describe('gollandResults Endpoint', () => {
-  it('should return dictionary with number for every type', (done) => {
+  it('should return name, result and description in object for every type', (done) => {
     request(app.callback())
       .get('/api/gollandResults')
       .set('Authorization', token)
@@ -62,7 +62,10 @@ describe('gollandResults Endpoint', () => {
       .end((err, res) => {
         if (err) done(err);
 
-        expect(Object.values(res.body).every(val => isNumber(val))).toBe(true);
+        expect(Object.values(res.body).every(val => isObject(val))).toBe(true);
+        expect(Object.values(res.body).every(val => isString(val.name))).toBe(true);
+        expect(Object.values(res.body).every(val => isString(val.descr))).toBe(true);
+        expect(Object.values(res.body).every(val => isNumber(val.result))).toBe(true);
 
         done();
       });

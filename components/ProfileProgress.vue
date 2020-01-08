@@ -41,7 +41,7 @@
       return {
         initialSteps: [{
           name: 'golland',
-          text: 'Проф. предпочтения',
+          text: 'Тип личности',
           link: '/tests/golland',
         }, {
           name: 'klimov',

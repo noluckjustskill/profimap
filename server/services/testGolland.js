@@ -1,4 +1,4 @@
-const { mapKeys, mapValues, keyBy, maxBy } = require('lodash');
+const { mapKeys, keyBy, maxBy } = require('lodash');
 const {
   GollandTasksModel,
   GollandTypesModel,
@@ -37,15 +37,13 @@ const getProfileResult = async (userId) => {
     .query()
     .leftJoinRelation('gollandType')
     .where('gollandResults.userId', userId)
-    .select('gollandType.name', 'gollandResults.result');
+    .select('gollandType.name', 'gollandType.descr', 'gollandResults.result');
+  if (!Object.values(arr).length) {
+    const array = await GollandTypesModel.query().select('name');
+    return array.map(el => keyDictionary[el.name]);
+  }
 
-  return Object.assign(
-    ...Object.values(keyDictionary).map(key => ({ [key]: 0 })),
-    mapKeys(
-      mapValues(keyBy(arr, 'name'), 'result'),
-      (val, key) => keyDictionary[key],
-    )
-  );
+  return mapKeys(keyBy(arr, 'name'), (val, key) => keyDictionary[key]);
 };
 
 const getProfileType = async (userId) => {

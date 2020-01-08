@@ -72,7 +72,7 @@
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
-                    label="Логин"
+                    label="Логин или e-mail"
                     name="login"
                     prepend-icon="mdi-account"
                     type="text"

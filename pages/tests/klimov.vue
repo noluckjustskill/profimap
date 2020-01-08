@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Профессиональная область"
     </h2>
@@ -136,16 +140,21 @@
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="hasResult" :curr="testName" />
   </div>
 </template>
 
 <script>
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
+
+  const testName = 'klimov';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
     },
     head () {
       return {
@@ -158,6 +167,7 @@
       };
     },
     data: () => ({
+      testName,
       hasResult: false,
 
       startTest: false,
@@ -167,6 +177,7 @@
       calculated: null,
       description: null,
 
+      userCanContinue: true,
       showInviteForm: false,
     }),
     computed: {
@@ -181,13 +192,17 @@
           && this.$store.state.auth.user.status === 'active';
       }
     },
-    async asyncData({ $axios }) {
-      const results = await $axios.$get('klimovResults').catch(() => ([]));
-      const maxResult = results.sort((a, b) => b.result - a.result).shift();
-      const professions = await $axios.$get('getKlimov').catch(() => ([]));
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [results, professions] = await Promise.all([
+        $axios.$get('klimovResults').catch(() => ([])),
+        $axios.$get('getKlimov').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
 
       return {
         professions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
         hasResult: results.some(t => t.result),
         calculated: get(maxResult, 'name'),
         description: get(maxResult, 'fullText'),
@@ -224,11 +239,9 @@
           this.calculated = name;
           this.description = fullText;
 
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
+          if (!this.activeUser) {
+            this.$store.commit('updateGuestFirstTest', testName);
+          }
         }).catch(err => {
           console.error(err);
         });

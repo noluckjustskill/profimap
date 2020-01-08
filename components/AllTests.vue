@@ -1,19 +1,20 @@
 <template>
   <div>
-    <h2 class="display-1 font-weight-medium page-title">
-      Тестирование
-    </h2>
+    <h3 class="title">
+      Ещё тесты:
+    </h3>
     <v-layout
       row
       wrap
-      align-start
-      justify-start
+      justify-center
+      align-center
+      class="layout"
     >
       <v-flex
-        v-for="(test, i) in $constants.allTests"
+        v-for="(test, i) in list"
         :key="i"
-        lg6
-        md6
+        lg4
+        sm6
         xs12
         class="block-wrap"
       >
@@ -23,10 +24,10 @@
               :src="test.icon"
               contain
               width="100%"
-              height="174"
+              height="120"
             />
-            <h3 class="headline font-weight-medium text-center mt-8 mb-2">
-              Тест<br>"{{ test.text }}"
+            <h3 class="subtitle-2 text-center my-2">
+              {{ test.text }}
             </h3>
           </div>
         </nuxt-link>
@@ -37,27 +38,27 @@
 
 <script>
   export default {
-    head () {
-      return {
-        title: 'Тестирование',
-      };
+    props: {
+      curr: {
+        type: String,
+        required: true,
+      },
     },
-    middleware: 'authenticated',
+    computed: {
+      list() {
+        return this.$constants.allTests.filter(({ name }) => name !== this.curr);
+      },
+    },
   };
 </script>
 
-<style scoped lang="scss">
-  .row {
-    max-width: 100%;
-    margin: 0 auto;
-  }
-  .page-title {
+<style lang="scss" scoped>
+  .title {
+    color: rgb(90, 90, 90);
     padding-left: 10px;
-    margin-top: 35px;
-    margin-bottom: 15px;
   }
-  .page-title.second-title {
-    margin-top: 50px;
+  .layout {
+    padding: 10px;
   }
   .block-wrap {
     padding: 10px;
@@ -68,21 +69,15 @@
     font-weight: 500;
     border: 1px solid #E5E5E5;
     border-radius: 5px;
-    padding: 45px 8%;
+    padding: 20px 10%;
     box-sizing: border-box;
     background: white;
-  }
-  .block.second-block {
-    padding: 50px;
-
-    @media (max-width: 599px) {
-      padding: 10%;
-    }
   }
   .test-link {
     text-decoration: none;
   }
-  .headline {
+  .subtitle-2 {
     color: rgba(0, 0, 0, 0.9);
+    word-break: break-word;
   }
 </style>
