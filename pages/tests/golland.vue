@@ -198,14 +198,15 @@
             :block="isMobile"
             rounded
             depressed
+            exact
             to="/"
             color="primary"
             class="mt-2 mr-1"
           >
             <v-icon left>
-              mdi-arrow-left 
+              mdi-account
             </v-icon>
-            <span class="body-2">Портфолио</span>
+            <span class="body-2">Вернуться в профиль</span>
           </v-btn>
           <v-btn
             v-if="activeUser"
@@ -213,6 +214,7 @@
             color="primary"
             rounded
             depressed
+            exact
             to="/tests"
             class="mt-2 mr-1"
           >
