@@ -94,6 +94,9 @@
           </template>
         </div>
         <div v-else class="block second-block">
+          <AllTestsForm
+            :opened="allTests && checkRestart"
+          />
           <h4 class="title mb-2 font-weight-medium">
             Ваш результат - 
             <template v-if="calculated">
@@ -156,6 +159,7 @@
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
   import AllTests from '../../components/AllTests';
+  import AllTestsForm from '../../components/AllTestsForm';
 
   const testName = 'disk';
 
@@ -163,6 +167,7 @@
     components: {
       InviteForm,
       AllTests,
+      AllTestsForm
     },
     head () {
       return {
@@ -187,6 +192,7 @@
       
       userCanContinue: true,
       showInviteForm: false,
+      checkRestart: false
     }),
     computed: {
       cardImageHeight() {
@@ -198,7 +204,10 @@
       activeUser() {
         return this.$store.state.auth.user
           && this.$store.state.auth.user.status === 'active';
-      }
+      },
+      allTests() {
+        return this.$store.getters.allTestsDone;
+      },
     },
     async asyncData({ $axios, store }) {
       const { error } = await $axios.$get('can-continue');
@@ -249,7 +258,10 @@
 
           if (!this.activeUser) {
             this.$store.commit('updateGuestFirstTest', testName);
+          } else { 
+            this.$store.commit('updateProfileProgress', testName); 
           }
+          this.checkRestart = true;
         }).catch(err => {
           console.error(err);
         });
