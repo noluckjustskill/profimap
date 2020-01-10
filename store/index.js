@@ -18,3 +18,9 @@ export const mutations = {
     }
   },
 };
+
+export const getters = {
+  allTestsDone(state) {
+    return Object.values(state.profileProgress).every(Boolean);
+  }
+};

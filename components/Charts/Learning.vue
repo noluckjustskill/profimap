@@ -26,6 +26,7 @@
   import hexToRgba from 'hex-to-rgba';
 
   import Preloader from '../Preloader';
+  import { get } from 'lodash';
 
   export default {
     components: {
@@ -66,7 +67,7 @@
                   return 'Уровень : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + '%';
                 },
                 afterLabel: (tooltipItem, data) => {
-                  return data.datasets[tooltipItem.datasetIndex].descr[tooltipItem.index];
+                  return get(data, `datasets[${tooltipItem.datasetIndex}].descr[${tooltipItem.index}]`, []);
                 }
               },
             },
