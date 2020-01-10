@@ -200,7 +200,7 @@
             depressed
             to="/"
             color="primary"
-            class="mt-2"
+            class="mt-2 mr-1"
           >
             <v-icon left>
               mdi-arrow-left 
