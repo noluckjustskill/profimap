@@ -5,6 +5,7 @@ module.exports = {
   dev: (process.env.NODE_ENV !== 'production'),
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
+    RELEASE_NAME: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
   },
   /*
   ** Headers of the page
