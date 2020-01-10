@@ -3,7 +3,7 @@ export default (ctx, inject) => {
     routes: [
       {
         icon: 'mdi-account-circle',
-        title: 'Портфолио',
+        title: 'Профиль',
         to: '/'
       },
       {

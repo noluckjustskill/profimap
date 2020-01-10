@@ -71,7 +71,7 @@
     },
     head () {
       return {
-        title: 'Портфолио',
+        title: 'Профиль',
       };
     },
     async asyncData({ $axios }) {
