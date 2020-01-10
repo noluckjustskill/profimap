@@ -109,6 +109,20 @@
           <v-btn
             v-if="activeUser"
             :block="isMobile"
+            rounded
+            depressed
+            to="/"
+            color="primary"
+            class="mt-2"
+          >
+            <v-icon left>
+              mdi-arrow-left 
+            </v-icon>
+            <span class="body-2">Портфолио</span>
+          </v-btn>
+          <v-btn
+            v-if="activeUser"
+            :block="isMobile"
             color="primary"
             rounded
             depressed
