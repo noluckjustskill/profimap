@@ -1,9 +1,9 @@
 const { Model } = require('objection');
 const Users = require('./users');
 
-module.exports = class InvitedUsers extends Model {
+module.exports = class Feedback extends Model {
   static get tableName() {
-    return 'invitedUsers';
+    return 'feedback';
   }
   static get idColumn() {
     return 'id';
@@ -14,7 +14,7 @@ module.exports = class InvitedUsers extends Model {
         relation: Model.HasOneRelation,
         modelClass: Users,
         join: {
-          from: 'invitedUsers.userId',
+          from: 'feedback.userId',
           to: 'users.id',
         }
       },
@@ -23,11 +23,13 @@ module.exports = class InvitedUsers extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'code'],
+      required: ['userId', 'rate'],
       properties: {
         id: { type: 'integer' },
         userId: { type: 'integer' },
-        code: { type: 'string' },
+        path: { type: 'string' },
+        rate: { type: 'integer' },
+        message: { type: ['string', 'null'] },
       },
     };
   }

@@ -75,15 +75,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .google-btn {
-    padding-right: 8px;
-    padding-bottom: 0px;
-
-    @media (max-width: 960px) {
-      padding-right: 0;
-      padding-bottom: 8px
-    }
-  }
   .dialog-card {
     max-width: 100%;
   }
