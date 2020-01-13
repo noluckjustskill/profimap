@@ -44,6 +44,7 @@ module.exports = {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/dynamicColor',
+    { src: '~/plugins/base64Image', mode: 'client' },
     '~/plugins/sentry',
     '~/plugins/constants',
   ],

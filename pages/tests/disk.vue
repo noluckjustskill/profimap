@@ -164,6 +164,8 @@
           >
             <span class="body-2">Сохранить результат</span>
           </v-btn>
+
+          <FeedbackForm />
         </div>
       </v-flex>
     </v-layout>
@@ -176,6 +178,7 @@
   import InviteForm from '../../components/InviteForm';
   import AllTests from '../../components/AllTests';
   import AllTestsForm from '../../components/AllTestsForm';
+  import FeedbackForm from '../../components/Feedback/FeedbackForm';
 
   const testName = 'disk';
 
@@ -183,7 +186,8 @@
     components: {
       InviteForm,
       AllTests,
-      AllTestsForm
+      AllTestsForm,
+      FeedbackForm,
     },
     head () {
       return {

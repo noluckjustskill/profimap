@@ -39,6 +39,11 @@ const { DiskResultsController, DiskResultsRoute } = require('./diskTest/diskResu
 const { GetDiskController, GetDiskRoute } = require('./diskTest/getDisk');
 const { PostDiskController, PostDiskRoute } = require('./diskTest/postDisk');
 
+const { SendFeedBackController, SendFeedBackRoute } = require('./sendFeedback');
+const { RouteFeedBackController, RouteFeedBackRoute } = require('./routeFeedback');
+
+const { ImageCacheController } = require('./imagesCache');
+
 const router = new Router();
 
 router.post('/auth/signup', SignupController);
@@ -76,5 +81,10 @@ router.post(`/api${PostBelbinRoute}`, PostBelbinController);
 router.get(`/api${DiskResultsRoute}`, DiskResultsController);
 router.get(`/api${GetDiskRoute}`, GetDiskController);
 router.post(`/api${PostDiskRoute}`, PostDiskController);
+
+router.get(`/api${RouteFeedBackRoute}`, RouteFeedBackController);
+router.post(`/api${SendFeedBackRoute}`, SendFeedBackController);
+
+router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 
 module.exports = router;

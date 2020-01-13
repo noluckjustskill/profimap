@@ -28,6 +28,7 @@ const BelbinResultsModel = require('./models/belbin/belbinResults');
 const DiskTasksModel = require('./models/disk/diskTasks');
 const DiskTypesModel = require('./models/disk/diskTypes');
 const DiskResultsModel = require('./models/disk/diskResults');
+const FeedBackModel = require('./models/feedback');
 
 const knex = Knex({
   client: 'mysql', 
@@ -71,4 +72,5 @@ module.exports = {
   DiskTasksModel,
   DiskTypesModel,
   DiskResultsModel,
+  FeedBackModel,
 };
