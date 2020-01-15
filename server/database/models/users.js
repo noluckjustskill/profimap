@@ -3,6 +3,7 @@ const GollandResults = require('./golland/gollandResults');
 const KlimovResults = require('./klimov/klimovResults');
 const BelbinResults = require('./belbin/belbinResults');
 const DiskResults = require('./disk/diskResults');
+const FeedBack = require('./feedback');
 
 module.exports = class Users extends Model {
   static get tableName() {
@@ -43,6 +44,14 @@ module.exports = class Users extends Model {
         join: {
           from: 'users.id',
           to: 'diskResults.userId'
+        }
+      },
+      UserFeedback: {
+        relation: Model.HasManyRelation,
+        modelClass: FeedBack,
+        join: {
+          from: 'users.id',
+          to: 'feedback.userId'
         }
       },
     };

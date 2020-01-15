@@ -68,6 +68,7 @@
                   @click="next(i)"
                 >
                   <v-img
+                    :lazy-src="imagesCache[item.image]"
                     :src="item.image"
                     :height="cardImageHeight"
                     class="white"
@@ -135,6 +136,7 @@
               @click="popupClick(item)"
             >
               <v-img
+                :lazy-src="imagesCache[item.image]"
                 :src="item.image"
                 height="90"
                 class="white"
@@ -243,6 +245,8 @@
           >
             <span class="body-2">Сохранить результат</span>
           </v-btn>
+
+          <FeedbackForm />
         </div>
       </v-flex>
     </v-layout>
@@ -251,10 +255,11 @@
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { isEmpty, get, flatten } from 'lodash';
   import InviteForm from '../../components/InviteForm';
   import AllTests from '../../components/AllTests';
   import AllTestsForm from '../../components/AllTestsForm';
+  import FeedbackForm from '../../components/Feedback/FeedbackForm';
 
   const testName = 'golland';
 
@@ -262,7 +267,8 @@
     components: {
       InviteForm,
       AllTests,
-      AllTestsForm
+      AllTestsForm,
+      FeedbackForm,
     },
     head () {
       return {
@@ -277,6 +283,8 @@
     data: () => ({
       testName,
       hasResult: false,
+
+      imagesCache: {},
 
       startTest: false,
       current: 0,
@@ -326,6 +334,13 @@
         recommendations: get(result, 'recommendations'),
         description: get(result, 'description'),
       };
+    },
+    mounted() {
+      flatten(this.professions).forEach(item => {
+        this.$imageToBase64(`/cache${item.image}`, (base64) => {
+          this.imagesCache[item.image] = base64;
+        });
+      });
     },
     methods: {
       next(index) {
