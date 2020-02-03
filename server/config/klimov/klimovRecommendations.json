@@ -1,0 +1,42 @@
+{
+    "nature": {
+        "Management": 0,
+        "Programming": 0,
+        "Marketing": 0,
+        "Design": 0,
+        "QA": 0,
+        "BigData": 0
+    },
+    "technics": {
+        "Management": 0,
+        "Programming": 1,
+        "Marketing": 0,
+        "Design": 1,
+        "QA": 1,
+        "BigData": 1
+    },
+    "human": {
+        "Management": 1,
+        "Programming": 0,
+        "Marketing": 1,
+        "Design": 1,
+        "QA": 0,
+        "BigData": 0 
+    },
+    "signSystem": {
+        "Management": 1,
+        "Programming": 1,
+        "Marketing": 0,
+        "Design": 0,
+        "QA": 1,
+        "BigData": 1
+    },
+    "artisticImage": {
+        "Management": 0,
+        "Programming": 0,
+        "Marketing": 1,
+        "Design": 1,
+        "QA": 0,
+        "BigData": 0
+    }
+}

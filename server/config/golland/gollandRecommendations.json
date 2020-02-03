@@ -1,0 +1,50 @@
+{
+    "realisticType": {
+        "Management": 0.5,
+        "Programming": 0,
+        "Marketing": 0.25,
+        "Design": 0.5,
+        "QA": 0.75,
+        "BigData": 1
+    },
+    "artisticType": {
+        "Management": 1,
+        "Programming": 1,
+        "Marketing": 0.5,
+        "Design": 0,
+        "QA": 0.5,
+        "BigData": 1
+    },
+    "socialType": {
+        "Management": 0,
+        "Programming": 0,
+        "Marketing": 1,
+        "Design": 0.33,
+        "QA": 0.33,
+        "BigData": 0
+    },
+    "conventionalType": {
+        "Management": 0.5,
+        "Programming": 0.75,
+        "Marketing": 0,
+        "Design": 0.25,
+        "QA": 1,
+        "BigData": 1
+    },
+    "enterprisingType": {
+        "Management": 1,
+        "Programming": 0,
+        "Marketing": 0.25,
+        "Design": 0.5,
+        "QA": 0.25,
+        "BigData": 0.25
+    },
+    "intellectualType": {
+        "Management": 0.5,
+        "Programming": 1,
+        "Marketing": 0.75,
+        "Design": 1,
+        "QA": 0.5,
+        "BigData": 0
+    }
+}

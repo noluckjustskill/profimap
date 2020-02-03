@@ -20,6 +20,7 @@ const {
 const { CanContinueController, CanContinueRoute } = require('./canContinue');
 
 const { GollandResultsController, GollandResultsRoute } = require('./gollandTest/gollandResults');
+const { GollandRecommendationsController, GollandRecommendationsRoute } = require('./gollandTest/gollandRecommendations');
 const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGolland');
 const { PostGollandController, PostGollandRoute } = require('./gollandTest/postGolland');
 const { GollandProfileController, GollandProfileRoute } = require('./gollandTest/gollandProfile');
@@ -28,10 +29,12 @@ const { RecommendationsController, RecommendationsRoute } = require('./recommend
 const { ProfessionController, ProfessionRoute } = require('./profession');
 
 const { KlimovResultsController, KlimovResultsRoute } = require('./klimovTest/klimovResults');
+const { KlimovRecommendationsController, KlimovRecommendationsRoute } = require('./klimovTest/klimovRecommendations');
 const { GetKlimovController, GetKlimovRoute } = require('./klimovTest/getKlimov');
 const { PostKlimovController, PostKlimovRoute } = require('./klimovTest/postKlimov');
 
 const { BelbinResultsController, BelbinResultsRoute } = require('./belbinTest/belbinResults');
+const { BelbinRecommendationsController, BelbinRecommendationsRoute } = require('./belbinTest/belbinRecomendations');
 const { GetBelbinController, GetBelbinRoute } = require('./belbinTest/getBelbin');
 const { PostBelbinController, PostBelbinRoute } = require('./belbinTest/postBelbin');
 
@@ -63,6 +66,7 @@ router.post(`/api${InviteRoute}`, InviteController);
 router.get(`/api${CanContinueRoute}`, CanContinueController);
 
 router.get(`/api${GollandResultsRoute}`, GollandResultsController);
+router.get(`/api${GollandRecommendationsRoute}`, GollandRecommendationsController);
 router.get(`/api${GetGollandRoute}`, GetGollandController);
 router.post(`/api${PostGollandRoute}`, PostGollandController);
 router.get(`/api${GollandProfileRoute}`, GollandProfileController);
@@ -71,10 +75,12 @@ router.get(`/api${RecommendationsRoute}`, RecommendationsController);
 router.get(`/api${ProfessionRoute}`, ProfessionController);
 
 router.get(`/api${KlimovResultsRoute}`, KlimovResultsController);
+router.get(`/api${KlimovRecommendationsRoute}`, KlimovRecommendationsController);
 router.get(`/api${GetKlimovRoute}`, GetKlimovController);
 router.post(`/api${PostKlimovRoute}`, PostKlimovController);
 
 router.get(`/api${BelbinResultsRoute}`, BelbinResultsController);
+router.get(`/api${BelbinRecommendationsRoute}`, BelbinRecommendationsController);
 router.get(`/api${GetBelbinRoute}`, GetBelbinController);
 router.post(`/api${PostBelbinRoute}`, PostBelbinController);
 
