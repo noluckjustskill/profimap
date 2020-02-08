@@ -1,7 +1,7 @@
 const dataForGolland = require('../config/golland/gollandRecommendations.json');
 const dataForKlimov = require('../config/klimov/klimovRecommendations.json');
 const dataForBelbin = require('../config/belbin/belbinRecommendations.json');
-const { max, min, chain } = require('lodash');
+const { max, min, cloneDeep, chain } = require('lodash');
 const {
   GollandTypesModel,
   GollandResultsModel,
@@ -67,7 +67,9 @@ const getRecommendations = async (userId) => {
   return chain(resultArr).orderBy('result', 'desc').slice(0, 3);
 };
 
-const recommendationsCalc = (types, results, recommendationsData) => {
+const recommendationsCalc = (types, results, testData) => {
+  const recommendationsData = cloneDeep(testData);
+
   // нормирование массива с результатами
   const minResult = min(Object.values(results));
   const maxResult = max(Object.values(results));
