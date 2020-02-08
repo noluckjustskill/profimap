@@ -2,8 +2,7 @@ const { mapKeys, keyBy, maxBy } = require('lodash');
 const {
   GollandTasksModel,
   GollandTypesModel,
-  GollandResultsModel,
-  GollandRecommendationsModel,
+  GollandResultsModel
 } = require('../database');
 const { keyWithMaxValue } = require('../utils/object');
 const { answers } = require('../config/golland/golland.json');
@@ -63,22 +62,6 @@ const getProfileType = async (userId) => {
   return GollandTypesModel.query().findById(gollandTypeId);
 };
 
-const getRecommendations = async (typeName) => {
-  const result = await GollandRecommendationsModel
-    .query()
-    .leftJoinRelation('gollandType')
-    .leftJoinRelation('profession')
-    .where('gollandType.name', typeName)
-    .select('profession.id', 'profession.name', 'profession.image', 'profession.smallDescr');
-
-  const staticUrl = process.env.STATIC_URL;
-
-  return result.map(rcmd => ({
-    ...rcmd,
-    image: `${staticUrl}/${rcmd.image}`,
-  }));
-};
-
 const insertResult = async (userId, result = []) => {
   // Delete old results
   await GollandResultsModel.query().delete().where({ userId });
@@ -124,5 +107,4 @@ module.exports = {
   insertResult,
   getProfileResult,
   getProfileType,
-  getRecommendations,
 };

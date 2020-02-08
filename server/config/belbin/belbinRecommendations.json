@@ -1,0 +1,66 @@
+{
+    "implementer": {
+        "Management": 0,
+        "Programming": 1,
+        "Marketing": 0,
+        "Design": 0.5,
+        "QA": 1,
+        "BigData": 0.5 
+    },
+    "coordinator": {
+        "Management": 1,
+        "Programming": 0.5,
+        "Marketing": 0.5,
+        "Design": 0,
+        "QA": 0.5,
+        "BigData": 0.5
+    },
+    "creator": {
+        "Management": 0,
+        "Programming": 1,
+        "Marketing": 0.5,
+        "Design": 1,
+        "QA": 0.5,
+        "BigData": 0.5
+    },
+    "ideasGenerator": {
+        "Management": 0.5,
+        "Programming": 0.5,
+        "Marketing": 1,
+        "Design": 1,
+        "QA": 1,
+        "BigData": 0 
+    },
+    "researcher": {
+        "Management": 0,
+        "Programming": 0.5,
+        "Marketing": 0,
+        "Design": 0.5,
+        "QA": 0,
+        "BigData": 0
+    },
+    "expert": {
+        "Management": 0.5,
+        "Programming": 1,
+        "Marketing": 0.5,
+        "Design": 0,
+        "QA": 1,
+        "BigData": 1
+    },
+    "diplomat": {
+        "Management": 0.5,
+        "Programming": 0,
+        "Marketing": 0,
+        "Design": 0,
+        "QA": 0.5,
+        "BigData": 0
+    },
+    "executor": {
+        "Management": 1,
+        "Programming": 0.5,
+        "Marketing": 0.5,
+        "Design": 1,
+        "QA": 1,
+        "BigData": 0.5 
+    }
+}
