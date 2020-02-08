@@ -1,7 +1,7 @@
 const dataForGolland = require('../config/golland/gollandRecommendations.json');
 const dataForKlimov = require('../config/klimov/klimovRecommendations.json');
 const dataForBelbin = require('../config/belbin/belbinRecommendations.json');
-const { max, min, orderBy } = require('lodash');
+const { max, min, chain } = require('lodash');
 const {
   GollandTypesModel,
   GollandResultsModel,
@@ -23,6 +23,7 @@ const getRecommendations = async (userId) => {
     acc[curr.gollandTypeId] = curr.result;
     return acc;
   }, {});
+
   //klimov
   const klimovTypes = await KlimovTypesModel.query().select('id', 'name');
   const klimovResultsList = await KlimovResultsModel
@@ -33,6 +34,7 @@ const getRecommendations = async (userId) => {
     acc[curr.klimovTypeId] = curr.result;
     return acc;
   }, {});
+
   //belbin
   const belbinTypes = await BelbinTypesModel.query().select('id', 'name');
   const belbinResultsList = await BelbinResultsModel
@@ -43,23 +45,26 @@ const getRecommendations = async (userId) => {
     acc[curr.belbinTypeId] = curr.result;
     return acc;
   }, {});
+
   //calculate recommendations for every test
   const gollandCalcResults = recommendationsCalc(gollandTypes, gollandResults, dataForGolland);
   const klimovCalcResults = recommendationsCalc(klimovTypes, klimovResults, dataForKlimov);
   const belbinCalcResults = recommendationsCalc(belbinTypes, belbinResults, dataForBelbin);
+
   //summary results
   const result = gollandCalcResults;
   for (key in result) {
     result[key] += klimovCalcResults[key];
     result[key] += belbinCalcResults[key];
   };
+
   //return top3 professions
   const resultArr = [];
   Object.keys(result).forEach(elem => {
     resultArr.push({name: elem, result: result[elem]});
   });
   
-  return orderBy(resultArr, 'result', 'desc').slice(0, 3);
+  return chain(resultArr).orderBy('result', 'desc').slice(0, 3);
 };
 
 const recommendationsCalc = (types, results, recommendationsData) => {
@@ -69,6 +74,7 @@ const recommendationsCalc = (types, results, recommendationsData) => {
   const normir = Object.values(results).map(result => {
     return (result - minResult) / (maxResult - minResult);
   });
+
   // нормированные данные в объект с результатами
   for (key in results) {
     results[key] = normir[key-1];
@@ -77,20 +83,21 @@ const recommendationsCalc = (types, results, recommendationsData) => {
     ...type,
     result: results[type.id] || 0,
   }));
-  const data = JSON.parse(JSON.stringify(recommendationsData));
+
   // перемножение критериев с нормированными результатами
-  Object.keys(data).forEach(type => {
+  Object.keys(recommendationsData).forEach(type => {
     const perem = normResults.find(result => result.name == type).result;
-    for (key in data[type]) {
-      data[type][key] *= perem;  
+    for (key in recommendationsData[type]) {
+      recommendationsData[type][key] *= perem;  
     }
   });
+
   // суммирование топ-3 по каждой профессии
-  const recommendations = Object.values(data)[0];
+  const recommendations = Object.values(recommendationsData).shift();
   for (key in recommendations) {
     const arr = [];
-    for (key1 in data) {
-      arr.push(data[key1][key]);
+    for (key1 in recommendationsData) {
+      arr.push(recommendationsData[key1][key]);
     }
     arr.sort((a, b) => b - a);
     recommendations[key] = arr[0] + arr[1] + arr[2];
