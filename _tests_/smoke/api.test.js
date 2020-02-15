@@ -9,7 +9,7 @@ const testUser = {
 };
 
 describe('Login Endpoint', () => {
-  it('shold return token', (done) => {
+  it('should return token', (done) => {
     request(app.callback())
       .post('/auth/login')
       .send(testUser)
@@ -192,7 +192,7 @@ describe('belbinResults Endpoint', () => {
 //=================DISK=============================
 
 describe('getDisk Endpoint', () => {
-  it('should return question and dictionary with variants of anwer for Belbin test', (done) => {
+  it('should return question and dictionary with variants of answer for Belbin test', (done) => {
     request(app.callback())
       .get('/api/getDisk')
       .set('Authorization', token)
