@@ -19,8 +19,8 @@
             <div class="rank__card-head">
               <v-avatar
                 color="secondary"
-                width="64"
-                height="64"
+                :width="avatarSize"
+                :height="avatarSize"
                 class="mb-1"
               >
                 <v-img v-if="second.image" :src="second.image" />
@@ -40,8 +40,8 @@
             <div class="rank__card-head">
               <v-avatar
                 color="secondary"
-                width="64"
-                height="64"
+                :width="avatarSize"
+                :height="avatarSize"
                 class="mb-1"
               >
                 <v-img v-if="first.image" :src="first.image" />
@@ -61,8 +61,8 @@
             <div class="rank__card-head">
               <v-avatar
                 color="secondary"
-                width="64"
-                height="64"
+                :width="avatarSize"
+                :height="avatarSize"
                 class="mb-1"
               >
                 <v-img v-if="third.image" :src="third.image" />
@@ -163,6 +163,11 @@
   import { initials } from '../utils/userUtils';
 
   export default {
+    computed: {
+      avatarSize() {
+        return this.$vuetify.breakpoint.smAndDown ? 48 : 64;
+      },
+    },
     async asyncData({ $axios, params, redirect }) {
       const recommendations = await $axios.$get('recommendations').catch(() => null);
       if (recommendations) {
@@ -219,8 +224,20 @@
   .rank__card {
     text-align: center;
   }
+  h2.body-1 {
+    word-break: break-all;
+    width: 100px;
+
+    @media (max-width: 799px) {
+      width: 60px;
+    }
+  }
   .rank__card:not(:last-child) {
     margin-right: 5em;
+
+    @media (max-width: 799px) {
+      margin-right: 2em;
+    }
   }
   .rank__card--big .rank__card-body {
     height: 200px;
@@ -242,10 +259,15 @@
     -webkit-box-direction: normal;
             flex-direction: column;
     padding: 0.5em 1em;
-    transition: height .4s ease-out;
+    transition: all .4s ease-out;
+
+    @media (max-width: 799px) {
+      width: 60px;
+    }
 
     &:hover, &.selected {
       height: 180px;
+      filter: contrast(2);
 
       .rank__card--small & {
         height: 130px;

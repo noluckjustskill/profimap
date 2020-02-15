@@ -88,7 +88,7 @@
     },
     computed: {
       isMobile() {
-        return this.$vuetify.breakpoint.mdAndDown;
+        return this.$vuetify.breakpoint.smAndDown;
       },
       user() {
         const user = this.$store.state.auth.user;
