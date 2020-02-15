@@ -259,7 +259,7 @@
     -webkit-box-direction: normal;
             flex-direction: column;
     padding: 0.5em 1em;
-    transition: all .4s ease-out;
+    transition: height .4s ease-out;
 
     @media (max-width: 799px) {
       width: 60px;
@@ -267,7 +267,7 @@
 
     &:hover, &.selected {
       height: 180px;
-      filter: contrast(2);
+      filter: contrast(3);
 
       .rank__card--small & {
         height: 130px;
