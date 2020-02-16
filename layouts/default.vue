@@ -36,7 +36,15 @@
     >
       <v-btn v-for="(item, i) in itemsBar" :key="i" :to="item.to">
         <span>{{ item.title }}</span>
-        <v-icon>{{ item.icon }}</v-icon>
+        <v-icon v-if="item.icon">
+          {{ item.icon }}
+        </v-icon>
+        <v-img
+          v-else-if="item.image"
+          :src="item.image"
+          max-width="24"
+          max-height="24"
+        />
       </v-btn>
     </v-bottom-navigation>
     <v-footer
@@ -88,7 +96,7 @@
     },
     computed: {
       isMobile() {
-        return this.$vuetify.breakpoint.mdAndDown;
+        return this.$vuetify.breakpoint.smAndDown;
       },
       user() {
         const user = this.$store.state.auth.user;

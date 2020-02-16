@@ -106,6 +106,7 @@
           </h4>
           <!-- eslint-disable-next-line -->
           <p v-if="description" class="descr body-2" v-html="description" />
+          <RecommendationsTestPage />
           <v-btn
             v-if="activeUser"
             :block="isMobile"
@@ -171,6 +172,7 @@
   import AllTests from '../../components/AllTests';
   import AllTestsForm from '../../components/AllTestsForm';
   import FeedbackForm from '../../components/Feedback/FeedbackForm';
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
 
   const testName = 'klimov';
 
@@ -180,6 +182,7 @@
       AllTests,
       AllTestsForm,
       FeedbackForm,
+      RecommendationsTestPage,
     },
     head () {
       return {

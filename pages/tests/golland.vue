@@ -122,79 +122,7 @@
           <p v-if="description" class="body-2 descr">
             {{ description }}
           </p>
-          <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-10">
-            Профессии, которые вам подходят:
-          </h4>
-          <v-layout row :justify-center="isMobile" class="mt-3 mb-3">
-            <v-card
-              v-for="(item, i) in recommendations"
-              :key="`rcmd${i}`"
-              :elevation="1"
-              width="200"
-              class="rcmd-card mr-3 mb-3"
-              color="primary"
-              @click="popupClick(item)"
-            >
-              <v-img
-                :lazy-src="imagesCache[item.image]"
-                :src="item.image"
-                height="90"
-                class="white"
-              />
-              <v-card-title class="small-title white--text text-truncate">
-                {{ item.name }}
-              </v-card-title>
-            </v-card>
-            <v-dialog
-              v-model="popup"
-              width="500"
-              height="500"
-              :fullscreen="isMobile"
-              :hide-overlay="isMobile"
-            >
-              <v-card>
-                <v-img
-                  :src="image"
-                  height="300"
-                  width="500"
-                  class="white"
-                />
-                <v-btn
-                  color="primary"
-                  :elevation="0"
-                  fab 
-                  dark
-                  small
-                  absolute
-                  class="mt-7 close text-center"
-                  @click="popup = false"
-                >
-                  <v-icon small>
-                    mdi-close
-                  </v-icon>
-                </v-btn>
-                <v-card-title 
-                  class="subtitle-1 mt-4 font-weight-medium"
-                >
-                  {{ name }}
-                </v-card-title>
-                <v-card-text class="body-2">
-                  {{ descr }}
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <nuxt-link :to="`/professions/${id}`" class="nuxtLink" target="_blank">
-                    <v-btn
-                      :block="isMobile"
-                      color="primary"
-                    >
-                      Подробнее
-                    </v-btn>
-                  </nuxt-link>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-layout>
+          <RecommendationsTestPage />
           <v-btn
             v-if="activeUser"
             :block="isMobile"
@@ -260,6 +188,7 @@
   import AllTests from '../../components/AllTests';
   import AllTestsForm from '../../components/AllTestsForm';
   import FeedbackForm from '../../components/Feedback/FeedbackForm';
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
 
   const testName = 'golland';
 
@@ -269,6 +198,7 @@
       AllTests,
       AllTestsForm,
       FeedbackForm,
+      RecommendationsTestPage,
     },
     head () {
       return {
@@ -289,15 +219,8 @@
       startTest: false,
       current: 0,
       result: [],
-      popup: false,
-
-      name: null,
-      image: null, 
-      descr: null,
-      id: null,
 
       calculated: null,
-      recommendations: null,
       description: null,
 
       userCanContinue: true,
@@ -331,7 +254,6 @@
         userCanContinue: !error || store.state.guestFirstTest === testName,
         hasResult: !isEmpty(result),
         calculated: get(result, 'name'),
-        recommendations: get(result, 'recommendations'),
         description: get(result, 'description'),
       };
     },
@@ -363,7 +285,7 @@
         this.$axios.$post('postGolland', {
           result: this.result,
         }).then(response => {
-          const { name, recommendations = [], description } = response;
+          const { name, description } = response;
           
           if (!name) {
             throw new Error('Can not fetch name');
@@ -371,7 +293,6 @@
 
           this.hasResult = true;
           this.calculated = name;
-          this.recommendations = recommendations;
           this.description = description;
 
           if (!this.activeUser) {
@@ -391,13 +312,6 @@
         this.current = 0;
         this.result = [];
       },
-      popupClick({ id, name, image, smallDescr }) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.descr = smallDescr;
-        this.popup = true;
-      }
     },
   };
 </script>
@@ -475,10 +389,6 @@
       margin-bottom: 10px;
     }
   }
-  .rcmd-card {
-    max-width: 165px;
-    height: 125px;
-  }
   @keyframes fadeIn{
     0% {
       opacity:0;
@@ -486,10 +396,6 @@
     100% {
       opacity:1;
     }
-  }
-  .close {
-    top: -20px;
-    right: 5px;
   }
   .hint {
     position: absolute;
@@ -509,15 +415,7 @@
   .caption {
     vertical-align: middle;
   }
-  .nuxtLink {
-    text-decoration: none;
-  }
   .title {
     font-size: 24px;
-  }
-  .small-title {
-    font-size: 14px;
-    padding: 0;
-    justify-content: center;
   }
 </style>

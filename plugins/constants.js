@@ -10,7 +10,12 @@ export default (ctx, inject) => {
         icon: 'mdi-gesture-double-tap',
         title: 'Тестирование',
         to: '/tests'
-      }
+      },
+      {
+        image: require('~/assets/career.png'),
+        title: 'Карьера',
+        to: '/career'
+      },
     ],
     allTests: [{
       name: 'golland',

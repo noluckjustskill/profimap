@@ -1,7 +1,8 @@
 const dataForGolland = require('../config/golland/gollandRecommendations.json');
 const dataForKlimov = require('../config/klimov/klimovRecommendations.json');
 const dataForBelbin = require('../config/belbin/belbinRecommendations.json');
-const { max, min, cloneDeep, chain } = require('lodash');
+const keyDictionary = require('../config/professionsDictionary.json');
+const { max, min, orderBy, cloneDeep } = require('lodash');
 const {
   GollandTypesModel,
   GollandResultsModel,
@@ -9,6 +10,7 @@ const {
   KlimovResultsModel,
   BelbinTypesModel,
   BelbinResultsModel,
+  ProfessionsModel,
 } = require('../database');
 
 const getRecommendations = async (userId) => {
@@ -60,11 +62,27 @@ const getRecommendations = async (userId) => {
 
   //return top3 professions
   const resultArr = [];
+  const professionsNames = [];
   Object.keys(result).forEach(elem => {
+    professionsNames.push(elem);
     resultArr.push({name: elem, result: result[elem]});
   });
-  
-  return chain(resultArr).orderBy('result', 'desc').slice(0, 3);
+
+  const professions = await ProfessionsModel
+    .query()
+    .whereIn('name', professionsNames)
+    .select('*');
+
+  const staticUrl = process.env.STATIC_URL;
+
+  return orderBy(resultArr, 'result', 'desc').slice(0, 3).map(elem => {
+    const profession = professions.find(p => p.name === elem.name);
+    profession.name = keyDictionary[elem.name];
+    profession.result = elem.result;
+    profession.image = `${staticUrl}/${profession.image}`;
+
+    return profession;
+  });
 };
 
 const recommendationsCalc = (types, results, testData) => {
@@ -81,6 +99,7 @@ const recommendationsCalc = (types, results, testData) => {
   for (key in results) {
     results[key] = normir[key-1];
   }
+
   const normResults = types.map(type => ({
     ...type,
     result: results[type.id] || 0,

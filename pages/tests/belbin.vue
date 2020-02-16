@@ -144,6 +144,7 @@
           <p v-if="func" class="body-2">
             {{ func }}
           </p>
+          <RecommendationsTestPage />
           <v-btn
             v-if="activeUser"
             :block="isMobile"
@@ -209,6 +210,7 @@
   import AllTests from '../../components/AllTests';
   import AllTestsForm from '../../components/AllTestsForm';
   import FeedbackForm from '../../components/Feedback/FeedbackForm';
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
 
   const testName = 'belbin';
 
@@ -218,6 +220,7 @@
       AllTests,
       AllTestsForm,
       FeedbackForm,
+      RecommendationsTestPage,
     },
     head () {
       return {

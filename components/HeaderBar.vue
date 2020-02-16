@@ -5,7 +5,7 @@
       wrap
       align-center
       justify-start
-      class="header-layout hidden-md-and-down"
+      class="header-layout hidden-sm-and-down"
     >
       <v-flex xs3>
         <nuxt-link to="/">

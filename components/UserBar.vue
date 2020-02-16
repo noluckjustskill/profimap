@@ -10,7 +10,7 @@
           <img v-if="user.picture" :src="user.picture" alt="avatar">
           <span v-else class="subtitle-1 white--text">{{ userInitials }}</span>
         </v-avatar>
-        <div class="hidden-md-and-down userInfo">
+        <div class="hidden-sm-and-down userInfo">
           <div class="userName">
             {{ user.name }}
             <v-btn
@@ -58,7 +58,7 @@
     },
     computed: {
       isMobile() {
-        return this.$vuetify.breakpoint.mdAndDown;
+        return this.$vuetify.breakpoint.smAndDown;
       },
       userInitials() {
         return initials(this.user.name).charAt(0);
