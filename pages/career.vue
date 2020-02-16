@@ -12,7 +12,7 @@
     >
       <v-flex
         xs12
-        class="block-wrap my-2"
+        class="block-wrap pa-0"
       >
         <div class="rank__board">
           <div class="rank__card">
@@ -26,7 +26,7 @@
                 <v-img v-if="second.image" :src="second.image" />
                 <span v-else class="white--text headline">{{ getInitials(second.name) }}</span>
               </v-avatar>
-              <h2 class="body-1">
+              <h2 class="rcmd-name">
                 {{ second.name }}
               </h2>
             </div>
@@ -47,7 +47,7 @@
                 <v-img v-if="first.image" :src="first.image" />
                 <span v-else class="white--text headline">{{ getInitials(first.name) }}</span>
               </v-avatar>
-              <h2 class="body-1">
+              <h2 class="rcmd-name">
                 {{ first.name }}
               </h2>
             </div>
@@ -68,7 +68,7 @@
                 <v-img v-if="third.image" :src="third.image" />
                 <span v-else class="white--text headline">{{ getInitials(third.name) }}</span>
               </v-avatar>
-              <h2 class="body-1">
+              <h2 class="rcmd-name">
                 {{ third.name }}
               </h2>
             </div>
@@ -88,8 +88,9 @@
       >
         <v-img 
           :src="selectedProfession.image" 
-          max-height="280"
-          max-width="460"
+          height="280"
+          width="460"
+          contain
           class="picture"
         />
       </v-flex>
@@ -217,16 +218,20 @@
             justify-content: center;
     -webkit-box-align: end;
             align-items: flex-end;
-    height: 360px;
+    height: 390px;
     max-height: 100%;
     overflow: hidden;
   }
   .rank__card {
     text-align: center;
   }
-  h2.body-1 {
+  h2.rcmd-name {
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.03125em;
+    line-height: 1.5rem;
     word-break: break-all;
-    width: 100px;
+    width: 120px;
 
     @media (max-width: 799px) {
       width: 60px;
@@ -252,7 +257,7 @@
     background: rgb(236, 69, 69);
     cursor: pointer;
     height: 140px;
-    width: 100px;
+    width: 120px;
     display: -webkit-box;
     display: flex;
     -webkit-box-orient: vertical;

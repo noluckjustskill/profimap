@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="elevation-0 skills pb-4"
+    class="elevation-0 skills pb-4 mt-2"
     tile
   >
     <v-card-title class="title">

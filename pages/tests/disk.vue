@@ -114,6 +114,7 @@
           </h4>
           <!-- eslint-disable-next-line -->
           <p v-if="description" class="body-2" v-html="description" />
+          <RecommendationsTestPage />
           <v-btn
             v-if="activeUser"
             :block="isMobile"
@@ -178,7 +179,9 @@
   import InviteForm from '../../components/InviteForm';
   import AllTests from '../../components/AllTests';
   import AllTestsForm from '../../components/AllTestsForm';
-  import FeedbackForm from '../../components/Feedback/FeedbackForm';
+  import FeedbackForm from '../../components/Feedback/FeedbackForm';  
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
+
 
   const testName = 'disk';
 
@@ -188,6 +191,7 @@
       AllTests,
       AllTestsForm,
       FeedbackForm,
+      RecommendationsTestPage,
     },
     head () {
       return {
