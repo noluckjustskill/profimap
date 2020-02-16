@@ -20,8 +20,8 @@
         <v-flex md6 xs12>
           <UserInfo />
         </v-flex>
-        <v-flex md6 xs12 class="progress">
-          <ProfileProgress />
+        <v-flex md6 xs12 class="recommendations">
+          <Recomendation :items="recomendations" />
         </v-flex>
       </v-layout>
     </v-flex>
@@ -31,6 +31,7 @@
       xs12
       class="block-wrap"
     >
+      <ProfileProgress />
       <Learning />
       <CharacterType />
     </v-flex>
@@ -43,7 +44,6 @@
       <!-- <Skills> -->
       <PersonType />
       <TeamRole />
-      <!-- <Recomendation :items="recomendations" /> -->
     </v-flex>
   </v-layout>
 </template>
@@ -55,7 +55,7 @@
   import PersonType from '../components/PersonType';
   import TeamRole from '../components/TeamRole';
   import Learning from '../components/Charts/Learning';
-  //import Recomendation from '../components/Recomendations';
+  import Recomendation from '../components/Recomendations';
   import CharacterType from '../components/CharacterType';
 
   export default {
@@ -66,7 +66,7 @@
       PersonType,
       TeamRole,
       Learning,
-      //Recomendation,
+      Recomendation,
       CharacterType,
     },
     head () {
@@ -97,7 +97,7 @@
     font-weight: 500;
     font-size: 20px;
   }
-  .progress {
+  .recommendations {
     padding-left: 10px;
     @media (max-width: 959px) {
       padding: 0;

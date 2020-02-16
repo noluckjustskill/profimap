@@ -17,8 +17,9 @@
       >
         <v-img 
           :src="profession.image" 
-          max-height="280"
-          max-width="460"
+          height="280"
+          width="460"
+          contain
           class="picture"
         />
       </v-flex>
