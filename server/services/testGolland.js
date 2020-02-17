@@ -70,7 +70,7 @@ const insertResult = async (userId, result = []) => {
 
   await Promise.all(Object.keys(answers).map(typeName => {
     const typeResult = answers[typeName].reduce((acc, curr) => {
-      if (result[curr.num] == curr.answer) { // `==` cuz 0 it's false, 1 is true
+      if (result[curr.num] === curr.answer) { // `==` cuz 0 it's false, 1 is true
         acc++;
       }
 

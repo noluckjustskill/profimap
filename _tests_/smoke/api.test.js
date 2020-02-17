@@ -243,7 +243,7 @@ describe('diskResults Endpoint', () => {
 //=================Others=============================
 
 describe('getProfession Endpoint', () => {
-  const id = Math.floor(Math.random() * 80) + 1; // Random [1, 80]
+  const id = Math.floor(Math.random() * 92) + 1; // Random [1, 80]
 
   it(`should return dictionary with description of profession with id = ${id}`, (done) => {
     request(app.callback())
@@ -262,25 +262,22 @@ describe('getProfession Endpoint', () => {
   });
 });
 
-// TODO: FIXME
-// describe('recommendations Endpoint', () => {
-//   it('should return array of dictionaries with recommended professions', (done) => {
-//     request(app.callback())
-//       .get('/api/recommendations')
-//       .set('Authorization', token)
-//       .expect(200)
-//       .end((err, res) => {
-//         if (err) done(err);
 
-//         expect(res.statusCode).toEqual(200);
-//         expect(res.body.every(cur => {
-//           return Object.values(cur).every(val => !isObject(val));
-//         })).toBe(true);
-//         expect(res.body.every(cur => {
-//           return (difference(Object.keys(cur), ['id', 'name', 'image', 'smallDescr']).length === 0);
-//         })).toBe(true);
+describe('recommendations Endpoint', () => {
+  it('should return array of dictionaries with recommended professions', (done) => {
+    request(app.callback())
+      .get('/api/recommendations')
+      .set('Authorization', token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) done(err);
 
-//         done();
-//       });
-//   });
-// });
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.every(cur => {
+          return Object.values(cur).every(val => !isObject(val));
+        })).toBe(true);
+
+        done();
+      });
+  });
+});
