@@ -13,6 +13,48 @@ const {
   ProfessionsModel,
 } = require('../database');
 
+const recommendationsCalc = (types, results, testData) => {
+  const recommendationsData = cloneDeep(testData);
+
+  // нормирование массива с результатами
+  const minResult = min(Object.values(results));
+  const maxResult = max(Object.values(results));
+  const normir = Object.values(results).map(result => {
+    return (result - minResult) / (maxResult - minResult);
+  });
+
+  // нормированные данные в объект с результатами
+  for (const key in results) {
+    results[key] = normir[key-1];
+  }
+
+  const normResults = types.map(type => ({
+    ...type,
+    result: results[type.id] || 0,
+  }));
+
+  // перемножение критериев с нормированными результатами
+  Object.keys(recommendationsData).forEach(type => {
+    const perem = normResults.find(result => result.name === type).result;
+    for (const key in recommendationsData[type]) {
+      recommendationsData[type][key] *= perem;  
+    }
+  });
+
+  // суммирование топ-3 по каждой профессии
+  const recommendations = Object.values(recommendationsData).shift();
+  for (const key in recommendations) {
+    const arr = [];
+    for (const rcmd in recommendationsData) {
+      arr.push(recommendationsData[rcmd][key]);
+    }
+    arr.sort((a, b) => b - a);
+    recommendations[key] = arr[0] + arr[1] + arr[2];
+  }
+  
+  return recommendations;
+};
+
 const getRecommendations = async (userId) => {
   //getting data with results from database for every test
   //golland 
@@ -55,7 +97,7 @@ const getRecommendations = async (userId) => {
 
   //summary results
   const result = gollandCalcResults;
-  for (key in result) {
+  for (const key in result) {
     result[key] += klimovCalcResults[key];
     result[key] += belbinCalcResults[key];
   };
@@ -75,56 +117,18 @@ const getRecommendations = async (userId) => {
 
   const staticUrl = process.env.STATIC_URL;
 
-  return orderBy(resultArr, 'result', 'desc').slice(0, 3).map(elem => {
-    const profession = professions.find(p => p.name === elem.name);
-    profession.name = keyDictionary[elem.name];
-    profession.result = elem.result;
-    profession.image = `${staticUrl}/${profession.image}`;
+  if (resultArr.some(elem => elem.result)) {
+    return orderBy(resultArr, 'result', 'desc').slice(0, 3).map(elem => {
+      const profession = professions.find(p => p.name === elem.name);
+      profession.name = keyDictionary[elem.name] || elem.name;
+      profession.result = elem.result;
+      profession.image = `${staticUrl}/${profession.image}`;
 
-    return profession;
-  });
-};
-
-const recommendationsCalc = (types, results, testData) => {
-  const recommendationsData = cloneDeep(testData);
-
-  // нормирование массива с результатами
-  const minResult = min(Object.values(results));
-  const maxResult = max(Object.values(results));
-  const normir = Object.values(results).map(result => {
-    return (result - minResult) / (maxResult - minResult);
-  });
-
-  // нормированные данные в объект с результатами
-  for (key in results) {
-    results[key] = normir[key-1];
-  }
-
-  const normResults = types.map(type => ({
-    ...type,
-    result: results[type.id] || 0,
-  }));
-
-  // перемножение критериев с нормированными результатами
-  Object.keys(recommendationsData).forEach(type => {
-    const perem = normResults.find(result => result.name == type).result;
-    for (key in recommendationsData[type]) {
-      recommendationsData[type][key] *= perem;  
-    }
-  });
-
-  // суммирование топ-3 по каждой профессии
-  const recommendations = Object.values(recommendationsData).shift();
-  for (key in recommendations) {
-    const arr = [];
-    for (key1 in recommendationsData) {
-      arr.push(recommendationsData[key1][key]);
-    }
-    arr.sort((a, b) => b - a);
-    recommendations[key] = arr[0] + arr[1] + arr[2];
+      return profession;
+    });
   }
   
-  return recommendations;
+  return [];
 };
 
 module.exports = {

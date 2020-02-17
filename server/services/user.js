@@ -16,6 +16,15 @@ const { templateId, emailFrom } = require('../config/email.json');
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
+const validateUser = async (token) => {
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    return user;
+  } catch (err) {
+    return null;
+  }
+};
+
 const findUserLocal = async (email, password) => {
   return UsersModel
     .query()
@@ -88,22 +97,6 @@ const checkUserByEmail = async (email) => {
   return Boolean(user);
 };
 
-const inviteUser = async ({ name, email }) => {
-  const password = generate(10);
-  const code = generate(16);
-
-  const user = await UsersModel.query().insert({
-    name,
-    email,
-    password: md5(password),
-    status: 'invited',
-  });
-
-  await createInvation(user.id, code);
-
-  return sendMail({ email, name, password, code });
-};
-
 const createInvation = async (userId, code) => {
   return InvitedUsersModel.query().insert({
     userId,
@@ -132,6 +125,22 @@ const sendMail = async ({ email, name, password, code }) => {
   return sgMail.send(msgData);
 };
 
+const inviteUser = async ({ name, email }) => {
+  const password = generate(10);
+  const code = generate(16);
+
+  const user = await UsersModel.query().insert({
+    name,
+    email,
+    password: md5(password),
+    status: 'invited',
+  });
+
+  await createInvation(user.id, code);
+
+  return sendMail({ email, name, password, code });
+};
+
 const authUser = async (user) => {
   await UsersModel.query().findById(user.id).patch({ 
     lastLogin: knex.raw('now()'),
@@ -147,15 +156,6 @@ const authUser = async (user) => {
   );
   
   return token;
-};
-
-const validateUser = async (token) => {
-  try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    return user;
-  } catch (err) {
-    return null;
-  }
 };
 
 const checkProfileProgress = async (user) => {

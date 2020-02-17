@@ -16,6 +16,7 @@ module.exports = {
     'plugin:vue/recommended'
   ],
   rules: {
+    'eqeqeq': ["error"],
     'max-len': ['error', 160, {
       'ignoreUrls': true,
       'ignoreTemplateLiterals': true,
@@ -37,7 +38,7 @@ module.exports = {
     'no-restricted-syntax': ['error', 'WithStatement'],
     'no-unused-expressions': 'off',
     'no-unused-vars': ['error', { args: 'none', "ignoreRestSiblings": true }],
-    'no-use-before-define': 'off',
+    'no-use-before-define': ['error'],
     'nuxt/no-cjs-in-config': 'off',
     'prefer-const': ['error'],
     'no-var': ['error'],
