@@ -218,9 +218,9 @@
         return count*25;
       },
       getColor() {
-        if (this.getProgress < 25) return 'red';
-        else if (this.getProgress < 50) return 'orange';
-        else if (this.getProgress < 75) return 'yellow';
+        if (this.getProgress <= 25) return 'red';
+        else if (this.getProgress <= 50) return 'orange';
+        else if (this.getProgress <= 75) return 'yellow';
         else return 'green';
       }
     },
