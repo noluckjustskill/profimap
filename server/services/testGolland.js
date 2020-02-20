@@ -97,8 +97,7 @@ const insertResult = async (userId, result = []) => {
 
   return {
     name: keyDictionary[profileType],
-    description,
-    recommendations: await getRecommendations(profileType),
+    description
   };
 };
 
