@@ -74,7 +74,7 @@
                     class="white"
                   />
                   <div
-                    v-if="hover && !isMobile"
+                    v-if="hover && !isMobile && item.descr"
                     :style="{ height: `${cardImageHeight}px`}"
                     class="hint subtitle-1 white--text"
                   >
@@ -400,6 +400,7 @@
   .hint {
     position: absolute;
     display: flex;
+    justify-content: center;
     top: 0;
     left: 0;
     width: 100%;
