@@ -57,6 +57,7 @@ router.get('/auth/vkontakte', UserIsAuth, VkontakteAuthController);
 router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAuthRedirectController);
 
 router.use('/api/*', MiddleWare);
+router.post('/api/signup', SignupController);
 router.get(`/api${MeRoute}`, MeController);
 
 router.post(`/api${InviteRoute}`, InviteController);

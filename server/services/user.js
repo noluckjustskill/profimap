@@ -125,13 +125,15 @@ const sendMail = async ({ email, name, password, code }) => {
   return sgMail.send(msgData);
 };
 
-const inviteUser = async ({ name, email }) => {
+const inviteUser = async ({ name, email, gender, dateOfBirth }) => {
   const password = generate(10);
   const code = generate(16);
 
   const user = await UsersModel.query().insert({
     name,
     email,
+    gender,
+    dateOfBirth,
     password: md5(password),
     status: 'invited',
   });
