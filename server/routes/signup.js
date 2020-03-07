@@ -10,7 +10,7 @@ const SignupController = async (ctx) => {
       return;
     }
 
-    const { name, email } = get(ctx, 'request.body', {});
+    const { name, email, gender, dateOfBirth } = get(ctx, 'request.body', {});
     if (!name || !email) {
       throw new BadRequestError(badParams);
     }
@@ -19,7 +19,7 @@ const SignupController = async (ctx) => {
       throw new ConflictError(emailIsExists);
     }
 
-    await inviteUser({ name, email });
+    await inviteUser({ name, email, gender, dateOfBirth });
 
     ctx.body = { message: 'OK' };
   } catch (err) {
