@@ -47,7 +47,7 @@
               height="25"
               reactive
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
               </template>
             </v-progress-linear>
@@ -200,14 +200,19 @@
       FeedbackForm,
       RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [result, professions] = await Promise.all([
+        $axios.$get('gollandProfile').catch(() => ({})),
+        $axios.$get('getGolland').catch(() => ([]))
+      ]);
+
       return {
-        title: 'Профессиональный тип личности',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять.',
-        }],
+        professions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: !isEmpty(result),
+        calculated: get(result, 'name'),
+        description: get(result, 'description'),
       };
     },
     data: () => ({
@@ -241,21 +246,6 @@
       allTests() {
         return this.$store.getters.allTestsDone;
       },
-    },
-    async asyncData({ $axios, store }) {
-      const { error } = await $axios.$get('can-continue');
-      const [result, professions] = await Promise.all([
-        $axios.$get('gollandProfile').catch(() => ({})),
-        $axios.$get('getGolland').catch(() => ([]))
-      ]);
-
-      return {
-        professions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        description: get(result, 'description'),
-      };
     },
     mounted() {
       flatten(this.professions).forEach(item => {
@@ -312,6 +302,16 @@
         this.current = 0;
         this.result = [];
       },
+    },
+    head () {
+      return {
+        title: 'Профессиональный тип личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять.',
+        }],
+      };
     },
   };
 </script>

@@ -25,11 +25,18 @@ const validateUser = async (token) => {
   }
 };
 
+const findUserById = async (id) => {
+  return UsersModel
+    .query()
+    .findById(id)
+    .select('id', 'externalId', 'status', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
+};
+
 const findUserLocal = async (email, password) => {
   return UsersModel
     .query()
     .findOne({ email, password: md5(password), status: 'active' })
-    .select('id', 'externalId', 'status', 'name', 'email', 'picture');
+    .select('id', 'externalId', 'status', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
 };
 
 const findOAuthUser = async (externalId, email) => {
@@ -43,7 +50,7 @@ const findOAuthUser = async (externalId, email) => {
 
       return build;
     })
-    .select('id', 'externalId', 'status', 'name', 'email', 'picture');
+    .select('id', 'externalId', 'status', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
 };
 
 const createOAuthUser = async (id, name, email, picture) => {
@@ -81,6 +88,9 @@ const updateOAuthUser = async (token, externalId, name, email, picture) => {
 };
 
 const updateUser = async (id, userData = {}) => {
+  if (userData.password) {
+    userData.password = md5(userData.password);
+  }
   const userObj = await UsersModel.query().updateAndFetchById(id, userData);
   if (!userObj) {
     throw new Error('User not found');
@@ -170,6 +180,7 @@ const checkProfileProgress = async (user) => {
 };
 
 module.exports = {
+  findUserById,
   findUserLocal,
   findOAuthUser,
   createOAuthUser,

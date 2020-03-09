@@ -13,7 +13,7 @@
       <v-layout
         row
         wrap
-        align-end
+        align-center
         justify-space-between
         class="row"
       >
@@ -69,14 +69,14 @@
       Recomendation,
       CharacterType,
     },
+    async asyncData({ $axios }) {
+      const recomendations = await $axios.$get('recommendations').catch(() => ([]));
+      return { recomendations };
+    },
     head () {
       return {
         title: 'Профиль',
       };
-    },
-    async asyncData({ $axios }) {
-      const recomendations = await $axios.$get('recommendations').catch(() => ([]));
-      return { recomendations };
     },
     middleware: 'authenticated',
   };

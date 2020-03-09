@@ -44,7 +44,7 @@
               reactive
               class="progress"
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ questions.length }}</span>
               </template>
             </v-progress-linear>
@@ -193,14 +193,20 @@
       FeedbackForm,
       RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [results, questions] = await Promise.all([
+        $axios.$get('diskResults').catch(() => ([])),
+        $axios.$get('getDisk').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
+
       return {
-        title: 'Характеристика личности',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, как ты мыслишь и как принимаешь решения.',
-        }],
+        questions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'text'),
       };
     },
     data: () => ({
@@ -232,22 +238,6 @@
       allTests() {
         return this.$store.getters.allTestsDone;
       },
-    },
-    async asyncData({ $axios, store }) {
-      const { error } = await $axios.$get('can-continue');
-      const [results, questions] = await Promise.all([
-        $axios.$get('diskResults').catch(() => ([])),
-        $axios.$get('getDisk').catch(() => ([])),
-      ]);
-      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
-
-      return {
-        questions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
-        hasResult: results.some(t => t.result),
-        calculated: get(maxResult, 'name'),
-        description: get(maxResult, 'text'),
-      };
     },
     methods: {
       next(index) {
@@ -297,6 +287,16 @@
         this.current = 0;
         this.result = [];
       },
+    },
+    head () {
+      return {
+        title: 'Характеристика личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, как ты мыслишь и как принимаешь решения.',
+        }],
+      };
     },
   };
 </script>

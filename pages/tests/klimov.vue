@@ -44,7 +44,7 @@
               reactive
               class="progress"
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
               </template>
             </v-progress-linear>
@@ -184,14 +184,20 @@
       FeedbackForm,
       RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [results, professions] = await Promise.all([
+        $axios.$get('klimovResults').catch(() => ([])),
+        $axios.$get('getKlimov').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
+
       return {
-        title: 'Профессиональная область',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к конкретным профессиям.',
-        }],
+        professions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'fullText'),
       };
     },
     data: () => ({
@@ -223,22 +229,6 @@
       allTests() {
         return this.$store.getters.allTestsDone;
       },
-    },
-    async asyncData({ $axios, store }) {
-      const { error } = await $axios.$get('can-continue');
-      const [results, professions] = await Promise.all([
-        $axios.$get('klimovResults').catch(() => ([])),
-        $axios.$get('getKlimov').catch(() => ([])),
-      ]);
-      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
-
-      return {
-        professions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
-        hasResult: results.some(t => t.result),
-        calculated: get(maxResult, 'name'),
-        description: get(maxResult, 'fullText'),
-      };
     },
     methods: {
       next(index) {
@@ -288,6 +278,16 @@
         this.current = 0;
         this.result = [];
       },
+    },
+    head () {
+      return {
+        title: 'Профессиональная область',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к конкретным профессиям.',
+        }],
+      };
     },
   };
 </script>
