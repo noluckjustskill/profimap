@@ -42,6 +42,9 @@ const { PostDiskController, PostDiskRoute } = require('./diskTest/postDisk');
 const { SendFeedBackController, SendFeedBackRoute } = require('./sendFeedback');
 const { RouteFeedBackController, RouteFeedBackRoute } = require('./routeFeedback');
 
+const { AvatarUploadController, AvatarUploadRoute } = require('./avatarUpload');
+const { UpdateUserController, UpdateUserRoute } = require('./updateUser');
+
 const { ImageCacheController } = require('./imagesCache');
 
 const router = new Router();
@@ -85,6 +88,9 @@ router.post(`/api${PostDiskRoute}`, PostDiskController);
 
 router.get(`/api${RouteFeedBackRoute}`, RouteFeedBackController);
 router.post(`/api${SendFeedBackRoute}`, SendFeedBackController);
+
+router.post(`/api${AvatarUploadRoute}`, AvatarUploadController);
+router.post(`/api${UpdateUserRoute}`, UpdateUserController);
 
 router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 

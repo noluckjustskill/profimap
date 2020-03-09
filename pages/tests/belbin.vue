@@ -45,7 +45,7 @@
               reactive
               class="progress"
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ tasks.length }}</span>
               </template>
             </v-progress-linear>
@@ -222,14 +222,21 @@
       FeedbackForm,
       RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [results, tasks] = await Promise.all([
+        $axios.$get('belbinResults').catch(() => ([])),
+        $axios.$get('getBelbin').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
+
       return {
-        title: 'Командные роли',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'В современных профессиях важно уметь работать в команде: придумывать и создавать свои проекты, претворять их в жизнь, набирать людей и налаживать общение между сотрудниками или координировать весь процесс.',
-        }],
+        tasks,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'descr'),
+        func: get(maxResult, 'func'),
       };
     },
     data: () => ({
@@ -268,23 +275,6 @@
       allTests() {
         return this.$store.getters.allTestsDone;
       },
-    },
-    async asyncData({ $axios, store }) {
-      const { error } = await $axios.$get('can-continue');
-      const [results, tasks] = await Promise.all([
-        $axios.$get('belbinResults').catch(() => ([])),
-        $axios.$get('getBelbin').catch(() => ([])),
-      ]);
-      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
-
-      return {
-        tasks,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
-        hasResult: results.some(t => t.result),
-        calculated: get(maxResult, 'name'),
-        description: get(maxResult, 'descr'),
-        func: get(maxResult, 'func'),
-      };
     },
     methods: {
       counter(num) {
@@ -368,6 +358,16 @@
         this.current = 0;
         this.result = {};
       },
+    },
+    head () {
+      return {
+        title: 'Командные роли',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В современных профессиях важно уметь работать в команде: придумывать и создавать свои проекты, претворять их в жизнь, набирать людей и налаживать общение между сотрудниками или координировать весь процесс.',
+        }],
+      };
     },
   };
 </script>

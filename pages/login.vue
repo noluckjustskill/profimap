@@ -148,7 +148,7 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="dateOfBith"
+                          v-model="dateOfBirth"
                           label="Дата рождения"
                           readonly
                           v-on="on"
@@ -156,7 +156,7 @@
                       </template>
                       <v-date-picker
                         ref="picker"
-                        v-model="dateOfBith"
+                        v-model="dateOfBirth"
                         :max="new Date().toISOString().substr(0, 10)"
                         min="1950-01-01"
                         locale="ru-RU"
@@ -221,11 +221,6 @@
   
   export default {
     layout: 'login',
-    head () {
-      return {
-        title: 'Время выбирать профессию! Куда и как поступать?',
-      };
-    },
     components: {
       Preloader
     },
@@ -236,7 +231,7 @@
       email: null,
       name: null,
       gender: null,
-      dateOfBith: null,
+      dateOfBirth: null,
       password: null,
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -303,7 +298,7 @@
           name: this.name,
           email: this.email,
           gender: this.gender,
-          dateOfBith: this.dateOfBith,
+          dateOfBirth: this.dateOfBirth,
         }).then(() => {
           this.registrationSuccess = true;
         }).catch(err => {
@@ -313,6 +308,11 @@
           this.snackbar = true;
         });
       },
+    },
+    head () {
+      return {
+        title: 'Время выбирать профессию! Куда и как поступать?',
+      };
     },
   };
 </script>

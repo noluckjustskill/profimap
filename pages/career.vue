@@ -208,6 +208,15 @@
   import { initials } from '../utils/userUtils';
 
   export default {
+    async asyncData({ $axios, params, redirect }) {
+      const recommendations = await $axios.$get('recommendations').catch(() => null);
+      if (recommendations) {
+        const [ first = {}, second = {}, third = {} ] = recommendations;
+        return { first, second, third, selectedProfession: first, emptyResults: !recommendations.length };
+      } else {
+        redirect('/');
+      }
+    },
     computed: {
       avatarSize() {
         return this.$vuetify.breakpoint.smAndDown ? 48 : 64;
@@ -222,15 +231,6 @@
         else if (this.getProgress <= 50) return 'orange';
         else if (this.getProgress <= 75) return 'yellow';
         else return 'green';
-      }
-    },
-    async asyncData({ $axios, params, redirect }) {
-      const recommendations = await $axios.$get('recommendations').catch(() => null);
-      if (recommendations) {
-        const [ first = {}, second = {}, third = {} ] = recommendations;
-        return { first, second, third, selectedProfession: first, emptyResults: !recommendations.length };
-      } else {
-        redirect('/');
       }
     },
     methods: {
