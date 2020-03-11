@@ -1,66 +1,98 @@
 {
     "implementer": {
-        "Management": 0,
-        "Programming": 1,
+        "Management": 0.5,
+        "Programming": 0.5,
         "Marketing": 0,
         "Design": 0.5,
-        "QA": 1,
-        "BigData": 0.5 
+        "BigData": 0.5,
+        "QA": 0.5,
+        "DevOps": 0.5,
+        "HR": 1,
+        "Architector": 0.5,
+        "SysAdmin": 0.5
     },
     "coordinator": {
-        "Management": 1,
-        "Programming": 0.5,
-        "Marketing": 0.5,
-        "Design": 0,
-        "QA": 0.5,
-        "BigData": 0.5
+        "Management": 0.6,
+        "Programming": 0.6,
+        "Marketing": 1,
+        "Design": 0.2,
+        "BigData": 0.2,
+        "QA": 0,
+        "DevOps": 0.6,
+        "HR": 0.8,
+        "Architector": 0.6,
+        "SysAdmin": 0
     },
     "creator": {
-        "Management": 0,
-        "Programming": 1,
-        "Marketing": 0.5,
-        "Design": 1,
-        "QA": 0.5,
-        "BigData": 0.5
+        "Management": 0.6,
+        "Programming": 0.8,
+        "Marketing": 1,
+        "Design": 0.6,
+        "BigData": 0.2,
+        "QA": 0.6,
+        "DevOps": 0.4,
+        "HR": 0.8,
+        "Architector": 0.6,
+        "SysAdmin": 0
     },
     "ideasGenerator": {
-        "Management": 0.5,
-        "Programming": 0.5,
+        "Management": 0.6,
+        "Programming": 0.6,
         "Marketing": 1,
-        "Design": 1,
-        "QA": 1,
-        "BigData": 0 
+        "Design": 0.4,
+        "BigData": 0.2,
+        "QA": 0.2,
+        "DevOps": 0.6,
+        "HR": 0.8,
+        "Architector": 0.6,
+        "SysAdmin": 0
     },
     "researcher": {
-        "Management": 0,
-        "Programming": 0.5,
-        "Marketing": 0,
-        "Design": 0.5,
-        "QA": 0,
-        "BigData": 0
+        "Management": 0.6,
+        "Programming": 0.6,
+        "Marketing": 1,
+        "Design": 0.4,
+        "BigData": 0.6,
+        "QA": 0.6,
+        "DevOps": 0.6,
+        "HR": 0.8,
+        "Architector": 0.4,
+        "SysAdmin": 0
     },
     "expert": {
-        "Management": 0.5,
-        "Programming": 1,
-        "Marketing": 0.5,
-        "Design": 0,
-        "QA": 1,
-        "BigData": 1
-    },
-    "diplomat": {
-        "Management": 0.5,
-        "Programming": 0,
-        "Marketing": 0,
-        "Design": 0,
-        "QA": 0.5,
-        "BigData": 0
-    },
-    "executor": {
         "Management": 1,
         "Programming": 0.5,
-        "Marketing": 0.5,
-        "Design": 1,
-        "QA": 1,
-        "BigData": 0.5 
+        "Marketing": 0,
+        "Design": 0,
+        "BigData": 0.5,
+        "QA": 0.5,
+        "DevOps": 0.5,
+        "HR": 1,
+        "Architector": 0.5,
+        "SysAdmin": 0
+    },
+    "diplomat": {
+        "Management": 1,
+        "Programming": 0.5,
+        "Marketing": 0.75,
+        "Design": 0.5,
+        "BigData": 0.25,
+        "QA": 0.25,
+        "DevOps": 0.5,
+        "HR": 1,
+        "Architector": 0.5,
+        "SysAdmin": 0
+    },
+    "executor": {
+        "Management": 0.66,
+        "Programming": 0.66,
+        "Marketing": 0,
+        "Design": 0.66,
+        "BigData": 0.66,
+        "QA": 0.66,
+        "DevOps": 0.66,
+        "HR": 0.33,
+        "Architector": 0.66,
+        "SysAdmin": 1
     }
 }

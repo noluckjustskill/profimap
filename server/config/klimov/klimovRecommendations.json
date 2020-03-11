@@ -1,42 +1,62 @@
 {
+    "human": {
+        "Management": 1,
+        "Programming": 0.4,
+        "Marketing": 0.8,
+        "Design": 0.2,
+        "BigData": 0.2,
+        "QA": 0.2,
+        "DevOps": 0.2,
+        "HR": 1,
+        "Architector": 0.2,
+        "SysAdmin": 0
+    },
+    "technics": {
+        "Management": 0.8,
+        "Programming": 1,
+        "Marketing": 0.4,
+        "Design": 0,
+        "BigData": 0.8,
+        "QA": 0.8,
+        "DevOps": 0.8,
+        "HR": 0.2,
+        "Architector": 0.8,
+        "SysAdmin": 0.8
+    },
+    "artisticImage": {
+        "Management": 0,
+        "Programming": 0,
+        "Marketing": 0,
+        "Design": 1,
+        "BigData": 0,
+        "QA": 0,
+        "DevOps": 0,
+        "HR": 0,
+        "Architector": 0,
+        "SysAdmin": 0
+    },
     "nature": {
         "Management": 0,
         "Programming": 0,
         "Marketing": 0,
         "Design": 0,
+        "BigData": 0,
         "QA": 0,
-        "BigData": 0
-    },
-    "technics": {
-        "Management": 0,
-        "Programming": 1,
-        "Marketing": 0,
-        "Design": 1,
-        "QA": 1,
-        "BigData": 1
-    },
-    "human": {
-        "Management": 1,
-        "Programming": 0,
-        "Marketing": 1,
-        "Design": 1,
-        "QA": 0,
-        "BigData": 0 
+        "DevOps": 0,
+        "HR": 0,
+        "Architector": 0,
+        "SysAdmin": 0
     },
     "signSystem": {
-        "Management": 1,
-        "Programming": 1,
-        "Marketing": 0,
-        "Design": 0,
-        "QA": 1,
-        "BigData": 1
-    },
-    "artisticImage": {
         "Management": 0,
         "Programming": 0,
-        "Marketing": 1,
-        "Design": 1,
+        "Marketing": 0,
+        "Design": 0,
+        "BigData": 0,
         "QA": 0,
-        "BigData": 0
+        "DevOps": 0,
+        "HR": 0,
+        "Architector": 0,
+        "SysAdmin": 0
     }
 }
