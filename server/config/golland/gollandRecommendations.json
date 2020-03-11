@@ -1,50 +1,74 @@
 {
     "realisticType": {
-        "Management": 0.5,
-        "Programming": 0,
-        "Marketing": 0.25,
-        "Design": 0.5,
-        "QA": 0.75,
-        "BigData": 1
+        "Management": 0,
+        "Programming": 0.4,
+        "Marketing": 0,
+        "Design": 0.6,
+        "BigData": 0.6,
+        "QA": 0.4,
+        "DevOps": 0.6,
+        "HR": 0.2,
+        "Architector": 0.2,
+        "SysAdmin": 1
     },
     "artisticType": {
-        "Management": 1,
+        "Management": 0.25,
         "Programming": 1,
         "Marketing": 0.5,
-        "Design": 0,
-        "QA": 0.5,
-        "BigData": 1
+        "Design": 0.75,
+        "BigData": 0.75,
+        "QA": 0.75,
+        "DevOps": 0.75,
+        "HR": 0,
+        "Architector": 0.75,
+        "SysAdmin": 0.75
     },
     "socialType": {
-        "Management": 0,
+        "Management": 0.66,
         "Programming": 0,
         "Marketing": 1,
-        "Design": 0.33,
+        "Design": 0,
+        "BigData": 0.33,
         "QA": 0.33,
-        "BigData": 0
+        "DevOps": 0.33,
+        "HR": 1,
+        "Architector": 0.33,
+        "SysAdmin": 0.33
     },
     "conventionalType": {
         "Management": 0.5,
-        "Programming": 0.75,
-        "Marketing": 0,
-        "Design": 0.25,
+        "Programming": 1,
+        "Marketing": 0.5,
+        "Design": 0.5,
+        "BigData": 1,
         "QA": 1,
-        "BigData": 1
+        "DevOps": 1,
+        "HR": 0,
+        "Architector": 0.5,
+        "SysAdmin": 0.5
     },
     "enterprisingType": {
         "Management": 1,
         "Programming": 0,
-        "Marketing": 0.25,
-        "Design": 0.5,
-        "QA": 0.25,
-        "BigData": 0.25
+        "Marketing": 0.66,
+        "Design": 0.66,
+        "BigData": 0,
+        "QA": 0,
+        "DevOps": 0,
+        "HR": 0.66,
+        "Architector": 0,
+        "SysAdmin": 0
     },
     "intellectualType": {
-        "Management": 0.5,
-        "Programming": 1,
-        "Marketing": 0.75,
-        "Design": 1,
-        "QA": 0.5,
-        "BigData": 0
+        "Management": 1,
+        "Programming": 0.5,
+        "Marketing": 0,
+        "Design": 0,
+        "BigData": 0,
+        "QA": 0,
+        "DevOps": 0,
+        "HR": 0,
+        "Architector": 0,
+        "SysAdmin": 0
     }
 }

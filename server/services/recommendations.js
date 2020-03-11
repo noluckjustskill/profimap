@@ -48,8 +48,8 @@ const recommendationsCalc = (types, results, testData) => {
     for (const rcmd in recommendationsData) {
       arr.push(recommendationsData[rcmd][key]);
     }
-    arr.sort((a, b) => b - a);
-    recommendations[key] = arr[0] + arr[1] + arr[2];
+    
+    recommendations[key] = arr.reduce((a, b) => a + b, 0);
   }
   
   return recommendations;
