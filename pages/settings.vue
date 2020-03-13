@@ -57,6 +57,7 @@
             v-model="name"
             label="Ваше имя"
             required
+            @change="nameInput"
           />
           <v-select
             v-model="gender"
@@ -91,16 +92,26 @@
             />
           </v-menu>
           <v-text-field
+            v-if="!isExternalUser"
+            v-model="currentPassword"
+            type="password"
+            label="Ваш текущий пароль"
+          />
+          <v-text-field
+            v-if="!isExternalUser"
             v-model="password"
             :rules="passwordRules"
             type="password"
             label="Ваш пароль"
+            @change="passwordInput"
           />
           <v-text-field
+            v-if="!isExternalUser"
             v-model="passwordConfirm"
             :disabled="!password"
             type="password"
             label="Подтвердите пароль"
+            @change="passwordInput"
           />
           <v-btn
             class="white--text mt-2"
@@ -127,11 +138,13 @@
       dateOfBirth: null,
       preview: null,
       picture: null,
+      currentPassword: null,
       password: null,
       passwordConfirm: null,
       passwordRules: [
         v => (v || '').length >= 6 || 'Пароль должен содеражать не менее 6 символов',
-        v => /(?=.*[A-Z])/.test(v) || 'Пароль должен иметь буквы в разных регистрах'
+        v => /(?=.*[a-z])/.test(v) || 'Пароль должен иметь хотябы одну прописную букву',
+        v => /(?=.*[A-Z])/.test(v) || 'Пароль должен иметь хотябы одну заглавную букву',
       ],
       genderList: [{
         key: 'M',
@@ -155,9 +168,12 @@
       avatarSize() {
         return this.$vuetify.breakpoint.mdAndDown ? 180: 230;
       },
+      isExternalUser() {
+        return Boolean(this.$store.state.auth.user.externalId);
+      }
     },
     watch: {
-      pickDoB (val) {
+      pickDoB(val) {
         val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'));
       },
     },
@@ -169,6 +185,20 @@
       this.dateOfBirth = dateOfBirth ? dateOfBirth.slice(0, 10) : null;
     },
     methods: {
+      nameInput(val) {
+        if (String(val).length > 64) {
+          this.name = this.name.slice(0, 64);
+        }
+      },
+      passwordInput(val) {
+        if (String(val).length > 64) {
+          this.password = this.password.slice(0, 64);
+          this.passwordConfirm = this.passwordConfirm.slice(0, 64);
+        } else if (!val) {
+          this.password = null;
+          this.passwordConfirm = null;
+        }
+      },
       saveDoB(date) {
         this.$refs.menu.save(date);
       },
@@ -202,6 +232,7 @@
             this.picture = data.avatarUrl;
           }).catch(e => {
             console.log(e);
+            this.preview = null;
 
             this.snackbarColor = 'red';
             this.snackbar = true;
@@ -214,19 +245,32 @@
         }
       },
       update() {
+        if (!this.name) {
+          this.showError('Имя не может быть пустым');
+          return;
+        }
+
+        const validation = this.password && this.passwordRules.find(rule => typeof rule(this.password) === 'string');
+        if (validation) {
+          this.showError(validation(this.password));
+          return;
+        }
         if (this.password && this.password !== this.passwordConfirm) {
-          this.snackbarText = 'Пароли не совпадают';
-          this.snackbarColor = 'red';
-          this.snackbar = true;
+          this.showError('Пароли не совпадают');
+          return;
+        }
+        if (this.password && !this.currentPassword) {
+          this.showError('Введите текущий пароль');
           return;
         }
 
         this.$axios.$post('updateUser', {
-          name: this.name,
-          gender: this.gender,
-          picture: this.picture,
-          dateOfBirth: this.dateOfBirth,
-          password: this.password,
+          name: this.name || undefined,
+          gender: this.gender || undefined,
+          picture: this.picture || undefined,
+          dateOfBirth: this.dateOfBirth || undefined,
+          currentPassword: this.currentPassword || undefined,
+          password: this.password || undefined,
         }).then(() => {
           this.snackbarText = 'Пользователь обновлён';
           this.snackbarColor = 'accent';
@@ -236,10 +280,13 @@
         }).catch(err => {
           console.log(e);
           
-          this.snackbarText = 'Не удалось обновить пользователя';
-          this.snackbarColor = 'red';
-          this.snackbar = true;
+          this.showError('Не удалось обновить пользователя');
         });
+      },
+      showError(msg) {
+        this.snackbarText = msg || 'Ошибка';
+        this.snackbarColor = 'red';
+        this.snackbar = true;
       }
     },
   };

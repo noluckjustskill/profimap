@@ -87,14 +87,16 @@ const updateOAuthUser = async (token, externalId, name, email, picture) => {
   });
 };
 
-const updateUser = async (id, userData = {}) => {
+const updateUser = async (id, userData = {}, findConditions = {}) => {
   if (userData.password) {
     userData.password = md5(userData.password);
   }
-  const userObj = await UsersModel.query().updateAndFetchById(id, userData);
+  const userObj = await UsersModel.query().findOne({ id, ...findConditions});
   if (!userObj) {
     throw new Error('User not found');
   }
+
+  await UsersModel.query().updateAndFetchById(userObj.id, userData);
 
   const user = userObj.toJSON();
   delete user.password;
@@ -171,12 +173,12 @@ const authUser = async (user) => {
 };
 
 const checkProfileProgress = async (user) => {
-  if (!user || user.status === 'active') return false;
+  if (!user || user.status !== 'active') return 0;
+  const allModels = [GollandResultsModel, KlimovResultsModel, BelbinResultsModel, DiskResultsModel];
 
   return Promise.all(
-    [GollandResultsModel, KlimovResultsModel, BelbinResultsModel, DiskResultsModel]
-      .map(model => model.query().where({ userId: user.id }).resultSize())
-  ).then(results => results.some(Boolean)).catch(() => false);
+    allModels.map(model => model.query().where({ userId: user.id }).resultSize())
+  ).then(results => results.filter(Boolean).length / allModels.length).catch(() => 0);
 };
 
 module.exports = {

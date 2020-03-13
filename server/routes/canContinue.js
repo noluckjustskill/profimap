@@ -1,7 +1,7 @@
 const { checkProfileProgress } = require('../services/user');
 
 const CanContinueController = async (ctx) => {
-  if (await checkProfileProgress(ctx.user)) {
+  if (await checkProfileProgress(ctx.user) === 0) {
     ctx.body = { error: 'Can not continue' };
     return;
   }

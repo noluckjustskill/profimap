@@ -182,7 +182,6 @@
       },
       getProgress() {
         const count = Object.values(this.$store.state.profileProgress).filter(Boolean).length;
-        console.log('TEST', this.$store.state.profileProgress);
         return count*25;
       },
       getColor() {

@@ -124,12 +124,14 @@
                       v-model="name"
                       label="Ваше имя"
                       required
+                      @change="nameInput"
                     />
                     <v-text-field
                       v-model="email"
                       :rules="emailRules"
                       label="E-mail"
                       required
+                      @change="emailInput"
                     />
                     <v-select
                       v-model="gender"
@@ -234,10 +236,10 @@
       dateOfBirth: null,
       password: null,
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
+        v => !!v || 'E-mail обязателен',
+        v => /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(v) || 'E-mail введён не верно',
       ],
-      passwordRules: [v => !!v || 'The input is required'],
+      passwordRules: [v => !!v || 'Необходим пароль'],
       genderList: [{
         key: 'M',
         name: 'Мужской',
@@ -288,11 +290,27 @@
           this.snackbar = true;
         }
       },
+      nameInput(val) {
+        if (String(val).length > 64) {
+          this.name = this.name.slice(0, 64).trim();
+        }
+      },
+      emailInput(val) {
+        if (String(val).length > 64) {
+          this.email = this.email.slice(0, 64).trim();
+        }
+      },
       saveDoB(date) {
         this.$refs.menu.save(date);
       },
       register() {
         if (!this.email || !this.name) return;
+        const validation = this.emailRules.find(rule => typeof rule(this.email) === 'string');
+        if (validation) {
+          this.snackbarText = validation(this.password);
+          this.snackbar = true;
+          return;
+        }
 
         this.$axios.$post('signup', {
           name: this.name,

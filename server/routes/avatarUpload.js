@@ -1,4 +1,4 @@
-const fs = require('fs');
+const sharp = require('sharp');
 const path = require('path');
 const { BadRequestError } = require('http-custom-errors');
 const { generate } = require('../utils/string');
@@ -17,9 +17,9 @@ const AvatarUploadController = async (ctx) => {
   const avatarName = `avatar_${ctx.user.id}-${generate(5)}.${ext}`;
   const avatarUrl = `${process.env.BROWSER_BASE_URL}${process.env.STATIC_URL}/${avatarName}`;
 
-  const reader = fs.createReadStream(avatar.path);
-  const stream = fs.createWriteStream(path.resolve(`${process.env.STATIC_DIR}/${avatarName}`));
-  reader.pipe(stream);
+  sharp(avatar.path)
+    .resize({ width: 256 })
+    .toFile(path.resolve(`${process.env.STATIC_DIR}/${avatarName}`));
 
   ctx.body = { avatarUrl };
 };
