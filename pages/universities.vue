@@ -4,7 +4,7 @@
       Выбор ВУЗа
     </h2>
     <v-card
-      v-for="item in data"
+      v-for="item in universities"
       :key="item.id"
       class="mt-6"
       outlined
@@ -16,7 +16,7 @@
             {{ item.name }}
           </v-list-item-title>
           <v-list-item-subtitle class="descr mb-3">
-            {{ item.smallDescr }}
+            {{ item.description }}
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action class="right-block ml-0">
@@ -30,7 +30,7 @@
               depressed
               color="primary"
             >
-              <span class="body-2">Выбрать вуз</span>
+              <span class="body-2">Перейти на сайт</span>
             </v-btn>
           </v-card-actions>
         </v-list-item-action>
@@ -41,30 +41,13 @@
 
 <script>
   export default {
-    // async asyncData({ $axios, params, redirect }) {
-    //   const recommendations = await $axios.$get('recommendations').catch(() => null);
-    //   if (recommendations) {
-    //     const [ first = {}, second = {}, third = {} ] = recommendations;
-    //     first.color = '#E23B3B';
-    //     second.color = '#FFD037';
-    //     third.color = '#66BAED';
-    //     const data = [first, second, third];
-    //     const sum = data.reduce((a, b) => a + b.result, 0);
-    //     data.forEach(profession => {
-    //       profession.result = Math.round(profession.result / sum * 100);
-    //     });
-    //     return { first, second, third, emptyResults: !recommendations.length, data };
-    //   } else {
-    //     redirect('/');
-    //   }
-    // },
-    data() {
-      return {
-        data: [
-          { name: 'МГТУ им. Баумана', city: 'Москва', descr: '', image: 'https://sun9-50.userapi.com/c857636/v857636440/161298/cDe7P4m65ug.jpg' },
-          { name: 'ИТМО', city: 'Санкт-Петербург', descr: '', image: 'https://sun9-50.userapi.com/c857636/v857636440/161298/cDe7P4m65ug.jpg' },
-        ]
-      };
+    async asyncData({ $axios, params, redirect }) {
+      const universities = await $axios.$get('getUniversities').catch(() => null);
+      if (universities) {
+        return { universities };
+      } else {
+        redirect('/');
+      }
     },
     computed: {
       avatarSize() {
