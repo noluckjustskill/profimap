@@ -14,7 +14,7 @@
         <div class="info">
           <v-list class="legend">
             <v-list-item
-              v-for="item in data"
+              v-for="item in professions"
               :key="item.id"
             >
               <v-list-item-icon>
@@ -33,13 +33,13 @@
               <template v-slot:activator="{ on }">
                 <div class="progress-bar" v-on="on">
                   <v-progress-circular
-                    :value="getProgress"
+                    :value="progress"
                     :color="getColor"
                     :size="60"
                     :width="10"
                     :rotate="-90"
                   >
-                    {{ getProgress }}%
+                    {{ progress }}%
                   </v-progress-circular>
                   <h4 class="caption mt-1">
                     Точность расчетов
@@ -84,7 +84,7 @@
       </template> 
     </v-layout>
     <v-card
-      v-for="item in data"
+      v-for="item in professions"
       :key="item.id"
       class="mt-6"
       outlined
@@ -118,14 +118,16 @@
             <v-img :src="item.image" />
           </v-list-item-avatar>
           <v-card-actions>
-            <v-btn
-              :height="buttonHeight"
-              rounded
-              depressed
-              color="primary"
-            >
-              <span class="body-2">Выбрать вуз</span>
-            </v-btn>
+            <nuxt-link to="/universities" class="nuxt-link">
+              <v-btn
+                :height="buttonHeight"
+                rounded
+                depressed
+                color="primary"
+              >
+                <span class="body-2">Выбрать вуз</span>
+              </v-btn>
+            </nuxt-link>
           </v-card-actions>
         </v-list-item-action>
       </v-list-item>
@@ -144,18 +146,17 @@
       Preloader,
     },
     async asyncData({ $axios, params, redirect }) {
-      const recommendations = await $axios.$get('recommendations').catch(() => null);
-      if (recommendations) {
-        const [ first = {}, second = {}, third = {} ] = recommendations;
-        first.color = '#E23B3B';
-        second.color = '#FFD037';
-        third.color = '#66BAED';
-        const data = [first, second, third];
-        const sum = data.reduce((a, b) => a + b.result, 0);
-        data.forEach(profession => {
+      const professions = await $axios.$get('recommendations').catch(() => null);
+      const progressCounter = await $axios.$get('progress-counter').catch(() => null);
+      if (professions) {
+        professions[0].color = '#E23B3B';
+        professions[1].color = '#FFD037';
+        professions[2].color = '#66BAED';
+        const sum = professions.reduce((a, b) => a + b.result, 0);
+        professions.forEach(profession => {
           profession.result = Math.round(profession.result / sum * 100);
         });
-        return { first, second, third, emptyResults: !recommendations.length, data };
+        return { emptyResults: !professions.length, professions, progress: progressCounter.progress * 100 };
       } else {
         redirect('/');
       }
@@ -180,14 +181,10 @@
       buttonHeight() {
         return this.$vuetify.breakpoint.xsOnly ? 24 : 36;
       },
-      getProgress() {
-        const count = Object.values(this.$store.state.profileProgress).filter(Boolean).length;
-        return count*25;
-      },
       getColor() {
-        if (this.getProgress <= 25) return 'red';
-        else if (this.getProgress <= 50) return 'orange';
-        else if (this.getProgress <= 75) return 'yellow';
+        if (this.progress <= 25) return 'red';
+        else if (this.progress <= 50) return 'orange';
+        else if (this.progress <= 75) return 'yellow';
         else return 'green';
       },
       loaderSize() {
@@ -204,10 +201,10 @@
         const config = !this.noData ? {
           ...this.config, 
           data: {
-            labels: this.data.map(v => v.name),
+            labels: this.professions.map(v => v.name),
             datasets: [{
-              data: this.data.map(v => v.result),
-              backgroundColor: [this.first.color, this.second.color, this.third.color]
+              data: this.professions.map(v => v.result),
+              backgroundColor: this.professions.map(v => v.color),
             }],
           },
           plugins: [ChartLabels],
@@ -227,7 +224,7 @@
           ...this.config, 
           data: { 
             datasets: [{
-              data: [0, 0, 0],
+              professions: [0, 0, 0],
             }]
           },
         };

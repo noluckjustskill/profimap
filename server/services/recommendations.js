@@ -118,7 +118,7 @@ const getRecommendations = async (userId) => {
   const staticUrl = process.env.STATIC_URL;
 
   if (resultArr.some(elem => elem.result)) {
-    return orderBy(resultArr, 'result', 'desc').slice(0, 3).map(elem => {
+    return orderBy(resultArr, 'result', 'desc').map(elem => {
       const profession = professions.find(p => p.name === elem.name);
       profession.name = keyDictionary[elem.name] || elem.name;
       profession.result = elem.result;
