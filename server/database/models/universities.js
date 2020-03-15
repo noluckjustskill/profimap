@@ -15,8 +15,8 @@ module.exports = class Unversities extends Model {
         id: { type: 'integer' },
         name: { type: 'string' },
         city: { type: 'string' },
-        description: { type: 'string' },
-        image: { type: 'string' },
+        description: { type: ['string', 'null'] },
+        image: { type: ['string', 'null'] },
       }
     };
   }
