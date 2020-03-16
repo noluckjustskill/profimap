@@ -1,9 +1,10 @@
 <template>
   <div>
     <h2 class="display-1 page-title">
-      Направления в IT, которые вам подходят:
+      {{ paidUser ? 'Направления в IT, которые вам подходят:' : 'Что ждет тебя после тестирования?' }}
     </h2>
     <v-layout
+      v-if="paidUser"
       row
       wrap
       align-start
@@ -53,13 +54,61 @@
           </div>
         </div>
         <div class="rank__board">
-          <Preloader v-if="!myChart && !noData" :width="loaderSize" :height="loaderSize" />
+          <Preloader v-if="!myChart" :width="loaderSize" :height="loaderSize" />
           <canvas 
             ref="canvas" 
             height="100" 
             width="100" 
           />
         </div>
+        <v-card
+          v-for="item in professions"
+          :key="item.id"
+          class="mt-6"
+          outlined
+          style="border: none;"
+        >
+          <v-list-item>
+            <v-list-item-content class="mx-3">
+              <v-list-item-title class="mainline mb-2">
+                {{ item.name }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="descr mb-3">
+                {{ item.smallDescr }}
+              </v-list-item-subtitle>
+              <v-list-item-title class="subline mb-2">
+                Образовательные курсы по данному направлению:
+              </v-list-item-title>
+              <v-list-item-subtitle class="mb-3">
+                <img :src="item.course1" class="course-image">
+                <img :src="item.course2" class="course-image">
+                <img :src="item.course3" class="course-image">
+              </v-list-item-subtitle>
+              <v-list-item-title class="subline mb-2">
+                Факультеты в ВУЗах, связанные с направлением:
+              </v-list-item-title>
+              <v-list-item-subtitle class="descr mb-3">
+                {{ item.smallDescr }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action class="right-block ml-0">
+              <v-list-item-avatar :size="avatarSize" class="mr-0">
+                <v-img :src="item.image" />
+              </v-list-item-avatar>
+              <v-card-actions>
+                <v-btn
+                  :height="buttonHeight"
+                  rounded
+                  depressed
+                  color="primary"
+                >
+                  <span class="body-2">Выбрать вуз</span>
+                </v-btn>
+              </v-card-actions>
+            </v-list-item-action>
+          </v-list-item>
+          <v-divider />
+        </v-card>
       </template>
       <template v-else>
         <div class="list-empty">
@@ -83,55 +132,71 @@
         </div>
       </template> 
     </v-layout>
-    <v-card
-      v-for="item in professions"
-      :key="item.id"
-      class="mt-6"
-      outlined
-      style="border: none;"
+    <v-layout
+      v-else
+      row
+      wrap
+      align-start
+      justify-center
     >
-      <v-list-item>
-        <v-list-item-content class="mx-3">
-          <v-list-item-title class="mainline mb-2">
-            {{ item.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle class="descr mb-3">
-            {{ item.smallDescr }}
-          </v-list-item-subtitle>
-          <v-list-item-title class="subline mb-2">
-            Образовательные курсы по данному направлению:
-          </v-list-item-title>
-          <v-list-item-subtitle class="mb-3">
-            <img :src="item.course1" class="course-image">
-            <img :src="item.course2" class="course-image">
-            <img :src="item.course3" class="course-image">
-          </v-list-item-subtitle>
-          <v-list-item-title class="subline mb-2">
-            Факультеты в ВУЗах, связанные с направлением:
-          </v-list-item-title>
-          <v-list-item-subtitle class="descr mb-3">
-            {{ item.smallDescr }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action class="right-block ml-0">
-          <v-list-item-avatar :size="avatarSize" class="mr-0">
-            <v-img :src="item.image" />
-          </v-list-item-avatar>
-          <v-card-actions>
-            <nuxt-link to="/universities" class="nuxt-link">
-              <v-btn
-                :height="buttonHeight"
-                rounded
-                depressed
-                color="primary"
-              >
-                <span class="body-2">Выбрать вуз</span>
-              </v-btn>
-            </nuxt-link>
-          </v-card-actions>
-        </v-list-item-action>
-      </v-list-item>
-    </v-card>
+      <v-flex
+        md4
+        sm6
+        xs12
+        class="block"
+      >
+        <div class="advantage">
+          <v-img :src="require('~/assets/bar-chart.png')" width="50" class="img" />
+          <h3>Направления, которые подходят именно тебе</h3>
+          <p>По результатам тестирования ты получишь топ-3 наиболее подходящих направления в виде диаграммы</p>
+          <v-img :src="require('~/assets/example.png')" width="210" class="img mx-auto mt-2" />
+        </div>
+      </v-flex>
+      <v-flex
+        md4
+        sm6
+        xs12
+        class="block"
+      >
+        <div class="advantage">
+          <v-img :src="require('~/assets/edu.png')" width="50" class="img" />
+          <h3>Рекомендации по ВУЗам и курсам</h3>
+          <p>
+            Мы предоставим описание 
+            всех подходящих тебе направлений, 
+            а также поделимся своими личными рекомендациями по ВУЗам и курсам, 
+            которые помогут освоить данные профессии
+          </p>
+        </div>
+      </v-flex>
+      <v-flex
+        md4
+        sm6
+        xs12
+        class="block"
+      >
+        <div class="advantage">
+          <v-img :src="require('~/assets/cost.png')" width="50" class="img" />
+          <h3>Не просто доступ, а целый жизненный путь</h3>
+          <p>
+            Все еще не знаешь, 
+            в какой сфере развиваться? Мы готовы помочь и направить тебя на правильный путь. 
+            Безлимитный доступ к тестам и рекомендациям по цене чашки кофе!
+          </p>
+          <div class="text-center">
+            <v-btn
+              to="/api/pay"
+              rounded
+              depressed
+              color="primary"
+              class="buy-btn"
+            >
+              <span class="body-2">Купить за 179 рублей</span>
+            </v-btn>
+          </div>
+        </div>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -145,17 +210,23 @@
     components: {
       Preloader,
     },
-    async asyncData({ $axios, params, redirect }) {
+    async asyncData({ $axios, store, params, redirect }) {
+      if (!store.$auth.user.paid) {
+        return;
+      }
+
       const professions = await $axios.$get('recommendations').catch(() => null);
       const progressCounter = await $axios.$get('progress-counter').catch(() => null);
       if (professions) {
-        professions[0].color = '#E23B3B';
-        professions[1].color = '#FFD037';
-        professions[2].color = '#66BAED';
-        const sum = professions.reduce((a, b) => a + b.result, 0);
-        professions.forEach(profession => {
-          profession.result = Math.round(profession.result / sum * 100);
-        });
+        if (professions.length) {
+          professions[0].color = '#E23B3B';
+          professions[1].color = '#FFD037';
+          professions[2].color = '#66BAED';
+          const sum = professions.reduce((a, b) => a + b.result, 0);
+          professions.forEach(profession => {
+            profession.result = Math.round(profession.result / sum * 100);
+          });
+        }
         return { emptyResults: !professions.length, professions, progress: progressCounter.progress * 100 };
       } else {
         redirect('/');
@@ -164,13 +235,15 @@
     data() {
       return {
         myChart: null,
-        noData: false,
         config: {
           type: 'pie',
         },
       };
     },
     computed: {
+      paidUser() {
+        return Boolean(this.$store.state.auth.user.paid);
+      },
       avatarSize() {
         if (this.$vuetify.breakpoint.xsOnly) { 
           return 80;
@@ -192,13 +265,15 @@
       },
     },
     mounted() {
-      this.setChart();
+      if (this.paidUser && !this.emptyResults) {
+        this.setChart();
+      }
     },
     methods: {
       setChart() {
         const ctx = this.$refs.canvas;
 
-        const config = !this.noData ? {
+        const config = {
           ...this.config, 
           data: {
             labels: this.professions.map(v => v.name),
@@ -220,13 +295,6 @@
               display: false,
             }
           }
-        } : {
-          ...this.config, 
-          data: { 
-            datasets: [{
-              professions: [0, 0, 0],
-            }]
-          },
         };
         this.myChart = new Chart(ctx, config);
       },
@@ -400,5 +468,45 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .block {
+    font-family: 'Montserrat', sans-serif;
+    padding: 30px 20px;
+
+    & .advantage{
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      padding: 25px 10px;
+      height: 450px;
+      box-sizing: border-box;
+
+      & .img {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      & h3 {
+        margin: 10px 0;
+        font-family: 'Montserrat', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 22px;
+        line-height: 25px;
+        letter-spacing: 0.05em;
+      }
+
+      & p {
+        margin: 5px 0;
+        font-family: 'Montserrat', sans-serif;
+        font-style: normal;
+        font-weight: 200;
+        font-size: 18px;
+        line-height: 23px;
+      }
+
+      & .buy-btn {
+        margin-top: 40px;
+      }
+    }
   }
 </style>

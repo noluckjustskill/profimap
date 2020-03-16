@@ -7,7 +7,7 @@
     </h2>
     <v-list-item class="pa-0 profile-content">
       <v-list-item-avatar :size="avatarSize" :color="avatarColor" class="avatar">
-        <img v-if="user.picture" :src="user.picture" alt="avatar">
+        <v-img v-if="user.picture" :src="user.picture" />
         <span v-else class="display-1 font-weight-light white--text ma-0">{{ userInitials }}</span>
       </v-list-item-avatar>
       <v-list-item-content>

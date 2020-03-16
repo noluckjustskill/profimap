@@ -7,7 +7,7 @@
           :size="isMobile ? 28 : 36"
           v-on="on"
         >
-          <img v-if="user.picture" :src="user.picture" alt="avatar">
+          <v-img v-if="user.picture" :src="user.picture" />
           <span v-else class="subtitle-1 white--text">{{ userInitials }}</span>
         </v-avatar>
         <div class="hidden-sm-and-down userInfo">

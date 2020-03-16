@@ -21,7 +21,8 @@
           <UserInfo />
         </v-flex>
         <v-flex md6 xs12 class="recommendations">
-          <Recomendation :items="recomendations" />
+          <Recomendation v-if="paidUser" :items="recomendations" />
+          <NotPaid v-else />
         </v-flex>
       </v-layout>
     </v-flex>
@@ -56,6 +57,7 @@
   import TeamRole from '../components/TeamRole';
   import Learning from '../components/Charts/Learning';
   import Recomendation from '../components/Recomendations';
+  import NotPaid from '../components/NotPaid';
   import CharacterType from '../components/CharacterType';
 
   export default {
@@ -67,11 +69,17 @@
       TeamRole,
       Learning,
       Recomendation,
+      NotPaid,
       CharacterType,
     },
     async asyncData({ $axios }) {
       const recomendations = await $axios.$get('recommendations').catch(() => ([]));
       return { recomendations };
+    },
+    computed: {
+      paidUser() {
+        return Boolean(this.$store.state.auth.user.paid);
+      },
     },
     head () {
       return {

@@ -29,14 +29,14 @@ const findUserById = async (id) => {
   return UsersModel
     .query()
     .findById(id)
-    .select('id', 'externalId', 'status', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
+    .select('id', 'externalId', 'status', 'paid', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
 };
 
 const findUserLocal = async (email, password) => {
   return UsersModel
     .query()
     .findOne({ email, password: md5(password), status: 'active' })
-    .select('id', 'externalId', 'status', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
+    .select('id', 'externalId', 'status', 'paid', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
 };
 
 const findOAuthUser = async (externalId, email) => {
@@ -50,7 +50,7 @@ const findOAuthUser = async (externalId, email) => {
 
       return build;
     })
-    .select('id', 'externalId', 'status', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
+    .select('id', 'externalId', 'status', 'paid', 'name', 'email', 'picture', 'gender', 'dateOfBirth');
 };
 
 const createOAuthUser = async (id, name, email, picture) => {

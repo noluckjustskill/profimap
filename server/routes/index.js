@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const MiddleWare = require('../middleware');
+const PaidUser = require('../middleware/paid');
 const { MeController, MeRoute } = require('./me');
 const { InviteController, InviteRoute } = require('./invite');
 const { SignupController } = require('./signup');
@@ -50,6 +51,8 @@ const { ProgressCounterController, ProgressCounterRoute } = require('./progressC
 
 const { ImageCacheController } = require('./imagesCache');
 
+const { PayController, PayRoute, RequestPayController, RequestPayRoute } = require('./robokassa');
+
 const router = new Router();
 
 router.post('/auth/signup', SignupController);
@@ -74,7 +77,7 @@ router.get(`/api${GetGollandRoute}`, GetGollandController);
 router.post(`/api${PostGollandRoute}`, PostGollandController);
 router.get(`/api${GollandProfileRoute}`, GollandProfileController);
 
-router.get(`/api${RecommendationsRoute}`, RecommendationsController);
+router.get(`/api${RecommendationsRoute}`, PaidUser, RecommendationsController);
 router.get(`/api${ProfessionRoute}`, ProfessionController);
 router.get(`/api${UniversitiesRoute}`, UniversitiesController);
 router.get(`/api${CitiesRoute}`, CitiesController);
@@ -98,6 +101,9 @@ router.post(`/api${AvatarUploadRoute}`, AvatarUploadController);
 router.post(`/api${UpdateUserRoute}`, UpdateUserController);
 
 router.get(`/api${ProgressCounterRoute}`, ProgressCounterController);
+
+router.get(`/api${PayRoute}`, PayController);
+router.post(`/pay${RequestPayRoute}`, RequestPayController);
 
 router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 
