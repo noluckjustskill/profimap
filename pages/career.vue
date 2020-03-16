@@ -185,7 +185,7 @@
           </p>
           <div class="text-center">
             <v-btn
-              to="/api/pay"
+              href="/api/pay"
               rounded
               depressed
               color="primary"
