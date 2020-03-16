@@ -67,6 +67,7 @@ module.exports = class Users extends Model {
         email: { type: ['string', 'null'] },
         externalId: { type: ['string', 'null'] },
         status: { type: 'string' },
+        paid: { type: 'integer' },
         password: { type: ['string', 'null'] },
         picture: { type: ['string', 'null'] },
         createdAt: { type: 'string' },

@@ -19,7 +19,9 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
       { hid: 'keywords', name: 'keywords', content: 'профориентация тест, тест на профориентацию бесплатно онлайн, профориентация для школьников, центр профориентации, профессии, выбрать профессию, профессии будущего, карьера' },
     ],
-    link: [],
+    link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat' },
+    ],
   },
   manifest: {
     name: 'ProfiMap',
