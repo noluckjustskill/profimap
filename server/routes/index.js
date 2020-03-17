@@ -19,6 +19,7 @@ const {
 } = require('./vkontakte');
 
 const { CanContinueController, CanContinueRoute } = require('./canContinue');
+const { RefreshTokenController, RefreshTokenRoute } = require('./refreshToken');
 
 const { GollandResultsController, GollandResultsRoute } = require('./gollandTest/gollandResults');
 const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGolland');
@@ -52,6 +53,7 @@ const { ProgressCounterController, ProgressCounterRoute } = require('./progressC
 const { ImageCacheController } = require('./imagesCache');
 
 const { PayController, PayRoute, RequestPayController, RequestPayRoute } = require('./robokassa');
+const { ActivatePromocodeController, ActivatePromocodeRoute } = require('./promocodes');
 
 const router = new Router();
 
@@ -68,6 +70,7 @@ router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAut
 router.use('/api/*', MiddleWare);
 router.post('/api/signup', SignupController);
 router.get(`/api${MeRoute}`, MeController);
+router.get(`/api${RefreshTokenRoute}`, RefreshTokenController);
 
 router.post(`/api${InviteRoute}`, InviteController);
 router.get(`/api${CanContinueRoute}`, CanContinueController);
@@ -104,6 +107,7 @@ router.get(`/api${ProgressCounterRoute}`, ProgressCounterController);
 
 router.get(`/api${PayRoute}`, PayController);
 router.post(`/pay${RequestPayRoute}`, RequestPayController);
+router.get(`/api${ActivatePromocodeRoute}`, ActivatePromocodeController);
 
 router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 
