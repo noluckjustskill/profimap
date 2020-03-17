@@ -193,6 +193,10 @@
             >
               <span class="body-2">Купить за 179 рублей</span>
             </v-btn>
+            <h4 class="text-center caption mt-3 promocode" @click="promocode = true">
+              У меня есть промокод!
+            </h4>
+            <ActivatePromocode :opened="promocode" @close="promocode = false" />
           </div>
         </div>
       </v-flex>
@@ -204,11 +208,14 @@
   import Chart from 'chart.js';
   import ChartLabels from 'chartjs-plugin-labels';
   import Preloader from '../components/Preloader';
+  import ActivatePromocode from '../components/ActivatePromocode';
+
   Chart.plugins.unregister(ChartLabels);
 
   export default {
     components: {
       Preloader,
+      ActivatePromocode,
     },
     async asyncData({ $axios, store, params, redirect }) {
       if (!store.$auth.user.paid) {
@@ -235,6 +242,7 @@
     data() {
       return {
         myChart: null,
+        promocode: false,
         config: {
           type: 'pie',
         },
@@ -505,7 +513,12 @@
       }
 
       & .buy-btn {
-        margin-top: 40px;
+        margin-top: 20px;
+      }
+
+      & .promocode {
+        color: #868686;
+        cursor: pointer;
       }
     }
   }

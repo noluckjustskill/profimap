@@ -31,6 +31,7 @@ const DiskResultsModel = require('./models/disk/diskResults');
 const FeedBackModel = require('./models/feedback');
 const UniversitiesModel = require('./models/universities');
 const InvoiceModel = require('./models/invoices');
+const PromocodesModel = require('./models/promocodes');
 
 const knex = Knex({
   client: 'mysql', 
@@ -77,4 +78,5 @@ module.exports = {
   FeedBackModel,
   UniversitiesModel,
   InvoiceModel,
+  PromocodesModel,
 };

@@ -2,9 +2,10 @@ const md5 = require('md5');
 const sgMail = require('@sendgrid/mail');
 const { Personalization } = require('@sendgrid/helpers/classes');
 const jwt = require('jsonwebtoken');
-const { knex } = require('../database');
+const { NotFoundError } = require('http-custom-errors');
 const { generate } = require('../utils/string');
 const {
+  knex,
   UsersModel,
   InvitedUsersModel,
   GollandResultsModel,
@@ -172,6 +173,15 @@ const authUser = async (user) => {
   return token;
 };
 
+const refreshToken = async (userId) => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  return authUser(user.toJSON());
+};
+
 const checkProfileProgress = async (user) => {
   if (!user || user.status !== 'active') return 0;
   const allModels = [GollandResultsModel, KlimovResultsModel, BelbinResultsModel, DiskResultsModel];
@@ -190,6 +200,7 @@ module.exports = {
   updateUser,
   updateOAuthUser,
   authUser,
+  refreshToken,
   validateUser,
   checkProfileProgress,
   checkUserByEmail,
