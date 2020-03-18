@@ -1,3 +1,4 @@
+const { get } = require('lodash');
 const { CreatePaymentUrl, HandleResult } = require('../services/robokassa');
 
 const PayController = async(ctx) => {
@@ -6,12 +7,14 @@ const PayController = async(ctx) => {
     return;
   }
 
+  const code = get(ctx, 'request.query.code', null);
+
   try {
-    const paymentUrl = await CreatePaymentUrl(ctx.user);
+    const paymentUrl = await CreatePaymentUrl(ctx.user, code);
     ctx.redirect(paymentUrl);
   } catch (error) {
     console.error('Payment error: ', error);
-    ctx.redirect('/api/failed-pay');
+    ctx.redirect('/failed-pay');
   }
 };
 

@@ -1,5 +1,6 @@
 const { Model } = require('objection');
 const User = require('./users');
+const Promocode = require('./promocodes');
 
 module.exports = class Invoices extends Model {
   static get tableName() {
@@ -18,6 +19,14 @@ module.exports = class Invoices extends Model {
           to: 'users.id'
         }
       },
+      promocodes: {
+        relation: Model.HasOneRelation,
+        modelClass: Promocode,
+        join: {
+          from: 'invoices.promocodeId',
+          to: 'promocodes.id'
+        }
+      },
     };
   }
   static get jsonSchema() {
@@ -27,7 +36,8 @@ module.exports = class Invoices extends Model {
       properties: {
         id: { type: 'integer' },
         userId: { type: 'integer' },
-        amount: { type: 'integer' },
+        promocodeId: { type: ['integer', 'null'] },
+        amount: { type: 'float' },
         status: { type: 'string' },
         createdAt: { type: 'string' },
       }

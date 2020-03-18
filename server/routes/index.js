@@ -53,7 +53,6 @@ const { ProgressCounterController, ProgressCounterRoute } = require('./progressC
 const { ImageCacheController } = require('./imagesCache');
 
 const { PayController, PayRoute, RequestPayController, RequestPayRoute } = require('./robokassa');
-const { ActivatePromocodeController, ActivatePromocodeRoute } = require('./promocodes');
 
 const router = new Router();
 
@@ -107,7 +106,6 @@ router.get(`/api${ProgressCounterRoute}`, ProgressCounterController);
 
 router.get(`/api${PayRoute}`, PayController);
 router.post(`/pay${RequestPayRoute}`, RequestPayController);
-router.get(`/api${ActivatePromocodeRoute}`, ActivatePromocodeController);
 
 router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 
