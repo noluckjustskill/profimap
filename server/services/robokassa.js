@@ -1,24 +1,50 @@
 const md5 = require('md5');
-const { InvoiceModel, UsersModel } = require('../database');
+const { BadRequestError, NotFoundError } = require('http-custom-errors');
+const { InvoiceModel, UsersModel, PromocodesModel, knex } = require('../database');
 const { outSum, invDesc } = require('../config/pay.json');
 
 const RobokassaUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
 const merchantLogin = process.env.ROBOKASSA_MERCHANT_LOGIN;
 const isTest = process.env.NODE_ENV !== 'production' ? 1 : 0;
 
-const CreatePaymentUrl = async (user) => {
+const CreatePaymentUrl = async (user, code) => {
   const merchantPass1 = process.env.ROBOKASSA_PASSWORD1;
 
   if (!merchantLogin || !merchantPass1) {
     throw new Error('Merchant data not set');
   }
 
-  const invoice = await InvoiceModel.query().insert({ userId: user.id, amount: outSum });
-  const invoiceId = invoice.toJSON().id;
+  let invoice = await InvoiceModel.query().findOne({ userId: user.id });
+  if (invoice) {
+    const invoiceObj = invoice.toJSON();
+    if (invoiceObj.status === 'paid') {
+      throw new BadRequestError('Invoice already paid');
+    }
+    
+    return invoiceObj.payLink;
+  } else {
+    let amount = outSum, promocodeId;
+    if (code) {
+      const promocodeEntity = await PromocodesModel.query().findOne({ code, userId: null });
+      if (!promocodeEntity) {
+        throw new NotFoundError('Promocode not found');
+      }
 
-  const signature = md5(`${merchantLogin}:${outSum}:${invoiceId}:${merchantPass1}`);
+      const promocode = promocodeEntity.toJSON();
+      promocodeId = promocode.id;
+      amount *= promocode.discount || 1;
+    }
 
-  return `${RobokassaUrl}?MrchLogin=${merchantLogin}&OutSum=${outSum}&InvId=${invoiceId}&Email=${user.email}&Desc=${invDesc}&IsTest=${isTest}&SignatureValue=${signature}&Encoding=UTF-8`;
+    invoice = await InvoiceModel.query().insert({ userId: user.id, amount, promocodeId });
+    const invoiceId = invoice.toJSON().id;
+
+    const signature = md5(`${merchantLogin}:${amount}:${invoiceId}:${merchantPass1}`);
+    const payLink = `${RobokassaUrl}?MrchLogin=${merchantLogin}&OutSum=${amount}&InvId=${invoiceId}&Email=${user.email}&Desc=${invDesc}&IsTest=${isTest}&SignatureValue=${signature}&Encoding=UTF-8`;
+
+    await invoice.$query().patch({ payLink });
+
+    return payLink;
+  }
 };
 
 const HandleResult = async(request) => {
@@ -48,6 +74,10 @@ const HandleResult = async(request) => {
 
   await Promise.all([
     invoiceEntity.$query().patch({ status: 'paid' }),
+    ...(invoice.promocodeId
+      ? [PromocodesModel.query().findById(invoice.promocodeId).patch({ userId: invoice.userId, activated: knex.raw('now()') })]
+      : []
+    ),
     UsersModel.query().updateAndFetchById(invoice.userId, { paid: 1 }),
   ]);
 

@@ -38,11 +38,11 @@
         />
         <div class="text-right">
           <v-btn
+            :href="url"
             :disabled="!code"
             rounded
             depressed
             color="primary"
-            @click="activate"
           >
             <span class="body-2">Активировать</span>
           </v-btn>
@@ -80,20 +80,11 @@
       isMobile() {
         return this.$vuetify.breakpoint.xsOnly;
       },
+      url() {
+        return this.code && `/api/pay?code=${this.code}`;
+      },
     },
     methods: {
-      activate() {
-        if (!this.code) return;
-
-        this.$axios.$get(`promocode?code=${this.code}`).then(({ error }) => {
-          if (error) {
-            return Promise.reject(error);
-          }
-          this.$router.push('/success-pay');
-        }).catch(err => {
-          this.showError(err);
-        });
-      },
       showError(message) {
         this.snackbarText = typeof message === 'string' ? message : 'Ошибка';
         this.snackbarColor = 'red';
