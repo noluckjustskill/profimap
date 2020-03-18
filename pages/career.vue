@@ -210,8 +210,6 @@
   import Preloader from '../components/Preloader';
   import ActivatePromocode from '../components/ActivatePromocode';
 
-  Chart.plugins.unregister(ChartLabels);
-
   export default {
     components: {
       Preloader,
@@ -245,6 +243,19 @@
         promocode: false,
         config: {
           type: 'pie',
+          plugins: [ChartLabels],
+          options: {
+            plugins: {
+              labels: {
+                render: 'value',
+                fontColor: '#fff',
+                fontSize: 30,
+              }
+            },
+            legend: {
+              display: false,
+            }
+          }
         },
       };
     },
@@ -290,19 +301,6 @@
               backgroundColor: this.professions.map(v => v.color),
             }],
           },
-          plugins: [ChartLabels],
-          options: {
-            plugins: {
-              labels: {
-                render: 'value',
-                fontColor: '#fff',
-                fontSize: 30,
-              }
-            },
-            legend: {
-              display: false,
-            }
-          }
         };
         this.myChart = new Chart(ctx, config);
       },
