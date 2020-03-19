@@ -32,7 +32,7 @@ const CreatePaymentUrl = async (user, code) => {
 
       const promocode = promocodeEntity.toJSON();
       promocodeId = promocode.id;
-      amount *= promocode.discount || 1;
+      amount *= (1 - promocode.discount || 0);
     }
 
     invoice = await InvoiceModel.query().insert({ userId: user.id, amount, promocodeId });
