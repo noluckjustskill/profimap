@@ -46,9 +46,9 @@ const knex = Knex({
   ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
-      warn: msg => logger.log('warn', msg),
-      error: msg => logger.log('error', msg),
-      debug: msg => logger.log('debug', msg),
+      warn: msg => logger.log('warn', JSON.stringify(msg)),
+      error: msg => logger.log('error', JSON.stringify(msg)),
+      debug: msg => logger.log('info', JSON.stringify(msg)),
     }
   } : {
     error: msg => logger.log('error', msg),
