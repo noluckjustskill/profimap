@@ -29,7 +29,7 @@ const SendFeedback = async ({
 
   await SlackHook.send({
     text: `*User id:* ${userId}\n*URL:* ${path}\n*Rate:* ${stars}\n*Message:* ${message || '_none_'}`,
-  }).catch(err => console.error(err));
+  }).catch(err => logger.lor('error', err));
 
   return FeedBackModel.query().insert({
     userId,

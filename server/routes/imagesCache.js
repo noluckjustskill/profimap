@@ -3,21 +3,23 @@ const { resolve } = require('path');
 const sharp = require('sharp');
 
 const storage = {};
-fs.readdir(resolve(process.env.STATIC_DIR), (err, files) => {
-  if (err) {
-    console.error('CAN NOT CACHE FILES: ', JSON.stringify(err));
-    return;
-  }
+if (process.env.STATIC_DIR) {
+  fs.readdir(resolve(process.env.STATIC_DIR), (err, files) => {
+    if (err) {
+      logger.log('error', `CAN NOT CACHE FILES: ${JSON.stringify(err)}`);
+      return;
+    }
 
-  files.forEach(file => {
-    sharp(resolve(process.env.STATIC_DIR, file))
-      .resize({width: 64})
-      .toBuffer()
-      .then(data => {
-        storage[file] = data;
-      });
+    files.forEach(file => {
+      sharp(resolve(process.env.STATIC_DIR, file))
+        .resize({width: 64})
+        .toBuffer()
+        .then(data => {
+          storage[file] = data;
+        });
+    });
   });
-});
+}
 
 const ImageCacheController = async (ctx) => {
   const name = ctx.params.name;

@@ -78,7 +78,7 @@ const HandleResult = async(request) => {
       ? [PromocodesModel.query().findById(invoice.promocodeId).patch({ userId: invoice.userId, activated: knex.raw('now()') })]
       : []
     ),
-    UsersModel.query().updateAndFetchById(invoice.userId, { paid: 1 }),
+    UsersModel.query().updateAndFetchById(invoice.userId, { paid: true }),
   ]);
 
   return invoice.id;

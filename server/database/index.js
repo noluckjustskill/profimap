@@ -46,12 +46,12 @@ const knex = Knex({
   ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
-      warn: console.warn,
-      error: console.error,
-      debug: console.debug,
+      warn: msg => logger.log('warn', msg),
+      error: msg => logger.log('error', msg),
+      debug: msg => logger.log('debug', msg),
     }
   } : {
-    error: console.error,
+    error: msg => logger.log('error', msg),
   }),
 });
 

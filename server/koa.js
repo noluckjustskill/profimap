@@ -1,8 +1,8 @@
 const Koa = require('koa');
-const passport = require('./services/passport');
 const staticFolder = require('koa-static');
 const mount = require('koa-mount');
 const koaBody = require('koa-body');
+const passport = require('./services/passport');
 const router = require('./routes/index');
 
 const app = new Koa();
@@ -17,5 +17,8 @@ app.use(router.routes()).use(router.allowedMethods());
 
 // Static folder
 app.use(mount(process.env.STATIC_URL, staticFolder(process.env.STATIC_DIR)));
+
+// Error handling
+app.on('error', (err, ctx) => logger.log('error', `Some error occurred:\n${err}\nUser: ${JSON.stringify(ctx.user)}\n`));
 
 module.exports = app;
