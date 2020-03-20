@@ -1,4 +1,5 @@
 const Router = require('koa-router');
+const morgan = require('koa-morgan');
 const MiddleWare = require('../middleware');
 const PaidUser = require('../middleware/paid');
 const { MeController, MeRoute } = require('./me');
@@ -55,6 +56,9 @@ const { ImageCacheController } = require('./imagesCache');
 const { PayController, PayRoute, RequestPayController, RequestPayRoute } = require('./robokassa');
 
 const router = new Router();
+const requestLogger = morgan(':method :url :status :res[content-length] - :response-time ms');
+
+router.use('/auth/*', requestLogger);
 
 router.post('/auth/signup', SignupController);
 router.post('/auth/login', LoginController);
@@ -66,7 +70,8 @@ router.get('/auth/google-redirect', GooglePassportController, GoogleAuthRedirect
 router.get('/auth/vkontakte', UserIsAuth, VkontakteAuthController);
 router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAuthRedirectController);
 
-router.use('/api/*', MiddleWare);
+router.use('/api/*', requestLogger, MiddleWare);
+
 router.post('/api/signup', SignupController);
 router.get(`/api${MeRoute}`, MeController);
 router.get(`/api${RefreshTokenRoute}`, RefreshTokenController);
@@ -105,8 +110,8 @@ router.post(`/api${UpdateUserRoute}`, UpdateUserController);
 router.get(`/api${ProgressCounterRoute}`, ProgressCounterController);
 
 router.get(`/api${PayRoute}`, PayController);
-router.post(`/pay${RequestPayRoute}`, RequestPayController);
 
+router.post(`/pay${RequestPayRoute}`, requestLogger, RequestPayController);
 router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 
 module.exports = router;

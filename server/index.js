@@ -1,3 +1,4 @@
+global.logger = require('./logger');
 require('dotenv').config();
 
 const consola = require('consola');

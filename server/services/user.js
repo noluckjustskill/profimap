@@ -1,4 +1,5 @@
 const md5 = require('md5');
+const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
 const { Personalization } = require('@sendgrid/helpers/classes');
 const jwt = require('jsonwebtoken');
@@ -92,9 +93,19 @@ const updateUser = async (id, userData = {}, findConditions = {}) => {
   if (userData.password) {
     userData.password = md5(userData.password);
   }
+
   const userObj = await UsersModel.query().findOne({ id, ...findConditions});
   if (!userObj) {
     throw new Error('User not found');
+  }
+
+  if (userData.picture && userObj.picture) {
+    const fileName = userObj.picture.split('/').pop();
+    fs.unlink(`${process.env.STATIC_DIR}/${fileName}`, err => {
+      if (err) {
+        logger.log('error', `CAN NOT DELETE ${fileName}: ${JSON.stringify(err)}`);
+      }
+    });
   }
 
   await UsersModel.query().updateAndFetchById(userObj.id, userData);

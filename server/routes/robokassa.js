@@ -13,7 +13,7 @@ const PayController = async(ctx) => {
     const paymentUrl = await CreatePaymentUrl(ctx.user, code);
     ctx.redirect(paymentUrl);
   } catch (error) {
-    console.error('Payment error: ', error);
+    logger.log('error', `Payment error: ${JSON.stringify(error)}`);
     ctx.redirect('/failed-pay');
   }
 };
@@ -25,7 +25,7 @@ const RequestPayController = async(ctx) => {
     const invoiceId = await HandleResult(ctx.request);
     ctx.body = `OK${invoiceId}\n`;
   } catch (error) {
-    console.error('Handle result error: ', error);
+    logger.log('error', `Handle result error: ${JSON.stringify(error)}`);
     ctx.status = 400;
     ctx.body = { error: error.message };
   }
