@@ -20,7 +20,7 @@ const {
 } = require('./vkontakte');
 
 const { CanContinueController, CanContinueRoute } = require('./canContinue');
-const { RefreshTokenController, RefreshTokenRoute } = require('./refreshToken');
+const { SuccessPayController, SuccessPayRoute } = require('./successPay');
 
 const { GollandResultsController, GollandResultsRoute } = require('./gollandTest/gollandResults');
 const { GetGollandController, GetGollandRoute } = require('./gollandTest/getGolland');
@@ -56,9 +56,9 @@ const { ImageCacheController } = require('./imagesCache');
 const { PayController, PayRoute, RequestPayController, RequestPayRoute } = require('./robokassa');
 
 const router = new Router();
-const requestLogger = morgan(':method :url :status :res[content-length] - :response-time ms');
+const RequestLogger = morgan(':method :url :status :res[content-length] - :response-time ms');
 
-router.use('/auth/*', requestLogger);
+router.use('/auth/*', RequestLogger);
 
 router.post('/auth/signup', SignupController);
 router.post('/auth/login', LoginController);
@@ -70,11 +70,10 @@ router.get('/auth/google-redirect', GooglePassportController, GoogleAuthRedirect
 router.get('/auth/vkontakte', UserIsAuth, VkontakteAuthController);
 router.get('/auth/vkontakte-redirect', VkontaktePassportController, VkontakteAuthRedirectController);
 
-router.use('/api/*', requestLogger, MiddleWare);
+router.use('/api/*', RequestLogger, MiddleWare);
 
 router.post('/api/signup', SignupController);
 router.get(`/api${MeRoute}`, MeController);
-router.get(`/api${RefreshTokenRoute}`, RefreshTokenController);
 
 router.post(`/api${InviteRoute}`, InviteController);
 router.get(`/api${CanContinueRoute}`, CanContinueController);
@@ -110,8 +109,9 @@ router.post(`/api${UpdateUserRoute}`, UpdateUserController);
 router.get(`/api${ProgressCounterRoute}`, ProgressCounterController);
 
 router.get(`/api${PayRoute}`, PayController);
+router.get(`/api${SuccessPayRoute}`, SuccessPayController);
 
-router.post(`/pay${RequestPayRoute}`, requestLogger, RequestPayController);
+router.post(`/pay${RequestPayRoute}`, RequestLogger, RequestPayController);
 router.get(`/cache${process.env.STATIC_URL}/:name`, ImageCacheController);
 
 module.exports = router;
