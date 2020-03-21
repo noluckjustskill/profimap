@@ -16,7 +16,9 @@
         class="header-layout"
       >
         <v-flex xs9>
-          <HeaderBar :items="itemsBar" />
+          <client-only>
+            <HeaderBar :items="itemsBar" />
+          </client-only>
         </v-flex>
         <v-flex xs3 fill-height>
           <UserBar :user="user" />

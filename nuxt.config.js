@@ -49,6 +49,7 @@ module.exports = {
     { src: '~/plugins/base64Image', mode: 'client' },
     '~/plugins/sentry',
     '~/plugins/constants',
+    { src: '~/plugins/cookies', mode: 'client' },
   ],
   /*
   ** Nuxt.js dev-modules

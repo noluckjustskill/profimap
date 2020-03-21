@@ -32,7 +32,14 @@
             :to="item.to"
             class="tab"
           >
-            {{ item.title }}
+            <v-badge
+              :value="showHint(item.hint)"
+              color="primary"
+              offset-x="-5"
+              dot
+            >
+              {{ item.title }}
+            </v-badge>
           </v-tab>
         </v-tabs>
       </v-flex>
@@ -61,6 +68,20 @@
       drawer: false,
       overlay: false
     }),
+    methods: {
+      showHint(hint) {
+        if (!hint || !this.$store.state.auth.user.paid) return false;
+
+        const cookieName = `hint_${hint.id}`;
+        const showHint = this.$cookies.isKey(cookieName);
+        if (!showHint) {
+          this.$cookies.set(cookieName, true);
+          return true;
+        }
+
+        return false;
+      }
+    },
   };
 </script>
 
@@ -71,6 +92,7 @@
     margin: 0;
   }
   .tab {
+    position: relative;
     line-height: 15px;
     letter-spacing: 0.4px;
     text-transform: none;

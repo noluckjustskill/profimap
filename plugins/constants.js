@@ -14,6 +14,10 @@ export default (ctx, inject) => {
       {
         image: require('~/assets/career.png'),
         title: 'Карьера',
+        hint: {
+          id: 'career',
+          text: 'Теперь тебе доступны карьерные рекомендации!'
+        },
         to: '/career'
       },
     ],
