@@ -39,7 +39,8 @@ const CreatePaymentUrl = async (user, code) => {
     const invoiceId = invoice.toJSON().id;
 
     const signature = md5(`${merchantLogin}:${amount}:${invoiceId}:${merchantPass1}`);
-    const payLink = `${RobokassaUrl}?MrchLogin=${merchantLogin}&OutSum=${amount}&InvId=${invoiceId}&Email=${user.email}&Desc=${invDesc}&IsTest=${isTest}&SignatureValue=${signature}&Encoding=UTF-8`;
+    const email = user.email ? `&Email=${user.email}` : '';
+    const payLink = `${RobokassaUrl}?MrchLogin=${merchantLogin}&OutSum=${amount}&InvId=${invoiceId}${email}&Desc=${invDesc}&IsTest=${isTest}&SignatureValue=${signature}&Encoding=UTF-8`;
 
     await invoice.$query().patch({ payLink });
 

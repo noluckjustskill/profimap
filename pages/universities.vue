@@ -103,7 +103,6 @@
 
           if (cityName) {
             this.$axios.get(`getUniversities?city=${cityName}`).then(res => {
-              console.log(res);
               this.universities = res.data;
             });
           }
@@ -111,8 +110,8 @@
           this.$axios.get('getUniversities').then(res => this.universities = res.data);;
         }
       }
-    }
-
+    },
+    middleware: ['authenticated', 'paid'],
   };
 </script>
 

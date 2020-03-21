@@ -13,6 +13,22 @@ const {
   ProfessionsModel,
 } = require('../database');
 
+const normirData = data => {
+  Object.values(data).forEach(type => {
+    const profList = Object.values(type);
+    const maxValue = max(profList);    
+    const minValue = min(profList);
+    Object.keys(type).forEach(key => {
+      let value = 0;
+      if (maxValue - minValue !== 0) {
+        value = (type[key] - minValue) / (maxValue - minValue);
+      }
+      type[key] = value;
+    });
+  });
+  return data;
+}; 
+
 const recommendationsCalc = (types, results, testData) => {
   const recommendationsData = cloneDeep(testData);
 
@@ -91,9 +107,9 @@ const getRecommendations = async (userId) => {
   }, {});
 
   //calculate recommendations for every test
-  const gollandCalcResults = recommendationsCalc(gollandTypes, gollandResults, dataForGolland);
-  const klimovCalcResults = recommendationsCalc(klimovTypes, klimovResults, dataForKlimov);
-  const belbinCalcResults = recommendationsCalc(belbinTypes, belbinResults, dataForBelbin);
+  const gollandCalcResults = recommendationsCalc(gollandTypes, gollandResults, normirData(dataForGolland));
+  const klimovCalcResults = recommendationsCalc(klimovTypes, klimovResults, normirData(dataForKlimov));
+  const belbinCalcResults = recommendationsCalc(belbinTypes, belbinResults, normirData(dataForBelbin));
 
   //summary results
   const result = gollandCalcResults;
