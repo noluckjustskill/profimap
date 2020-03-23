@@ -1,8 +1,12 @@
 {
-  "Management": "Менеджмент",
-  "Programming": "Программирование",
-  "Marketing": "Маркетинг",
-  "Design": "Дизайн",
-  "QA": "Тестирование",
-  "BigData": "Анализ больших данных"
+  "Management": "Проектный менеджер",
+  "Programming": "Программист",
+  "Marketing": "SEO-маркетолог",
+  "Design": "UI/UX дизайнер",
+  "QA": "Тестировщик",
+  "BigData": "Big Data аналитик",
+  "DevOps": "DevOps-инженер",
+  "Architector": "Архитектор",
+  "SysAdmin": "Системный администратор",
+  "HR": "HR"
 }

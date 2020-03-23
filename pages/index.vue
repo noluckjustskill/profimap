@@ -21,7 +21,7 @@
           <UserInfo />
         </v-flex>
         <v-flex md6 xs12 class="recommendations">
-          <Recomendation v-if="paidUser" :items="recomendations" />
+          <Recomendation v-if="paidUser" :items="recommendations" />
           <NotPaid v-else />
         </v-flex>
       </v-layout>
@@ -73,8 +73,9 @@
       CharacterType,
     },
     async asyncData({ $axios }) {
-      const recomendations = await $axios.$get('recommendations').catch(() => ([]));
-      return { recomendations };
+      const recommendationsData = await $axios.$get('recommendations').catch(() => ([]));
+      const recommendations = (recommendationsData || []).slice(0, 3);
+      return { recommendations };
     },
     computed: {
       paidUser() {

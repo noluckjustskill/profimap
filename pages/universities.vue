@@ -26,7 +26,7 @@
       justify-center
       align-center
       class="layout"
-      style="background-color: #fff; padding: 0 40px;"
+      style="background-color: #fff; padding: 0 40px; margin: 0 10px"
     >
       <v-card
         v-for="item in universities"
@@ -54,6 +54,7 @@
             rounded
             depressed
             color="primary"
+            :height="buttonHeight"
           >
             <span class="body-2">Перейти на сайт</span>
           </v-btn>
@@ -90,6 +91,9 @@
         } else if (this.$vuetify.breakpoint.smOnly) {
           return 110;
         } else return 150;
+      },
+      buttonHeight() {
+        return this.$vuetify.breakpoint.xsOnly ? 24 : 36;
       },
     },
     created() {

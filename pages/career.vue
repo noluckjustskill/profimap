@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="display-1 page-title">
-      {{ paidUser ? 'Направления в IT, которые вам подходят:' : 'Что ждет тебя после тестирования?' }}
+      {{ paidUser ? 'Профессии в IT, которые вам подходят:' : 'Что ждет тебя после тестирования?' }}
     </h2>
     <v-layout
       v-if="paidUser"
@@ -12,55 +12,39 @@
       class="list ma-0"
     >
       <template v-if="!emptyResults">
-        <div class="info">
-          <v-list class="legend">
-            <v-list-item
-              v-for="item in professions"
-              :key="item.id"
+        <h2 class="mt-6 mb-6" style="margin: 0 auto">
+          ТОП-3 профессии
+        </h2>
+        <v-layout 
+          row
+          wrap
+          align-end
+          justify-space-between
+          class="graphs px-7"
+        >
+          <v-flex
+            v-for="(item, i) in chartProfessions"
+            :key="item.id" 
+            xs4
+            class="graphs__item"
+            style="flex-basis: 0"
+          >
+            <v-progress-circular
+              rotate="-90"
+              :size="chartSize(i)"
+              :value="item.chartResult"
+              color="black"
+              :width="chartWidth"
             >
-              <v-list-item-icon>
-                <v-icon :color="item.color">
-                  mdi-circle
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name" />
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-
-          <div class="accuracy">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <div class="progress-bar" v-on="on">
-                  <v-progress-circular
-                    :value="progress"
-                    :color="getColor"
-                    :size="60"
-                    :width="10"
-                    :rotate="-90"
-                  >
-                    {{ progress }}%
-                  </v-progress-circular>
-                  <h4 class="caption mt-1">
-                    Точность расчетов
-                  </h4>
-                </div>
-              </template>
-              <p class="text-center ma-0">
-                Точность зависит от<br>количества пройденных тестов
+              <p class="percents mb-0">
+                {{ item.chartResult }}%
               </p>
-            </v-tooltip>
-          </div>
-        </div>
-        <div class="rank__board">
-          <Preloader v-if="!myChart" :width="loaderSize" :height="loaderSize" />
-          <canvas 
-            ref="canvas" 
-            height="100" 
-            width="100" 
-          />
-        </div>
+            </v-progress-circular>
+            <p class="mt-3 label">
+              {{ item.name }}
+            </p>
+          </v-flex>
+        </v-layout>
         <v-card
           v-for="item in professions"
           :key="item.id"
@@ -77,18 +61,16 @@
                 {{ item.smallDescr }}
               </v-list-item-subtitle>
               <v-list-item-title class="subline mb-2">
-                Образовательные курсы по данному направлению:
-              </v-list-item-title>
-              <v-list-item-subtitle class="mb-3">
-                <img :src="item.course1" class="course-image">
-                <img :src="item.course2" class="course-image">
-                <img :src="item.course3" class="course-image">
-              </v-list-item-subtitle>
-              <v-list-item-title class="subline mb-2">
-                Факультеты в ВУЗах, связанные с направлением:
+                Образовательные курсы по данной профессии:
               </v-list-item-title>
               <v-list-item-subtitle class="descr mb-3">
-                {{ item.smallDescr }}
+                {{ item.course }}
+              </v-list-item-subtitle>
+              <v-list-item-title class="subline mb-2">
+                Направления в ВУЗах, связанные с профессией:
+              </v-list-item-title>
+              <v-list-item-subtitle class="descr mb-3">
+                {{ item.education }}
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action class="right-block ml-0">
@@ -96,14 +78,16 @@
                 <v-img :src="item.image" />
               </v-list-item-avatar>
               <v-card-actions>
-                <v-btn
-                  :height="buttonHeight"
-                  rounded
-                  depressed
-                  color="primary"
-                >
-                  <span class="body-2">Выбрать вуз</span>
-                </v-btn>
+                <nuxt-link to="/universities">
+                  <v-btn
+                    :height="buttonHeight"
+                    rounded
+                    depressed
+                    color="primary"
+                  >
+                    <span class="body-2">Выбрать вуз</span>
+                  </v-btn>
+                </nuxt-link>
               </v-card-actions>
             </v-list-item-action>
           </v-list-item>
@@ -205,58 +189,34 @@
 </template>
 
 <script>
-  import Chart from 'chart.js';
-  import ChartLabels from 'chartjs-plugin-labels';
-  import Preloader from '../components/Preloader';
   import ActivatePromocode from '../components/ActivatePromocode';
 
   export default {
     components: {
-      Preloader,
       ActivatePromocode,
     },
     async asyncData({ $axios, store, params, redirect }) {
       if (!store.$auth.user.paid) {
         return;
       }
-
       const professions = await $axios.$get('recommendations').catch(() => null);
-      const progressCounter = await $axios.$get('progress-counter').catch(() => null);
       if (professions) {
         if (professions.length) {
-          professions[0].color = '#E23B3B';
-          professions[1].color = '#FFD037';
-          professions[2].color = '#66BAED';
-          const sum = professions.reduce((a, b) => a + b.result, 0);
+          const max = professions[0].result;
+          const min = professions[professions.length-1].result;
+          professions.slice(0, 3);
           professions.forEach(profession => {
-            profession.result = Math.round(profession.result / sum * 100);
+            profession.chartResult = Math.round((profession.result - min) * 100 / (max - min));
           });
         }
-        return { emptyResults: !professions.length, professions, progress: progressCounter.progress * 100 };
+        return { emptyResults: !professions.length, professions: professions.slice(0, 3), chartProfessions: [professions[1], professions[0], professions[2] ] };
       } else {
         redirect('/');
       }
     },
     data() {
       return {
-        myChart: null,
         promocode: false,
-        config: {
-          type: 'pie',
-          plugins: [ChartLabels],
-          options: {
-            plugins: {
-              labels: {
-                render: 'value',
-                fontColor: '#fff',
-                fontSize: 30,
-              }
-            },
-            legend: {
-              display: false,
-            }
-          }
-        },
       };
     },
     computed: {
@@ -273,36 +233,18 @@
       buttonHeight() {
         return this.$vuetify.breakpoint.xsOnly ? 24 : 36;
       },
-      getColor() {
-        if (this.progress <= 25) return 'red';
-        else if (this.progress <= 50) return 'orange';
-        else if (this.progress <= 75) return 'yellow';
-        else return 'green';
+      chartWidth() {
+        return this.$vuetify.breakpoint.xsOnly ? 6 : 11;
       },
-      loaderSize() {
-        return this.$vuetify.breakpoint.smAndDown ? 160 : 250;
-      },
-    },
-    mounted() {
-      if (this.paidUser && !this.emptyResults) {
-        this.setChart();
-      }
     },
     methods: {
-      setChart() {
-        const ctx = this.$refs.canvas;
-
-        const config = {
-          ...this.config, 
-          data: {
-            labels: this.professions.map(v => v.name),
-            datasets: [{
-              data: this.professions.map(v => v.result),
-              backgroundColor: this.professions.map(v => v.color),
-            }],
-          },
-        };
-        this.myChart = new Chart(ctx, config);
+      chartSize(index) {
+        if (this.$vuetify.breakpoint.xsOnly) {
+          return index === 1 ? 70 : 60; 
+        } else if (this.$vuetify.breakpoint.smOnly) {
+          return index === 1 ? 165 : 150;
+        }
+        return index === 1 ? 220 : 200;
       },
     },
     middleware: 'authenticated',
@@ -326,61 +268,6 @@
     }
     @media (min-width: 800px) and (max-width: 1099px) {
       padding: 30px;
-    }
-    .info {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      .legend {
-        max-width: 80%;
-        .v-list-item {
-          padding: unset;
-          min-height: unset;
-          &__icon {
-            margin: 5px 20px 5px 0;
-          }
-          &__content {
-            padding: unset;
-          }
-          &__title {
-            font-size: 20px;
-            font-weight: 500;
-            opacity: 0.8;
-            @media (max-width: 800px) {
-              font-size: 16px;
-            }
-            @media (max-width: 420px) {
-              font-size: 12px;
-            }
-          }
-        }
-      }
-      .accuracy {
-        max-width: 70px;
-        .progress-bar {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-        }
-      }
-    }
-
-    .rank__board {
-      margin: 0 auto;
-      height: 400px;
-      max-height: 100%;
-      width: 400px;
-      max-width: 100%;
-      overflow: hidden;
-      margin-top: -30px;
-      margin-bottom: 50px;
-      @media (max-width: 420px) {
-        height: 100vw;
-        margin-top: 20px;
-        margin-bottom: 0;
-        order: -1;
-      }
     }
   }
   .mainline {
@@ -459,11 +346,6 @@
     overflow: visible;
     white-space: normal;
   }
-  .v-application {
-    .info {
-      background-color: #fff !important;
-    }
-  }
   .body-2 {
     text-transform: none;
     @media (max-width: 420px) {
@@ -474,6 +356,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .graphs {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
   }
   .block {
     font-family: 'Montserrat', sans-serif;
@@ -518,6 +405,27 @@
         color: #868686;
         cursor: pointer;
       }
+    }
+  }
+  .percents {
+    font-weight: 500;
+    font-size: 29px;
+    line-height: 32px;
+    @media (max-width: 420px) {
+      font-size: 9px;
+      line-height: 32px;
+    }
+  }
+  .label {
+    font-weight: normal;
+    font-size: 25px;
+    line-height: 29px;
+    text-align: center;
+    min-height: 87px;
+    @media (max-width: 420px) {
+      font-size: 10px;
+      line-height: 12px;
+      min-height: 36px;  
     }
   }
 </style>
