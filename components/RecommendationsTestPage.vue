@@ -92,7 +92,7 @@
     },
     mounted() {
       this.$axios.$get('recommendations').then(response => {
-        this.recommendations = response;
+        this.recommendations = (response || []).slice(0, 3);
       }).catch(() => ({}));
     },
     methods: {

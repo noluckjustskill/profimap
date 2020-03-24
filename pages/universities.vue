@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row class="title-row">
       <v-col cols="8" class="pl-0">
         <h2 class="display-1 page-title">
           Выбор ВУЗа
@@ -26,7 +26,6 @@
       justify-center
       align-center
       class="layout"
-      style="background-color: #fff; padding: 0 40px;"
     >
       <v-card
         v-for="item in universities"
@@ -54,6 +53,7 @@
             rounded
             depressed
             color="primary"
+            :height="buttonHeight"
           >
             <span class="body-2">Перейти на сайт</span>
           </v-btn>
@@ -91,6 +91,9 @@
           return 110;
         } else return 150;
       },
+      buttonHeight() {
+        return this.$vuetify.breakpoint.xsOnly ? 24 : 36;
+      },
     },
     created() {
       this.fetchUniversities();
@@ -116,14 +119,22 @@
 </script>
 
 <style scoped lang="scss">
-.card {
-  border: none !important; 
-  border-bottom: 1px solid #b3b3b3 !important; 
-  border-radius: 0 !important;
-  &:last-child {
-    border: none !important;
+  .layout {
+    background-color: #fff;
+    padding: 0 40px;
+    margin: 0 10px;
   }
-}
+  .title-row {
+    padding: 0 22px;
+  }
+  .card {
+    border: none !important; 
+    border-bottom: 1px solid #b3b3b3 !important; 
+    border-radius: 0 !important;
+    &:last-child {
+      border: none !important;
+    }
+  }
   .mainline {
     font-weight: 500;
     font-size: 25px;
