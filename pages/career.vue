@@ -47,7 +47,7 @@
           </v-flex>
         </v-layout>
         <v-card
-          v-for="item in professions.sort((a, b) => b.chartResult - a.chartResult)"
+          v-for="item in sortedProfessionsList"
           :key="item.id"
           class="profession"
           outlined
@@ -189,6 +189,7 @@
 </template>
 
 <script>
+  import { cloneDeep } from 'lodash';
   import ActivatePromocode from '../components/ActivatePromocode';
 
   export default {
@@ -240,6 +241,9 @@
       },
       chartWidth() {
         return this.$vuetify.breakpoint.xsOnly ? 6 : 11;
+      },
+      sortedProfessionsList() {
+        return cloneDeep(this.professions).sort((a, b) => b.chartResult - a.chartResult);
       },
     },
     methods: {
@@ -465,7 +469,7 @@
     }
   }
   .profession {
-    margin-top: 24px;
+    margin-top: 35px;
     border: none !important;
     @media (max-width: 960px) {
       margin-top: 12px;
