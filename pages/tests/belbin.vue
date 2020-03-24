@@ -92,28 +92,28 @@
                   </v-card-actions>
                 </v-card>
               </v-flex>
-              <v-flex xs12 md4 class="text-center">
+              <v-flex xs12 md4 class="text-center mt-2">
                 <v-btn
                   :disabled="!current"
-                  color="accent"
-                  class="mt-6 white--text"
+                  width="100"
+                  color="primary"
+                  class="white--text"
+                  rounded
+                  depressed
                   @click="back"
                 >
-                  <v-icon left dark>
-                    mdi-arrow-left
-                  </v-icon>
-                  Назад
+                  <span class="body-2">Назад</span>
                 </v-btn>
                 <v-btn
                   :disabled="!nextStep"
-                  color="accent"
-                  class="mt-6 white--text"
+                  width="100"
+                  color="primary"
+                  class="white--text"
+                  rounded
+                  depressed
                   @click="next"
                 >
-                  {{ canNext ? 'Далее' : 'Готово' }}
-                  <v-icon right dark>
-                    mdi-arrow-right
-                  </v-icon>
+                  <span class="body-2">{{ canNext ? 'Далее' : 'Готово' }}</span>
                 </v-btn>
               </v-flex>
             </v-layout>

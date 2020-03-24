@@ -81,14 +81,13 @@
             <div class="text-center">
               <v-btn
                 :disabled="!current"
-                color="accent"
-                class="mt-6 white--text"
+                color="primary"
+                class="white--text"
+                rounded
+                depressed
                 @click="back"
               >
-                <v-icon left dark>
-                  mdi-arrow-left
-                </v-icon>
-                Предыдущий вопрос
+                <span class="body-2">Предыдущий вопрос</span>
               </v-btn>
             </div>
           </template>

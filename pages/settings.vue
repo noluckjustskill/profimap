@@ -278,7 +278,7 @@
 
           this.$auth.fetchUser();
         }).catch(err => {
-          console.log(e);
+          console.log(err);
           
           this.showError('Не удалось обновить пользователя');
         });

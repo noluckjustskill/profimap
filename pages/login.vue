@@ -320,7 +320,7 @@
         }).then(() => {
           this.registrationSuccess = true;
         }).catch(err => {
-          console.log(e);
+          console.log(err);
           
           this.snackbarText = 'Не удалось зарегистрироваться';
           this.snackbar = true;
