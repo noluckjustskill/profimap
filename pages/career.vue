@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="display-1 page-title">
-      {{ paidUser ? 'Профессии в IT, которые вам подходят:' : 'Что ждет тебя после тестирования?' }}
+      {{ paidUser ? 'Направления, которые Вам подходят:' : 'Что ждет тебя после тестирования?' }}
     </h2>
     <v-layout
       v-if="paidUser"
@@ -12,18 +12,18 @@
       class="list ma-0"
     >
       <template v-if="!emptyResults">
-        <h2 class="mt-6 mb-6" style="margin: 0 auto">
-          ТОП-3 профессии
-        </h2>
+        <h3 class="top3-title display-1 mx-auto">
+          ТОП-3 направления
+        </h3>
         <v-layout 
           row
           wrap
-          align-end
+          align-center
           justify-space-between
           class="graphs px-7"
         >
           <v-flex
-            v-for="(item, i) in chartProfessions"
+            v-for="(item, i) in professions"
             :key="item.id" 
             xs4
             class="graphs__item"
@@ -33,8 +33,9 @@
               rotate="-90"
               :size="chartSize(i)"
               :value="item.chartResult"
-              color="black"
               :width="chartWidth"
+              color="black"
+              class="chart"
             >
               <p class="percents mb-0">
                 {{ item.chartResult }}%
@@ -46,16 +47,15 @@
           </v-flex>
         </v-layout>
         <v-card
-          v-for="item in professions"
+          v-for="item in professions.sort((a, b) => b.chartResult - a.chartResult)"
           :key="item.id"
-          class="mt-6"
+          class="profession"
           outlined
-          style="border: none;"
         >
           <v-list-item>
             <v-list-item-content class="mx-3">
               <v-list-item-title class="mainline mb-2">
-                {{ item.name }}
+                {{ item.chartResult }}% {{ item.name }}
               </v-list-item-title>
               <v-list-item-subtitle class="descr mb-3">
                 {{ item.smallDescr }}
@@ -199,20 +199,25 @@
       if (!store.$auth.user.paid) {
         return;
       }
+
       const professions = await $axios.$get('recommendations').catch(() => null);
       if (professions) {
         if (professions.length) {
           const max = professions[0].result;
           const min = professions[professions.length-1].result;
-          professions.slice(0, 3);
-          professions.forEach(profession => {
-            profession.chartResult = Math.round((profession.result - min) * 100 / (max - min));
-          });
+
+          const [first, second, third] = professions.slice(0, 3).map(profession => ({
+            ...profession,
+            chartResult: Math.round((profession.result - min) * 100 / (max - min)),
+          }));
+
+          return { emptyResults: false, professions: [second, first, third] };
         }
-        return { emptyResults: !professions.length, professions: professions.slice(0, 3), chartProfessions: [professions[1], professions[0], professions[2] ] };
-      } else {
-        redirect('/');
+
+        return { emptyResults: true, professions: [] };
       }
+
+      redirect('/');
     },
     data() {
       return {
@@ -240,11 +245,11 @@
     methods: {
       chartSize(index) {
         if (this.$vuetify.breakpoint.xsOnly) {
-          return index === 1 ? 70 : 60; 
+          return index % 2 ? 75 : 60; 
         } else if (this.$vuetify.breakpoint.smOnly) {
-          return index === 1 ? 165 : 150;
+          return index % 2 ? 175 : 150;
         }
-        return index === 1 ? 220 : 200;
+        return index % 2 ? 240 : 200;
       },
     },
     middleware: 'authenticated',
@@ -264,9 +269,9 @@
     padding-bottom: 20px;
     border-radius: 5px;
     @media (max-width: 799px) {
-      padding: 10px;
+      padding: 20px 10px;
     }
-    @media (min-width: 800px) and (max-width: 1099px) {
+    @media (min-width: 960px) and (max-width: 1099px) {
       padding: 30px;
     }
   }
@@ -276,11 +281,11 @@
     line-height: 29px;
     color: #000000;
     opacity: 0.8;
-    @media (max-width: 800px) {
+    @media (max-width: 960px) {
       font-size: 20px;
       line-height: 23px;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 600px) {
       font-size: 15px;
       line-height: 18px;
     }
@@ -291,11 +296,11 @@
     line-height: 24px;
     color: #000000;
     opacity: 0.8;
-    @media (max-width: 800px) {
+    @media (max-width: 960px) {
       font-size: 17px;
       line-height: 20px;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 600px) {
       font-size: 10px;
       line-height: 12px;
     }
@@ -306,11 +311,11 @@
     line-height: 24px;
     color: #000000;
     opacity: 0.8;
-    @media (max-width: 800px) {
+    @media (max-width: 960px) {
       font-size: 17px;
       line-height: 20px;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 600px) {
       font-size: 10px;
       line-height: 12px;
     }
@@ -319,11 +324,11 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    @media (max-width: 800px) {
+    @media (max-width: 960px) {
       width: 40px;
       height: 40px;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 600px) {
       width: 20px;
       height: 20px;
     }
@@ -331,9 +336,21 @@
   .page-title {
     margin-top: 35px;
     margin-bottom: 15px;
+    @media (max-width: 600px) {
+      margin-top: 15px;
+    }
   }
   .nuxtLink {
     text-decoration: none;
+  }
+  .top3-title {
+    margin-bottom: 40px;
+    @media (max-width: 960px) {
+      margin-bottom: 35px;
+    }
+    @media (max-width: 600px) {
+      margin-bottom: 20px;
+    }
   }
   .list-empty {
     display: flex;
@@ -348,7 +365,7 @@
   }
   .body-2 {
     text-transform: none;
-    @media (max-width: 420px) {
+    @media (max-width: 600px) {
       font-size: 10px !important;
     }
   }
@@ -407,25 +424,54 @@
       }
     }
   }
-  .percents {
-    font-weight: 500;
-    font-size: 29px;
-    line-height: 32px;
-    @media (max-width: 420px) {
-      font-size: 9px;
+  .graphs__item {
+    .percents {
+      font-weight: 500;
+      font-size: 29px;
       line-height: 32px;
+      @media (max-width: 600px) {
+        font-size: 9px;
+        line-height: 32px;
+      }
+    }
+    .label {
+      font-weight: normal;
+      font-size: 25px;
+      line-height: 30px;
+      text-align: center;
+      height: 60px;
+      margin-bottom: 0;
+      @media (max-width: 960px) {
+        height: 40px;
+        line-height: 20px;
+        font-size: 18px;
+      }
+      @media (max-width: 600px) {
+        font-size: 12px;
+        line-height: 15px;
+        height: 30px;  
+      }
+    }
+    &:nth-child(odd) {
+      .chart, .label {
+        margin-top: 26px !important;
+        @media (max-width: 960px) {
+          margin-top: 16.5px !important;
+        }
+        @media (max-width: 600px) {
+          margin-top: 13.5px !important;
+        }
+      }
     }
   }
-  .label {
-    font-weight: normal;
-    font-size: 25px;
-    line-height: 29px;
-    text-align: center;
-    min-height: 87px;
-    @media (max-width: 420px) {
-      font-size: 10px;
-      line-height: 12px;
-      min-height: 36px;  
+  .profession {
+    margin-top: 24px;
+    border: none !important;
+    @media (max-width: 960px) {
+      margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+      margin-top: 5px;
     }
   }
 </style>
