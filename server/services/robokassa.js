@@ -25,7 +25,7 @@ const CreatePaymentUrl = async (user, code) => {
   } else {
     let amount = outSum, promocodeId;
     if (code) {
-      const promocodeEntity = await PromocodesModel.query().findOne({ code, userId: null });
+      const promocodeEntity = await PromocodesModel.query().findOne({ code });
       if (!promocodeEntity) {
         throw new NotFoundError('Promocode not found');
       }
@@ -74,11 +74,7 @@ const HandleResult = async(request) => {
   }
 
   await Promise.all([
-    invoiceEntity.$query().patch({ status: 'paid' }),
-    ...(invoice.promocodeId
-      ? [PromocodesModel.query().findById(invoice.promocodeId).patch({ userId: invoice.userId, activated: knex.raw('now()') })]
-      : []
-    ),
+    invoiceEntity.$query().patch({ status: 'paid', updatedAt: knex.raw('now()') }),
     UsersModel.query().updateAndFetchById(invoice.userId, { paid: true }),
   ]);
 

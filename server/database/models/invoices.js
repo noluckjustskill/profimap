@@ -39,6 +39,7 @@ module.exports = class Invoices extends Model {
         promocodeId: { type: ['integer', 'null'] },
         amount: { type: 'float' },
         status: { type: 'string' },
+        updatedAt: { type: 'string' },
         createdAt: { type: 'string' },
       }
     };
