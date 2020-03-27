@@ -34,10 +34,10 @@
             class="cont"
           >
             <template v-if="!preloader">
-              <v-card v-if="!registration" class="mx-auto card px-lg-12 px-md-8 px-sm-6">
-                <v-card-text>
+              <v-card class="mx-auto card px-lg-12 px-md-8 px-sm-6">
+                <v-card-text v-if="!registrationSuccess">
                   <h2 class="title-info mt-6 text-center">
-                    Войти с помощью
+                    {{ !registration ? 'Войти' : 'Зарегистрироваться' }} с помощью
                   </h2>  
                   <v-layout row wrap class="mt-6 px-4">
                     <v-flex xs12 md6 class="google-btn">
@@ -69,7 +69,7 @@
                       </v-btn>
                     </v-flex>
                   </v-layout>
-                  <v-form class="mt-8" @submit.prevent="login">
+                  <v-form v-if="!registration" class="mt-6" @submit.prevent="login">
                     <v-text-field
                       v-model="email"
                       :rules="emailRules"
@@ -112,14 +112,7 @@
                       </v-flex>
                     </v-layout>
                   </v-form>
-                </v-card-text>
-              </v-card>
-              <v-card v-else class="mx-auto card px-lg-12 px-md-8 px-sm-6">
-                <v-card-text v-if="!registrationSuccess">
-                  <h2 class="title-info mt-6 text-center">
-                    Зарегестрироваться
-                  </h2>
-                  <v-form class="mt-8" @submit.prevent="register">
+                  <v-form v-else class="mt-6" @submit.prevent="register">
                     <v-text-field
                       v-model="name"
                       label="Ваше имя"
@@ -193,7 +186,7 @@
                           color="#333333" 
                           @click="registration = false"
                         >
-                          Назад
+                          Войти
                         </v-btn>
                       </v-flex>
                     </v-layout>
@@ -235,8 +228,13 @@
     components: {
       Preloader
     },
+    async asyncData({ store, route, redirect }) {
+      if (store.$auth.loggedIn && !route.query.token) {
+        redirect('/');
+      }
+      return { registration: Boolean(route.query.registration) };
+    },
     data: () => ({
-      registration: false,
       registrationSuccess: false,
       drawer: null,
       email: null,
@@ -320,7 +318,7 @@
 
         const validation = this.emailRules.find(rule => typeof rule(this.email) === 'string');
         if (validation) {
-          this.snackbarText = validation(this.password);
+          this.snackbarText = validation(this.email);
           this.snackbar = true;
           return;
         }
