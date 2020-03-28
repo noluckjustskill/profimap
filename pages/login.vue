@@ -209,14 +209,13 @@
           </v-col>
         </v-row>
       </v-container>
-
-      <div class="cube" />
-      <div class="cube" />
-      <div class="cube" />
-      <div class="cube" />
-      <div class="cube" />
-      <div class="cube" />
     </v-content>
+    <div class="cube" />
+    <div class="cube" />
+    <div class="cube" />
+    <div class="cube" />
+    <div class="cube" />
+    <div class="cube" />
   </v-app>
 </template>
 
@@ -353,6 +352,10 @@
 </script>
 
 <style lang="scss" scoped>
+.page {
+  overflow: hidden;
+}
+
 .google-btn {
   padding-right: 8px;
   padding-bottom: 0px;
@@ -379,8 +382,8 @@
 .hero {
   background-color: #F6CAAE;
   position: relative;
-  height: 100vh;
-  overflow: hidden;
+  /* height: 100vh;
+  overflow: hidden; */
   font-family: 'Montserrat', sans-serif;
 }
 

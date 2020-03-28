@@ -94,7 +94,7 @@
               rounded
               depressed
               color="primary"
-              style="flex-basis: auto"
+              style="flex-basis: auto; flex-grow: unset"
             >
               <span class="body-2">Перейти на сайт</span>
             </v-btn>
