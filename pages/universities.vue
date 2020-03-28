@@ -1,12 +1,22 @@
 <template>
   <div>
     <v-row class="title-row">
-      <v-col cols="8" class="pl-0">
+      <v-col 
+        cols="6" 
+        xs="6" 
+        md="9" 
+        class="pl-0"
+      >
         <h2 class="display-1 page-title">
           Выбор ВУЗа
         </h2>
       </v-col>
-      <v-col cols="4" class="pr-0">
+      <v-col 
+        cols="6" 
+        xs="6" 
+        md="3" 
+        class="pr-0"
+      >
         <v-select
           v-model="city"
           :items="cities"
@@ -35,29 +45,69 @@
       >
         <v-list-item class="pa-0">
           <v-list-item-content>
-            <v-list-item-title class="mainline mb-2">
+            <v-list-item-title class="mainline mb-3">
               {{ item.name }}
             </v-list-item-title>
-            <v-list-item-subtitle class="descr mb-3">
-              {{ item.description }}
+            <v-list-item-subtitle class="descr mb-5">
+              <v-layout row wrap class="ma-0 pa-0">
+                <v-flex xs9>
+                  {{ item.description }}
+                </v-flex>
+                <v-flex xs3 class="avatar-container">
+                  <v-img :src="item.image" :width="avatarSize" class="mx-auto" />
+                </v-flex>
+              </v-layout>
             </v-list-item-subtitle>
+            <v-list-item-title class="subline mb-3">
+              Подходящие Вам направления:
+            </v-list-item-title>
+            <v-list-item-subtitle class="directions">
+              <v-layout
+                row 
+                wrap
+                class="mx-0 pl-0"
+              >
+                <v-flex
+                  xs12 
+                  md6
+                >
+                  <p class="mb-0" style="color: #1782FF">
+                    {{ item.direction1 }}
+                  </p>
+                  <p>Проходной балл 2019 года: {{ item.passingScore1 }}</p>
+                </v-flex>
+                <v-flex
+                  xs12 
+                  md6
+                >
+                  <p class="mb-0" style="color: #1782FF">
+                    {{ item.direction2 }}
+                  </p>
+                  <p>Проходной балл 2019 года: {{ item.passingScore2 }}</p>
+                </v-flex>
+              </v-layout>
+            </v-list-item-subtitle>
+            <nixt-link target="_blank" :to="item.link">
+              <v-btn
+                :large="buttonSize"
+                rounded
+                depressed
+                color="primary"
+              >
+                <span class="body-2">Перейти на сайт</span>
+              </v-btn>
+            </nixt-link>
           </v-list-item-content>
-          <v-list-item-action class="right-block ml-0">
-            <v-list-item-avatar :size="avatarSize" class="mr-0">
-              <v-img :src="item.image" />
+
+          <!-- <v-list-item-action class="right-block ml-0">
+            <v-list-item-avatar :size="avatarSize" class="avatar mr-0">
+              <v-img src="https://sun9-54.userapi.com/xDCjYqfcoY34ExqjIlQseUr17f9SX51Q0w817w/HjnqqM-JB90.jpg" />
             </v-list-item-avatar>
-          </v-list-item-action>
+            <v-card-actions class="pb-8">
+              
+            </v-card-actions>
+          </v-list-item-action> -->
         </v-list-item>
-        <v-card-actions class="pb-8">
-          <v-btn
-            rounded
-            depressed
-            color="primary"
-            :height="buttonHeight"
-          >
-            <span class="body-2">Перейти на сайт</span>
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-layout>
   </div>
@@ -91,8 +141,8 @@
           return 110;
         } else return 150;
       },
-      buttonHeight() {
-        return this.$vuetify.breakpoint.xsOnly ? 24 : 36;
+      buttonSize() {
+        return !this.$vuetify.breakpoint.smAndDown;
       },
     },
     created() {
@@ -120,9 +170,16 @@
 
 <style scoped lang="scss">
   .layout {
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 0 40px;
     margin: 0 10px;
+    box-sizing: border-box;
+    @media (max-width: 767px) {
+      padding: 0 10px;
+    }
+    @media (min-width: 769px) and (max-width: 1099px) {
+      padding: 0 30px;
+    }
   }
   .title-row {
     padding: 0 22px;
@@ -161,22 +218,40 @@
       line-height: 20px;
     }
     @media (max-width: 420px) {
-      font-size: 10px;
+      font-size: 12px;
       line-height: 12px;
     }
   }
   .descr {
     font-weight: 300;
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 18px;
+    line-height: 23px;
     color: #000000;
     opacity: 0.8;
     @media (max-width: 800px) {
-      font-size: 17px;
+      font-size: 14px;
       line-height: 20px;
     }
     @media (max-width: 420px) {
-      font-size: 10px;
+      font-size: 12px;
+      line-height: 12px;
+    }
+  }
+  .avatar {
+    border-radius: 0;
+  }
+  .directions {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 23px;
+    color: #000000;
+    opacity: 0.8;
+    @media (max-width: 800px) {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    @media (max-width: 420px) {
+      font-size: 12px;
       line-height: 12px;
     }
   }

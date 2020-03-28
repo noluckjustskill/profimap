@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="display-1 page-title">
+    <h2 class="display-1 page-title mb-0">
       {{ paidUser ? 'Направления, которые Вам подходят:' : 'Что ждет тебя после тестирования?' }}
     </h2>
     <v-layout
@@ -12,86 +12,113 @@
       class="list ma-0"
     >
       <template v-if="!emptyResults">
-        <h3 class="top3-title display-1 mx-auto">
-          ТОП-3 направления
-        </h3>
-        <v-layout 
-          row
+        <v-layout
+          column
           wrap
-          align-center
-          justify-space-between
-          class="graphs px-7"
+          style="background-color: white; width: 100%"
         >
-          <v-flex
-            v-for="(item, i) in professions"
-            :key="item.id" 
-            xs4
-            class="graphs__item"
-            style="flex-basis: 0"
+          <h3 class="top3-title display-1 mx-auto mt-5 pl-4">
+            ТОП-3 направления
+          </h3>
+          <v-layout 
+            row
+            wrap
+            align-center
+            justify-space-between
+            class="graphs px-6 mb-5"
           >
-            <v-progress-circular
-              rotate="-90"
-              :size="chartSize(i)"
-              :value="item.chartResult"
-              :width="chartWidth"
-              color="black"
-              class="chart"
+            <v-flex
+              v-for="(item, i) in professions"
+              :key="item.id" 
+              xs4
+              class="graphs__item text-center"
+              style="flex-basis: 0"
             >
-              <p class="percents mb-0">
-                {{ item.chartResult }}%
+              <v-progress-circular
+                rotate="-90"
+                :size="chartSize(i)"
+                :value="item.chartResult"
+                :width="chartWidth"
+                color="black"
+                class="chart"
+              >
+                <p class="percents mb-0">
+                  {{ item.chartResult }}%
+                </p>
+              </v-progress-circular>
+              <p class="mt-3 label">
+                {{ item.name }}
               </p>
-            </v-progress-circular>
-            <p class="mt-3 label">
-              {{ item.name }}
-            </p>
-          </v-flex>
+            </v-flex>
+          </v-layout>
         </v-layout>
         <v-card
-          v-for="item in sortedProfessionsList"
+          v-for="item in fullProfessionsList"
           :key="item.id"
           class="profession"
           outlined
         >
-          <v-list-item>
-            <v-list-item-content class="mx-3">
-              <v-list-item-title class="mainline mb-2">
+          <v-list-item class="card">
+            <v-list-item-content>
+              <v-list-item-title class="mainline mt-4 mb-3">
                 {{ item.chartResult }}% {{ item.name }}
               </v-list-item-title>
-              <v-list-item-subtitle class="descr mb-3">
-                {{ item.smallDescr }}
+              <v-list-item-subtitle class="descr mb-5">
+                <v-layout row wrap class="ma-0">
+                  <v-flex xs9>
+                    {{ item.smallDescr }}
+                  </v-flex>
+                  <v-flex xs3 class="avatar-container">
+                    <v-img :src="item.image" :width="avatarSize" class="mx-auto" />
+                  </v-flex>
+                </v-layout>
               </v-list-item-subtitle>
-              <v-list-item-title class="subline mb-2">
+              <v-list-item-title class="subline mb-3">
                 Образовательные курсы по данной профессии:
               </v-list-item-title>
-              <v-list-item-subtitle class="descr mb-3">
-                {{ item.course }}
+              <v-list-item-subtitle class="descr mb-5" style="display: flex">
+                <!-- {{ item.course }} -->
+                <v-img 
+                  :src="require('~/assets/skillbox.png')"
+                  :max-width="imageSize"
+                  :max-height="imageSize"
+                  contain
+                  class="mr-4"
+                />
+                <v-img 
+                  :src="require('~/assets/skillfactory.png')"
+                  :max-width="imageSize"
+                  :max-height="imageSize"
+                  class="mr-4"
+                  contain
+                />
+                <v-img 
+                  :src="require('~/assets/geekbrains.png')"
+                  :max-width="imageSize"
+                  :max-height="imageSize"
+                  class="mr-4"
+                  contain
+                />
               </v-list-item-subtitle>
-              <v-list-item-title class="subline mb-2">
+              <v-list-item-title class="subline mb-3">
                 Направления в ВУЗах, связанные с профессией:
               </v-list-item-title>
-              <v-list-item-subtitle class="descr mb-3">
+              <v-list-item-subtitle class="descr mb-2">
                 {{ item.education }}
               </v-list-item-subtitle>
+              <nuxt-link to="/universities">
+                <v-btn
+                  :large="buttonSize"
+                  rounded
+                  depressed
+                  color="primary"
+                  class="my-3"
+                >
+                  <span class="body-2">Выбрать вуз</span>
+                </v-btn>
+              </nuxt-link>
             </v-list-item-content>
-            <v-list-item-action class="right-block ml-0">
-              <v-list-item-avatar :size="avatarSize" class="mr-0">
-                <v-img :src="item.image" />
-              </v-list-item-avatar>
-              <v-card-actions>
-                <nuxt-link to="/universities">
-                  <v-btn
-                    :height="buttonHeight"
-                    rounded
-                    depressed
-                    color="primary"
-                  >
-                    <span class="body-2">Выбрать вуз</span>
-                  </v-btn>
-                </nuxt-link>
-              </v-card-actions>
-            </v-list-item-action>
           </v-list-item>
-          <v-divider />
         </v-card>
       </template>
       <template v-else>
@@ -189,7 +216,6 @@
 </template>
 
 <script>
-  import { cloneDeep } from 'lodash';
   import ActivatePromocode from '../components/ActivatePromocode';
 
   export default {
@@ -201,21 +227,22 @@
         return;
       }
 
-      const professions = await $axios.$get('recommendations').catch(() => null);
-      if (professions) {
-        if (professions.length) {
-          const max = professions[0].result;
-          const min = professions[professions.length-1].result;
+      const fullProfessionsList = await $axios.$get('recommendations').catch(() => null);
+      if (fullProfessionsList) {
+        if (fullProfessionsList.length) {
+          const max = fullProfessionsList[0].result;
+          const min = fullProfessionsList[fullProfessionsList.length-1].result;
 
-          const [first, second, third] = professions.slice(0, 3).map(profession => ({
-            ...profession,
-            chartResult: Math.round((profession.result - min) * 100 / (max - min)),
-          }));
+          fullProfessionsList.forEach(profession => {
+            profession.chartResult = Math.round((profession.result - min) * 100 / (max - min));
+          });
+          const professions = fullProfessionsList.slice(0, 3);
+          const [first, second, third] = professions;
 
-          return { emptyResults: false, professions: [second, first, third] };
+          return { emptyResults: false, professions: [second, first, third], fullProfessionsList };
         }
 
-        return { emptyResults: true, professions: [] };
+        return { emptyResults: true, professions: [], fullProfessionsList: [] };
       }
 
       redirect('/');
@@ -236,14 +263,18 @@
           return 110;
         } else return 150;
       },
-      buttonHeight() {
-        return this.$vuetify.breakpoint.xsOnly ? 24 : 36;
+      imageSize() {
+        if (this.$vuetify.breakpoint.xsOnly) { 
+          return 18;
+        } else if (this.$vuetify.breakpoint.smOnly) {
+          return 35;
+        } else return 60;
+      },
+      buttonSize() {
+        return !this.$vuetify.breakpoint.smAndDown;
       },
       chartWidth() {
         return this.$vuetify.breakpoint.xsOnly ? 6 : 11;
-      },
-      sortedProfessionsList() {
-        return cloneDeep(this.professions).sort((a, b) => b.chartResult - a.chartResult);
       },
     },
     methods: {
@@ -266,17 +297,26 @@
     flex-direction: column;
     position: relative;
     width: 100%;
-    background-color: white;
+    background-color: transparent;
     padding-left: 60px;
     padding-right: 60px;
     padding-top: 50px;
     padding-bottom: 20px;
     border-radius: 5px;
-    @media (max-width: 799px) {
+    @media (max-width: 767px) {
       padding: 20px 10px;
     }
-    @media (min-width: 960px) and (max-width: 1099px) {
+    @media (min-width: 768px) and (max-width: 1099px) {
       padding: 30px;
+    }
+  }
+  .card {
+    padding: 0 40px;
+    @media (max-width: 767px) {
+      padding: 0 10px;
+    }
+    @media (min-width: 769px) and (max-width: 1099px) {
+      padding: 0 30px;
     }
   }
   .mainline {
@@ -305,7 +345,7 @@
       line-height: 20px;
     }
     @media (max-width: 600px) {
-      font-size: 10px;
+      font-size: 12px;
       line-height: 12px;
     }
   }
@@ -316,11 +356,11 @@
     color: #000000;
     opacity: 0.8;
     @media (max-width: 960px) {
-      font-size: 17px;
+      font-size: 14px;
       line-height: 20px;
     }
     @media (max-width: 600px) {
-      font-size: 10px;
+      font-size: 12px;
       line-height: 12px;
     }
   }
@@ -340,8 +380,13 @@
   .page-title {
     margin-top: 35px;
     margin-bottom: 15px;
-    @media (max-width: 600px) {
+    padding-left: 60px;
+    @media (max-width: 799px) {
       margin-top: 15px;
+      padding-left: 10px;
+    }
+    @media (min-width: 800px) and (max-width: 1099px) {
+      padding-left: 30px;
     }
   }
   .nuxtLink {
@@ -476,6 +521,10 @@
     }
     @media (max-width: 600px) {
       margin-top: 5px;
+    }
+
+    .avatar-container {
+      margin-top: -30px;
     }
   }
 </style>
