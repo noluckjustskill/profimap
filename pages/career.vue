@@ -73,11 +73,11 @@
                   </v-flex>
                 </v-layout>
               </v-list-item-subtitle>
-              <v-list-item-title class="subline mb-3">
+              <!-- <v-list-item-title class="subline mb-3">
                 Образовательные курсы по данной профессии:
               </v-list-item-title>
               <v-list-item-subtitle class="descr mb-5" style="display: flex">
-                <!-- {{ item.course }} -->
+                {{ item.course }}
                 <v-img 
                   :src="require('~/assets/skillbox.png')"
                   :max-width="imageSize"
@@ -99,7 +99,7 @@
                   class="mr-4"
                   contain
                 />
-              </v-list-item-subtitle>
+              </v-list-item-subtitle> -->
               <v-list-item-title class="subline mb-3">
                 Направления в ВУЗах, связанные с профессией:
               </v-list-item-title>
