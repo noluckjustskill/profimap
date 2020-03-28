@@ -7,10 +7,10 @@
           :size="isMobile ? 28 : 36"
           v-on="on"
         >
-          <img v-if="user.picture" :src="user.picture" alt="avatar">
+          <v-img v-if="user.picture" :src="user.picture" />
           <span v-else class="subtitle-1 white--text">{{ userInitials }}</span>
         </v-avatar>
-        <div class="hidden-md-and-down userInfo">
+        <div class="hidden-sm-and-down userInfo">
           <div class="userName">
             {{ user.name }}
             <v-btn
@@ -30,6 +30,14 @@
         </div>
       </template>
       <v-list>
+        <v-list-item to="/settings">
+          <v-list-item-icon>
+            <v-icon>mdi-settings</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Настройки</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-icon>
             <v-icon>mdi-logout</v-icon>
@@ -58,7 +66,7 @@
     },
     computed: {
       isMobile() {
-        return this.$vuetify.breakpoint.mdAndDown;
+        return this.$vuetify.breakpoint.smAndDown;
       },
       userInitials() {
         return initials(this.user.name).charAt(0);

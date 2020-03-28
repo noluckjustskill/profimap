@@ -1,0 +1,74 @@
+{
+    "realisticType": {
+        "Management": 1,
+        "Programming": 3,
+        "Marketing": 1,
+        "Design": 4,
+        "BigData": 3,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 2,
+        "Architector": 2,
+        "SysAdmin": 6
+    },
+    "artisticType": {
+        "Management": 2,
+        "Programming": 5,
+        "Marketing": 3,
+        "Design": 4,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 1,
+        "Architector": 4,
+        "SysAdmin": 4
+    },
+    "socialType": {
+        "Management": 4,
+        "Programming": 2,
+        "Marketing": 5,
+        "Design": 2,
+        "BigData": 3,
+        "QA": 3,
+        "DevOps": 3,
+        "HR": 5,
+        "Architector": 3,
+        "SysAdmin": 3
+    },
+    "conventionalType": {
+        "Management": 3,
+        "Programming": 4,
+        "Marketing": 3,
+        "Design": 3,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 2,
+        "Architector": 3,
+        "SysAdmin": 3
+    },
+    "enterprisingType": {
+        "Management": 5,
+        "Programming": 2,
+        "Marketing": 4,
+        "Design": 4,
+        "BigData": 2,
+        "QA": 2,
+        "DevOps": 2,
+        "HR": 4,
+        "Architector": 2,
+        "SysAdmin": 2
+    },
+    "intellectualType": {
+        "Management": 6,
+        "Programming": 5,
+        "Marketing": 4,
+        "Design": 4,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 4,
+        "Architector": 4,
+        "SysAdmin": 4
+    }
+}

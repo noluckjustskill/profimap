@@ -9,7 +9,7 @@ const testUser = {
 };
 
 describe('Login Endpoint', () => {
-  it('shold return token', (done) => {
+  it('should return token', (done) => {
     request(app.callback())
       .post('/auth/login')
       .send(testUser)
@@ -54,7 +54,7 @@ describe('getGolland Endpoint', () => {
 });
 
 describe('gollandResults Endpoint', () => {
-  it('should return dictionary with number for every type', (done) => {
+  it('should return name, result and description in object for every type', (done) => {
     request(app.callback())
       .get('/api/gollandResults')
       .set('Authorization', token)
@@ -62,7 +62,10 @@ describe('gollandResults Endpoint', () => {
       .end((err, res) => {
         if (err) done(err);
 
-        expect(Object.values(res.body).every(val => isNumber(val))).toBe(true);
+        expect(Object.values(res.body).every(val => isObject(val))).toBe(true);
+        expect(Object.values(res.body).every(val => isString(val.name))).toBe(true);
+        expect(Object.values(res.body).every(val => isString(val.descr))).toBe(true);
+        expect(Object.values(res.body).every(val => isNumber(val.result))).toBe(true);
 
         done();
       });
@@ -83,11 +86,6 @@ describe('gollandProfile Endpoint', () => {
         expect(isString(res.body.name)).toBe(true);
         expect(res.body).toHaveProperty('description');
         expect(isString(res.body.description)).toBe(true);
-        expect(res.body).toHaveProperty('recommendations');
-        expect(isObject(res.body.recommendations)).toBe(true);
-        expect(res.body.recommendations.every(cur => {
-          return Object.values(cur).every(val => !isObject(val));
-        })).toBe(true);
 
         done();
       });
@@ -194,7 +192,7 @@ describe('belbinResults Endpoint', () => {
 //=================DISK=============================
 
 describe('getDisk Endpoint', () => {
-  it('should return question and dictionary with variants of anwer for Belbin test', (done) => {
+  it('should return question and dictionary with variants of answer for Belbin test', (done) => {
     request(app.callback())
       .get('/api/getDisk')
       .set('Authorization', token)
@@ -245,7 +243,7 @@ describe('diskResults Endpoint', () => {
 //=================Others=============================
 
 describe('getProfession Endpoint', () => {
-  const id = Math.floor(Math.random() * 80) + 1; // Random [1, 80]
+  const id = Math.floor(Math.random() * 92) + 1; // Random [1, 80]
 
   it(`should return dictionary with description of profession with id = ${id}`, (done) => {
     request(app.callback())
@@ -264,6 +262,7 @@ describe('getProfession Endpoint', () => {
   });
 });
 
+
 describe('recommendations Endpoint', () => {
   it('should return array of dictionaries with recommended professions', (done) => {
     request(app.callback())
@@ -276,9 +275,6 @@ describe('recommendations Endpoint', () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body.every(cur => {
           return Object.values(cur).every(val => !isObject(val));
-        })).toBe(true);
-        expect(res.body.every(cur => {
-          return (difference(Object.keys(cur), ['id', 'name', 'image', 'smallDescr']).length === 0);
         })).toBe(true);
 
         done();

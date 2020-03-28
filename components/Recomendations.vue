@@ -1,16 +1,19 @@
 <template>
   <v-card
-    v-if="items.length"
     class="elevation-0 recomendation mt-2"
     tile
   >
-    <v-list>
+    <v-list v-if="items.length">
       <v-subheader class="title">
-        Вас может заинтересовать:
+        Направления в IT, которые вам подходят:
       </v-subheader>
-      <v-layout row wrap class="list ma-0">
+      <v-layout 
+        row 
+        wrap 
+        class="list ma-0"
+      >
         <v-flex
-          v-for="(item, n) in computedItems"
+          v-for="(item, n) in items"
           :key="n"
           sm6
           xs12
@@ -26,19 +29,41 @@
             </v-list-item>
           </nuxt-link>
         </v-flex>
-        <v-flex v-if="items.length > listCount" xs12>
-          <v-btn 
-            class="link"
-            text
-            small
-            color:accent
-            @click="showMore=!showMore"
-          > 
-            {{ showMore ? 'Скрыть' : 'Все рекомендации' }} 
-          </v-btn>
-        </v-flex>
       </v-layout>
+      <div class="text-center">
+        <v-btn 
+          class="link"
+          text
+          small
+          color:accent
+          to="career"
+        > 
+          {{ 'Подробнее' }} 
+        </v-btn>
+      </div>
     </v-list>
+    <v-layout 
+      v-else
+      row 
+      wrap 
+      class="list ma-0 pb-4"
+    >
+      <v-card-title>Для Вас пока нет рекомендаций</v-card-title>
+      <v-card-subtitle class="pb-2">
+        Для получения рекомендаций пройдите тесты
+      </v-card-subtitle>
+      <v-card-text class="text-center py-0">
+        <v-btn 
+          class="link"
+          text
+          small
+          color:accent
+          to="tests"
+        > 
+          {{ 'К тестам' }} 
+        </v-btn>
+      </v-card-text>
+    </v-layout>
   </v-card>
 </template>
 
@@ -49,28 +74,6 @@
         type: Array,
         required: true,
       },
-    },
-    data() {
-      return {
-        showMore: false,
-      };
-    },
-    computed: {
-      listCount() {
-        return this.$vuetify.breakpoint.smAndDown ? 2 : 4;
-      },
-      computedItems: function() {
-        if (this.showMore) {
-          return this.items;
-        } else {
-          return this.items.slice(0, this.listCount);
-        }
-      }
-    },
-    mounted() {
-      this.$axios.$get('recommendations').then(response => {
-        this.items = response;
-      });
     },
   };
 </script>

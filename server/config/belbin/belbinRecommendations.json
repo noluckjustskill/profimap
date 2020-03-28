@@ -1,0 +1,98 @@
+{
+    "implementer": {
+        "Management": 4,
+        "Programming": 4,
+        "Marketing": 3,
+        "Design": 4,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 5,
+        "Architector": 4,
+        "SysAdmin": 4
+    },
+    "coordinator": {
+        "Management": 4,
+        "Programming": 4,
+        "Marketing": 6,
+        "Design": 2,
+        "BigData": 2,
+        "QA": 1,
+        "DevOps": 4,
+        "HR": 5,
+        "Architector": 4,
+        "SysAdmin": 1
+    },
+    "creator": {
+        "Management": 4,
+        "Programming": 5,
+        "Marketing": 6,
+        "Design": 4,
+        "BigData": 2,
+        "QA": 4,
+        "DevOps": 3,
+        "HR": 5,
+        "Architector": 4,
+        "SysAdmin": 1
+    },
+    "ideasGenerator": {
+        "Management": 4,
+        "Programming": 4,
+        "Marketing": 6,
+        "Design": 3,
+        "BigData": 2,
+        "QA": 2,
+        "DevOps": 4,
+        "HR": 5,
+        "Architector": 4,
+        "SysAdmin": 1
+    },
+    "researcher": {
+        "Management": 4,
+        "Programming": 4,
+        "Marketing": 6,
+        "Design": 3,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 5,
+        "Architector": 3,
+        "SysAdmin": 1
+    },
+    "expert": {
+        "Management": 5,
+        "Programming": 4,
+        "Marketing": 3,
+        "Design": 3,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 4,
+        "HR": 5,
+        "Architector": 4,
+        "SysAdmin": 3
+    },
+    "diplomat": {
+        "Management": 6,
+        "Programming": 3,
+        "Marketing": 4,
+        "Design": 3,
+        "BigData": 2,
+        "QA": 2,
+        "DevOps": 3,
+        "HR": 6,
+        "Architector": 3,
+        "SysAdmin": 1
+    },
+    "executor": {
+        "Management": 4,
+        "Programming": 5,
+        "Marketing": 2,
+        "Design": 4,
+        "BigData": 4,
+        "QA": 4,
+        "DevOps": 5,
+        "HR": 3,
+        "Architector": 5,
+        "SysAdmin": 5
+    }
+}

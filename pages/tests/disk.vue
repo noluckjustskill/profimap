@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Характеристика личности"
     </h2>
@@ -40,7 +44,7 @@
               reactive
               class="progress"
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ questions.length }}</span>
               </template>
             </v-progress-linear>
@@ -77,19 +81,21 @@
             <div class="text-center">
               <v-btn
                 :disabled="!current"
-                color="accent"
-                class="mt-6 white--text"
+                color="primary"
+                class="white--text"
+                rounded
+                depressed
                 @click="back"
               >
-                <v-icon left dark>
-                  mdi-arrow-left
-                </v-icon>
-                Предыдущий вопрос
+                <span class="body-2">Предыдущий вопрос</span>
               </v-btn>
             </div>
           </template>
         </div>
         <div v-else class="block second-block">
+          <AllTestsForm
+            :opened="allTests && checkRestart"
+          />
           <h4 class="title mb-2 font-weight-medium">
             Ваш результат - 
             <template v-if="calculated">
@@ -107,12 +113,29 @@
           </h4>
           <!-- eslint-disable-next-line -->
           <p v-if="description" class="body-2" v-html="description" />
+          <RecommendationsTestPage />
+          <v-btn
+            v-if="activeUser"
+            :block="isMobile"
+            rounded
+            depressed
+            exact
+            to="/"
+            color="primary"
+            class="mt-2 mr-1"
+          >
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            <span class="body-2">Вернуться в профиль</span>
+          </v-btn>
           <v-btn
             v-if="activeUser"
             :block="isMobile"
             color="primary"
             rounded
             depressed
+            exact
             to="/tests"
             class="mt-2 mr-1"
           >
@@ -141,31 +164,52 @@
           >
             <span class="body-2">Сохранить результат</span>
           </v-btn>
+
+          <FeedbackForm />
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="hasResult" :curr="testName" />
   </div>
 </template>
 
 <script>
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
+  import AllTestsForm from '../../components/AllTestsForm';
+  import FeedbackForm from '../../components/Feedback/FeedbackForm';  
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
+
+
+  const testName = 'disk';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
+      AllTestsForm,
+      FeedbackForm,
+      RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [results, questions] = await Promise.all([
+        $axios.$get('diskResults').catch(() => ([])),
+        $axios.$get('getDisk').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
+
       return {
-        title: 'Характеристика личности',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, как ты мыслишь и как принимаешь решения.',
-        }],
+        questions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'text'),
       };
     },
     data: () => ({
+      testName,
       hasResult: false,
 
       startTest: false,
@@ -175,7 +219,9 @@
       calculated: null,
       description: null,
       
+      userCanContinue: true,
       showInviteForm: false,
+      checkRestart: false
     }),
     computed: {
       cardImageHeight() {
@@ -187,19 +233,10 @@
       activeUser() {
         return this.$store.state.auth.user
           && this.$store.state.auth.user.status === 'active';
-      }
-    },
-    async asyncData({ $axios }) {
-      const results = await $axios.$get('diskResults').catch(() => ([]));
-      const maxResult = results.sort((a, b) => b.result - a.result).shift();
-      const questions = await $axios.$get('getDisk').catch(() => ([]));
-
-      return {
-        questions,
-        hasResult: results.some(t => t.result),
-        calculated: get(maxResult, 'name'),
-        description: get(maxResult, 'text'),
-      };
+      },
+      allTests() {
+        return this.$store.getters.allTestsDone;
+      },
     },
     methods: {
       next(index) {
@@ -232,11 +269,12 @@
           this.calculated = name;
           this.description = text;
 
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
+          if (!this.activeUser) {
+            this.$store.commit('updateGuestFirstTest', testName);
+          } else { 
+            this.$store.commit('updateProfileProgress', testName); 
+          }
+          this.checkRestart = true;
         }).catch(err => {
           console.error(err);
         });
@@ -248,6 +286,16 @@
         this.current = 0;
         this.result = [];
       },
+    },
+    head () {
+      return {
+        title: 'Характеристика личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'Этот тест проходят для того, чтобы узнать, чем отличается твой характер от остальных, как ты мыслишь и как принимаешь решения.',
+        }],
+      };
     },
   };
 </script>

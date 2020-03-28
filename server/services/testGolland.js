@@ -1,9 +1,8 @@
-const { mapKeys, mapValues, keyBy, maxBy } = require('lodash');
+const { mapKeys, keyBy, maxBy } = require('lodash');
 const {
   GollandTasksModel,
   GollandTypesModel,
-  GollandResultsModel,
-  GollandRecommendationsModel,
+  GollandResultsModel
 } = require('../database');
 const { keyWithMaxValue } = require('../utils/object');
 const { answers } = require('../config/golland/golland.json');
@@ -37,15 +36,13 @@ const getProfileResult = async (userId) => {
     .query()
     .leftJoinRelation('gollandType')
     .where('gollandResults.userId', userId)
-    .select('gollandType.name', 'gollandResults.result');
+    .select('gollandType.name', 'gollandType.descr', 'gollandResults.result');
+  if (!Object.values(arr).length) {
+    const array = await GollandTypesModel.query().select('name');
+    return array.map(el => keyDictionary[el.name]);
+  }
 
-  return Object.assign(
-    ...Object.values(keyDictionary).map(key => ({ [key]: 0 })),
-    mapKeys(
-      mapValues(keyBy(arr, 'name'), 'result'),
-      (val, key) => keyDictionary[key],
-    )
-  );
+  return mapKeys(keyBy(arr, 'name'), (val, key) => keyDictionary[key]);
 };
 
 const getProfileType = async (userId) => {
@@ -65,22 +62,6 @@ const getProfileType = async (userId) => {
   return GollandTypesModel.query().findById(gollandTypeId);
 };
 
-const getRecommendations = async (typeName) => {
-  const result = await GollandRecommendationsModel
-    .query()
-    .leftJoinRelation('gollandType')
-    .leftJoinRelation('profession')
-    .where('gollandType.name', typeName)
-    .select('profession.id', 'profession.name', 'profession.image', 'profession.smallDescr');
-
-  const staticUrl = process.env.STATIC_URL;
-
-  return result.map(rcmd => ({
-    ...rcmd,
-    image: `${staticUrl}/${rcmd.image}`,
-  }));
-};
-
 const insertResult = async (userId, result = []) => {
   // Delete old results
   await GollandResultsModel.query().delete().where({ userId });
@@ -89,7 +70,7 @@ const insertResult = async (userId, result = []) => {
 
   await Promise.all(Object.keys(answers).map(typeName => {
     const typeResult = answers[typeName].reduce((acc, curr) => {
-      if (result[curr.num] == curr.answer) { // `==` cuz 0 it's false, 1 is true
+      if (Boolean(result[curr.num]) === Boolean(curr.answer)) {
         acc++;
       }
 
@@ -116,8 +97,7 @@ const insertResult = async (userId, result = []) => {
 
   return {
     name: keyDictionary[profileType],
-    description,
-    recommendations: await getRecommendations(profileType),
+    description
   };
 };
 
@@ -126,5 +106,4 @@ module.exports = {
   insertResult,
   getProfileResult,
   getProfileType,
-  getRecommendations,
 };

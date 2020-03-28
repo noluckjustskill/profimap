@@ -10,7 +10,6 @@
       <v-stepper
         :value="stepperValue"
         class="elevation-0"
-        @change="nextStep"
       >
         <v-stepper-header class="step-header">
           <template v-for="(step, i) in steps">
@@ -21,6 +20,7 @@
               :editable="stepperValue <= i"
               :style="{ width: `${Math.floor(100 / steps.length)}%` }"
               class="pa-4 step"
+              @click="nextStep(i)"
             >
               <span class="step-caption text-center pt-2 mx-auto">
                 {{ step.text }}
@@ -41,7 +41,7 @@
       return {
         initialSteps: [{
           name: 'golland',
-          text: 'Проф. предпочтения',
+          text: 'Тип личности',
           link: '/tests/golland',
         }, {
           name: 'klimov',
@@ -79,7 +79,10 @@
     },
     methods: {
       nextStep(num) {
-        this.$router.push(this.steps[num - 1].link);
+        const step = this.steps[num];
+        if (this.stepperValue <= num && step) {
+          this.$router.push(step.link);
+        }
       },
     },
   };

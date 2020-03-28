@@ -3,6 +3,11 @@ require('dotenv').config();
 module.exports = {
   mode: 'universal',
   dev: (process.env.NODE_ENV !== 'production'),
+  env: {
+    SENTRY_DSN: process.env.SENTRY_DSN,
+    RELEASE_NAME: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+  },
   /*
   ** Headers of the page
   */
@@ -15,7 +20,9 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
       { hid: 'keywords', name: 'keywords', content: 'профориентация тест, тест на профориентацию бесплатно онлайн, профориентация для школьников, центр профориентации, профессии, выбрать профессию, профессии будущего, карьера' },
     ],
-    link: [],
+    link: [
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat' },
+    ],
   },
   manifest: {
     name: 'ProfiMap',
@@ -40,6 +47,11 @@ module.exports = {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/dynamicColor',
+    { src: '~/plugins/base64Image', mode: 'client' },
+    '~/plugins/sentry',
+    '~/plugins/constants',
+    { src: '~/plugins/cookies', mode: 'client' },
+    { src: '~/plugins/recaptcha', mode: 'client' },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -149,7 +161,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    extend(config, ctx) {
-    }
+    extend(config, { isDev, isClient }) {}
   }
 };

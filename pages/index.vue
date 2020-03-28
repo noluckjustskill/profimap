@@ -13,15 +13,16 @@
       <v-layout
         row
         wrap
-        align-end
+        align-center
         justify-space-between
         class="row"
       >
         <v-flex md6 xs12>
           <UserInfo />
         </v-flex>
-        <v-flex md6 xs12 class="progress">
-          <ProfileProgress />
+        <v-flex md6 xs12 class="recommendations">
+          <Recomendation v-if="paidUser" :items="recommendations" />
+          <NotPaid v-else />
         </v-flex>
       </v-layout>
     </v-flex>
@@ -31,6 +32,7 @@
       xs12
       class="block-wrap"
     >
+      <ProfileProgress />
       <Learning />
       <CharacterType />
     </v-flex>
@@ -43,7 +45,6 @@
       <!-- <Skills> -->
       <PersonType />
       <TeamRole />
-      <Recomendation :items="recomendations" />
     </v-flex>
   </v-layout>
 </template>
@@ -56,6 +57,7 @@
   import TeamRole from '../components/TeamRole';
   import Learning from '../components/Charts/Learning';
   import Recomendation from '../components/Recomendations';
+  import NotPaid from '../components/NotPaid';
   import CharacterType from '../components/CharacterType';
 
   export default {
@@ -67,16 +69,23 @@
       TeamRole,
       Learning,
       Recomendation,
+      NotPaid,
       CharacterType,
+    },
+    async asyncData({ $axios }) {
+      const recommendationsData = await $axios.$get('recommendations').catch(() => ([]));
+      const recommendations = (recommendationsData || []).slice(0, 3);
+      return { recommendations };
+    },
+    computed: {
+      paidUser() {
+        return Boolean(this.$store.state.auth.user.paid);
+      },
     },
     head () {
       return {
-        title: 'Портфолио',
+        title: 'Профиль',
       };
-    },
-    async asyncData({ $axios }) {
-      const recomendations = await $axios.$get('recommendations').catch(() => ([]));
-      return { recomendations };
     },
     middleware: 'authenticated',
   };
@@ -97,7 +106,7 @@
     font-weight: 500;
     font-size: 20px;
   }
-  .progress {
+  .recommendations {
     padding-left: 10px;
     @media (max-width: 959px) {
       padding: 0;

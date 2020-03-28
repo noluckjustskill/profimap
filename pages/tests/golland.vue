@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Профессиональный тип личности"
     </h2>
@@ -43,7 +47,7 @@
               height="25"
               reactive
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
               </template>
             </v-progress-linear>
@@ -64,12 +68,13 @@
                   @click="next(i)"
                 >
                   <v-img
+                    :lazy-src="imagesCache[item.image]"
                     :src="item.image"
                     :height="cardImageHeight"
                     class="white"
                   />
                   <div
-                    v-if="hover && !isMobile"
+                    v-if="hover && !isMobile && item.descr"
                     :style="{ height: `${cardImageHeight}px`}"
                     class="hint subtitle-1 white--text"
                   >
@@ -96,6 +101,9 @@
           </template>
         </div>
         <div v-else class="block second-block">
+          <AllTestsForm
+            :opened="allTests && checkRestart"
+          />
           <h4 class="title mb-2 font-weight-medium">
             Ваш тип личности - 
             <template v-if="calculated">
@@ -114,84 +122,29 @@
           <p v-if="description" class="body-2 descr">
             {{ description }}
           </p>
-          <h4 v-if="recommendations && recommendations.length" class="subtitle-2 mt-10">
-            Профессии, которые вам подходят:
-          </h4>
-          <v-layout row :justify-center="isMobile" class="mt-3 mb-3">
-            <v-card
-              v-for="(item, i) in recommendations"
-              :key="`rcmd${i}`"
-              :elevation="1"
-              width="200"
-              class="rcmd-card mr-3 mb-3"
-              color="primary"
-              @click="popupClick(item)"
-            >
-              <v-img
-                :src="item.image"
-                height="90"
-                class="white"
-              />
-              <v-card-title class="small-title white--text text-truncate">
-                {{ item.name }}
-              </v-card-title>
-            </v-card>
-            <v-dialog
-              v-model="popup"
-              width="500"
-              height="500"
-              :fullscreen="isMobile"
-              :hide-overlay="isMobile"
-            >
-              <v-card>
-                <v-img
-                  :src="image"
-                  height="300"
-                  width="500"
-                  class="white"
-                />
-                <v-btn
-                  color="primary"
-                  :elevation="0"
-                  fab 
-                  dark
-                  small
-                  absolute
-                  class="mt-7 close text-center"
-                  @click="popup = false"
-                >
-                  <v-icon small>
-                    mdi-close
-                  </v-icon>
-                </v-btn>
-                <v-card-title 
-                  class="subtitle-1 mt-4 font-weight-medium"
-                >
-                  {{ name }}
-                </v-card-title>
-                <v-card-text class="body-2">
-                  {{ descr }}
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <nuxt-link :to="`/professions/${id}`" class="nuxtLink" target="_blank">
-                    <v-btn
-                      :block="isMobile"
-                      color="primary"
-                    >
-                      Подробнее
-                    </v-btn>
-                  </nuxt-link>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-layout>
+          <RecommendationsTestPage />
+          <v-btn
+            v-if="activeUser"
+            :block="isMobile"
+            rounded
+            depressed
+            exact
+            to="/"
+            color="primary"
+            class="mt-2 mr-1"
+          >
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            <span class="body-2">Вернуться в профиль</span>
+          </v-btn>
           <v-btn
             v-if="activeUser"
             :block="isMobile"
             color="primary"
             rounded
             depressed
+            exact
             to="/tests"
             class="mt-2 mr-1"
           >
@@ -220,48 +173,64 @@
           >
             <span class="body-2">Сохранить результат</span>
           </v-btn>
+
+          <FeedbackForm />
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="hasResult" :curr="testName" />
   </div>
 </template>
 
 <script>
-  import { isEmpty, get } from 'lodash';
+  import { isEmpty, get, flatten } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
+  import AllTestsForm from '../../components/AllTestsForm';
+  import FeedbackForm from '../../components/Feedback/FeedbackForm';
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
+
+  const testName = 'golland';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
+      AllTestsForm,
+      FeedbackForm,
+      RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [result, professions] = await Promise.all([
+        $axios.$get('gollandProfile').catch(() => ({})),
+        $axios.$get('getGolland').catch(() => ([]))
+      ]);
+
       return {
-        title: 'Профессиональный тип личности',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять.',
-        }],
+        professions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: !isEmpty(result),
+        calculated: get(result, 'name'),
+        description: get(result, 'description'),
       };
     },
     data: () => ({
+      testName,
       hasResult: false,
+
+      imagesCache: {},
 
       startTest: false,
       current: 0,
       result: [],
-      popup: false,
-
-      name: null,
-      image: null, 
-      descr: null,
-      id: null,
 
       calculated: null,
-      recommendations: null,
       description: null,
 
+      userCanContinue: true,
       showInviteForm: false,
+      checkRestart: false
     }),
     computed: {
       cardImageHeight() {
@@ -273,19 +242,17 @@
       activeUser() {
         return this.$store.state.auth.user
           && this.$store.state.auth.user.status === 'active';
-      }
+      },
+      allTests() {
+        return this.$store.getters.allTestsDone;
+      },
     },
-    async asyncData({ $axios }) {
-      const result = await $axios.$get('gollandProfile').catch(() => ({}));
-      const professions = await $axios.$get('getGolland').catch(() => ([]));
-
-      return {
-        professions,
-        hasResult: !isEmpty(result),
-        calculated: get(result, 'name'),
-        recommendations: get(result, 'recommendations'),
-        description: get(result, 'description'),
-      };
+    mounted() {
+      flatten(this.professions).forEach(item => {
+        this.$imageToBase64(`/cache${item.image}`, (base64) => {
+          this.imagesCache[item.image] = base64;
+        });
+      });
     },
     methods: {
       next(index) {
@@ -308,7 +275,7 @@
         this.$axios.$post('postGolland', {
           result: this.result,
         }).then(response => {
-          const { name, recommendations = [], description } = response;
+          const { name, description } = response;
           
           if (!name) {
             throw new Error('Can not fetch name');
@@ -316,14 +283,14 @@
 
           this.hasResult = true;
           this.calculated = name;
-          this.recommendations = recommendations;
           this.description = description;
 
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
+          if (!this.activeUser) {
+            this.$store.commit('updateGuestFirstTest', testName);
+          } else { 
+            this.$store.commit('updateProfileProgress', testName);
+          }
+          this.checkRestart = true;
         }).catch(err => {
           console.error(err);
         });
@@ -335,13 +302,16 @@
         this.current = 0;
         this.result = [];
       },
-      popupClick({ id, name, image, smallDescr }) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.descr = smallDescr;
-        this.popup = true;
-      }
+    },
+    head () {
+      return {
+        title: 'Профессиональный тип личности',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В этом тесте ты разберешься, с кем тебе интересно работать и какого типа задачи выполнять.',
+        }],
+      };
     },
   };
 </script>
@@ -419,10 +389,6 @@
       margin-bottom: 10px;
     }
   }
-  .rcmd-card {
-    max-width: 165px;
-    height: 125px;
-  }
   @keyframes fadeIn{
     0% {
       opacity:0;
@@ -431,13 +397,10 @@
       opacity:1;
     }
   }
-  .close {
-    top: -20px;
-    right: 5px;
-  }
   .hint {
     position: absolute;
     display: flex;
+    justify-content: center;
     top: 0;
     left: 0;
     width: 100%;
@@ -453,15 +416,7 @@
   .caption {
     vertical-align: middle;
   }
-  .nuxtLink {
-    text-decoration: none;
-  }
   .title {
     font-size: 24px;
-  }
-  .small-title {
-    font-size: 14px;
-    padding: 0;
-    justify-content: center;
   }
 </style>

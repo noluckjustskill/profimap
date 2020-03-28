@@ -5,7 +5,7 @@
       wrap
       align-center
       justify-start
-      class="header-layout hidden-md-and-down"
+      class="header-layout hidden-sm-and-down"
     >
       <v-flex xs3>
         <nuxt-link to="/">
@@ -32,44 +32,18 @@
             :to="item.to"
             class="tab"
           >
-            {{ item.title }}
+            <v-badge
+              :value="showHint(item.hint)"
+              color="primary"
+              offset-x="-5"
+              dot
+            >
+              {{ item.title }}
+            </v-badge>
           </v-tab>
         </v-tabs>
       </v-flex>
     </v-layout>
-    <div class="hidden-md-and-up">
-      <v-navigation-drawer
-        v-model="drawer"
-        clipped
-        app
-        hide-overlay
-      >
-        <div>
-          <v-btn icon right @click="drawer = !drawer">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </div>
-        <v-list>
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-      <div>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      </div>
-    </div>
   </div>
 </template>
 
@@ -90,10 +64,24 @@
       },
     },
     data: () => ({
-      tab: null,
+      tab: '/',
       drawer: false,
       overlay: false
     }),
+    methods: {
+      showHint(hint) {
+        if (!hint || !this.$store.state.auth.user.paid) return false;
+
+        const cookieName = `hint_${hint.id}`;
+        const showHint = this.$cookies.isKey(cookieName);
+        if (!showHint) {
+          this.$cookies.set(cookieName, true);
+          return true;
+        }
+
+        return false;
+      }
+    },
   };
 </script>
 
@@ -104,6 +92,7 @@
     margin: 0;
   }
   .tab {
+    position: relative;
     line-height: 15px;
     letter-spacing: 0.4px;
     text-transform: none;

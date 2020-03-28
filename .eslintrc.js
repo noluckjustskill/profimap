@@ -2,7 +2,8 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true
+    node: true,
+    jest: true,
   },
   parserOptions: {
     ecmaVersion: 8
@@ -15,7 +16,11 @@ module.exports = {
     // 'plugin:nuxt/recommended'
     'plugin:vue/recommended'
   ],
+  globals: {
+    logger: 'readonly',
+  },
   rules: {
+    'eqeqeq': ["error"],
     'max-len': ['error', 160, {
       'ignoreUrls': true,
       'ignoreTemplateLiterals': true,
@@ -35,9 +40,10 @@ module.exports = {
     'keyword-spacing': 'error',
     'no-multi-spaces': 'error',
     'no-restricted-syntax': ['error', 'WithStatement'],
+    'no-undef': 'error',
     'no-unused-expressions': 'off',
     'no-unused-vars': ['error', { args: 'none', "ignoreRestSiblings": true }],
-    'no-use-before-define': 'off',
+    'no-use-before-define': ['error'],
     'nuxt/no-cjs-in-config': 'off',
     'prefer-const': ['error'],
     'no-var': ['error'],

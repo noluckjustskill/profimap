@@ -1,6 +1,10 @@
 <template>
   <div>
-    <InviteForm :opened="showInviteForm" @close="showInviteForm = false" />
+    <InviteForm
+      :opened="showInviteForm || !userCanContinue"
+      :persistent="!userCanContinue"
+      @close="showInviteForm = false"
+    />
     <h2 class="display-1 page-title font-weight-medium">
       Тест "Профессиональная область"
     </h2>
@@ -40,7 +44,7 @@
               reactive
               class="progress"
             >
-              <template v-slot="{ value }">
+              <template>
                 <span class="font-weight-light white--text">{{ current }}/{{ professions.length }}</span>
               </template>
             </v-progress-linear>
@@ -82,6 +86,9 @@
           </template>
         </div>
         <div v-else class="block second-block">
+          <AllTestsForm
+            :opened="allTests && checkRestart"
+          />
           <h4 class="title mb-2 font-weight-medium">
             Ваш результат - 
             <template v-if="calculated">
@@ -99,12 +106,29 @@
           </h4>
           <!-- eslint-disable-next-line -->
           <p v-if="description" class="descr body-2" v-html="description" />
+          <RecommendationsTestPage />
+          <v-btn
+            v-if="activeUser"
+            :block="isMobile"
+            rounded
+            depressed
+            exact
+            to="/"
+            color="primary"
+            class="mt-2 mr-1"
+          >
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            <span class="body-2">Вернуться в профиль</span>
+          </v-btn>
           <v-btn
             v-if="activeUser"
             :block="isMobile"
             color="primary"
             rounded
             depressed
+            exact
             to="/tests"
             class="mt-2 mr-1"
           >
@@ -133,31 +157,51 @@
           >
             <span class="body-2">Сохранить результат</span>
           </v-btn>
+
+          <FeedbackForm />
         </div>
       </v-flex>
     </v-layout>
+    <AllTests v-if="hasResult" :curr="testName" />
   </div>
 </template>
 
 <script>
   import { get } from 'lodash';
   import InviteForm from '../../components/InviteForm';
+  import AllTests from '../../components/AllTests';
+  import AllTestsForm from '../../components/AllTestsForm';
+  import FeedbackForm from '../../components/Feedback/FeedbackForm';
+  import RecommendationsTestPage from '../../components/RecommendationsTestPage';
+
+  const testName = 'klimov';
 
   export default {
     components: {
       InviteForm,
+      AllTests,
+      AllTestsForm,
+      FeedbackForm,
+      RecommendationsTestPage,
     },
-    head () {
+    async asyncData({ $axios, store }) {
+      const { error } = await $axios.$get('can-continue');
+      const [results, professions] = await Promise.all([
+        $axios.$get('klimovResults').catch(() => ([])),
+        $axios.$get('getKlimov').catch(() => ([])),
+      ]);
+      const maxResult = (results || []).sort((a, b) => b.result - a.result).shift();
+
       return {
-        title: 'Профессиональная область',
-        meta: [{
-          hid: 'description',
-          name: 'description',
-          content: 'В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к конкретным профессиям.',
-        }],
+        professions,
+        userCanContinue: !error || store.state.guestFirstTest === testName,
+        hasResult: results.some(t => t.result),
+        calculated: get(maxResult, 'name'),
+        description: get(maxResult, 'fullText'),
       };
     },
     data: () => ({
+      testName,
       hasResult: false,
 
       startTest: false,
@@ -167,7 +211,9 @@
       calculated: null,
       description: null,
 
+      userCanContinue: true,
       showInviteForm: false,
+      checkRestart: false
     }),
     computed: {
       cardImageHeight() {
@@ -179,19 +225,10 @@
       activeUser() {
         return this.$store.state.auth.user
           && this.$store.state.auth.user.status === 'active';
-      }
-    },
-    async asyncData({ $axios }) {
-      const results = await $axios.$get('klimovResults').catch(() => ([]));
-      const maxResult = results.sort((a, b) => b.result - a.result).shift();
-      const professions = await $axios.$get('getKlimov').catch(() => ([]));
-
-      return {
-        professions,
-        hasResult: results.some(t => t.result),
-        calculated: get(maxResult, 'name'),
-        description: get(maxResult, 'fullText'),
-      };
+      },
+      allTests() {
+        return this.$store.getters.allTestsDone;
+      },
     },
     methods: {
       next(index) {
@@ -224,11 +261,12 @@
           this.calculated = name;
           this.description = fullText;
 
-          // if (!this.activeUser) {
-          //   setTimeout(() => {
-          //     this.showInviteForm = true;
-          //   }, 3000);
-          // }
+          if (!this.activeUser) {
+            this.$store.commit('updateGuestFirstTest', testName);
+          } else { 
+            this.$store.commit('updateProfileProgress', testName); 
+          }
+          this.checkRestart = true;
         }).catch(err => {
           console.error(err);
         });
@@ -240,6 +278,16 @@
         this.current = 0;
         this.result = [];
       },
+    },
+    head () {
+      return {
+        title: 'Профессиональная область',
+        meta: [{
+          hid: 'description',
+          name: 'description',
+          content: 'В какой сфере тебе лучше работать? В этом тесте ты разберешься в своих склонностях к конкретным профессиям.',
+        }],
+      };
     },
   };
 </script>

@@ -28,6 +28,10 @@ const BelbinResultsModel = require('./models/belbin/belbinResults');
 const DiskTasksModel = require('./models/disk/diskTasks');
 const DiskTypesModel = require('./models/disk/diskTypes');
 const DiskResultsModel = require('./models/disk/diskResults');
+const FeedBackModel = require('./models/feedback');
+const UniversitiesModel = require('./models/universities');
+const InvoiceModel = require('./models/invoices');
+const PromocodesModel = require('./models/promocodes');
 
 const knex = Knex({
   client: 'mysql', 
@@ -42,12 +46,12 @@ const knex = Knex({
   ...knexSnakeCaseMappers(),
   ...(isDev ? {
     log: {
-      warn: console.warn,
-      error: console.error,
-      debug: console.debug,
+      warn: msg => logger.log('warn', JSON.stringify(msg)),
+      error: msg => logger.log('error', JSON.stringify(msg)),
+      debug: msg => logger.log('info', JSON.stringify(msg)),
     }
   } : {
-    error: console.error,
+    error: msg => logger.log('error', msg),
   }),
 });
 
@@ -71,4 +75,8 @@ module.exports = {
   DiskTasksModel,
   DiskTypesModel,
   DiskResultsModel,
+  FeedBackModel,
+  UniversitiesModel,
+  InvoiceModel,
+  PromocodesModel,
 };

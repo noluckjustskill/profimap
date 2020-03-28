@@ -14,8 +14,8 @@ module.exports = class InvitedUsers extends Model {
         relation: Model.HasOneRelation,
         modelClass: Users,
         join: {
-          from: 'users.id',
-          to: 'invitedUsers.userId'
+          from: 'invitedUsers.userId',
+          to: 'users.id',
         }
       },
     };

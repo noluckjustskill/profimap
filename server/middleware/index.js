@@ -25,7 +25,7 @@ module.exports = async (ctx, next) => {
     const status = Number(err.code);
     if (status) {
       ctx.status = status;
-      ctx.body = err.message;
+      ctx.body = { error: err.message };
     } else {
       ctx.status = 500;
       ctx.app.emit('error', err, ctx);
