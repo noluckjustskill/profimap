@@ -6,6 +6,7 @@ module.exports = {
   env: {
     SENTRY_DSN: process.env.SENTRY_DSN,
     RELEASE_NAME: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+    RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
   },
   /*
   ** Headers of the page
@@ -50,6 +51,7 @@ module.exports = {
     '~/plugins/sentry',
     '~/plugins/constants',
     { src: '~/plugins/cookies', mode: 'client' },
+    { src: '~/plugins/recaptcha', mode: 'client' },
   ],
   /*
   ** Nuxt.js dev-modules
