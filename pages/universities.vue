@@ -87,16 +87,17 @@
                 </v-flex>
               </v-layout>
             </v-list-item-subtitle>
-            <nixt-link target="_blank" :to="item.link">
-              <v-btn
-                :large="buttonSize"
-                rounded
-                depressed
-                color="primary"
-              >
-                <span class="body-2">Перейти на сайт</span>
-              </v-btn>
-            </nixt-link>
+            <v-btn
+              target="_blank"
+              :href="item.link"
+              :large="buttonSize"
+              rounded
+              depressed
+              color="primary"
+              style="flex-basis: auto"
+            >
+              <span class="body-2">Перейти на сайт</span>
+            </v-btn>
           </v-list-item-content>
 
           <!-- <v-list-item-action class="right-block ml-0">
