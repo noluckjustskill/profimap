@@ -58,6 +58,7 @@
     "sharp": "^0.25.1",
     "vue-chartjs": "^3.5.0",
     "vue-cookies": "^1.7.0",
+    "vue-recaptcha-v3": "^1.8.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {

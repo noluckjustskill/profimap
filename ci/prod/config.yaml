@@ -10,6 +10,7 @@ services:
         - browser_base_url=https://panel.profimap.ru
         - yandex_metrika=${YANDEX_METRIKA}
         - sentry_dsn=${SENTRY_DSN}
+        - recaptcha_site_key=${RECAPTCHA_SITE_KEY}
     restart: always
     environment:
       - HOST=127.0.0.1
@@ -33,6 +34,7 @@ services:
       - ROBOKASSA_MERCHANT_LOGIN=${ROBOKASSA_MERCHANT_LOGIN}
       - ROBOKASSA_PASSWORD1=${ROBOKASSA_PASSWORD1}
       - ROBOKASSA_PASSWORD2=${ROBOKASSA_PASSWORD2}
+      - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
     network_mode: 'host'
     volumes:
       - ${STATIC_DIR}:/opt/images

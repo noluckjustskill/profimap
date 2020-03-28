@@ -107,7 +107,7 @@
                           color="accent"
                           @click="registration = true"
                         >
-                          Зарегестрироваться
+                          Зарегистрироваться
                         </v-btn>
                       </v-flex>
                     </v-layout>
@@ -170,14 +170,14 @@
                     <v-layout row wrap class="mt-3 px-4">
                       <v-flex xs12 class="mb-6">
                         <v-btn
-                          :disabled="!acceptRules || !name || !email"
+                          :disabled="!acceptRules || !name || !email || registrationInProgress"
                           class="white--text"
                           block
                           large
                           color="accent" 
                           type="submit"
                         >
-                          Отправить
+                          {{ registrationInProgress ? 'Отправка...' : 'Отправить' }}
                         </v-btn>
                         <v-btn
                           class="white--text mt-2"
@@ -236,6 +236,7 @@
     },
     data: () => ({
       registrationSuccess: false,
+      registrationInProgress: false,
       drawer: null,
       email: null,
       name: null,
@@ -281,7 +282,6 @@
     methods: {
       async login() {
         if (!this.email || !this.password) return;
-
         try {
           await this.$auth.loginWith('local', {
             data: {
@@ -311,11 +311,14 @@
       saveDoB(date) {
         this.$refs.menu.save(date);
       },
-      register() {
-        if (!this.acceptRules || !this.email || !this.name) { 
+      async register() {
+        this.registrationInProgress = true;
+        await this.$recaptchaLoaded();
+        const recaptchaToken = await this.$recaptcha('homepage');
+        
+        if (!this.acceptRules || !this.email || !this.name || !recaptchaToken) { 
           return;
         }
-
         const validation = this.emailRules.find(rule => typeof rule(this.email) === 'string');
         if (validation) {
           this.snackbarText = validation(this.email);
@@ -328,13 +331,16 @@
           email: this.email,
           gender: this.gender,
           dateOfBirth: this.dateOfBirth,
+          recaptchaToken,
         }).then(() => {
           this.registrationSuccess = true;
+          this.registrationInProgress = false;
         }).catch(err => {
           console.log(err);
           
           this.snackbarText = 'Не удалось зарегистрироваться';
           this.snackbar = true;
+          this.registrationInProgress = false;
         });
       },
     },

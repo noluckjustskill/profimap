@@ -26,14 +26,14 @@
         />
         <div class="text-right">
           <v-btn
-            :disabled="!rating"
+            :disabled="!rating || sendingInProgress"
             :block="isMobile"
             color="primary"
             rounded
             depressed
             @click="send"
           >
-            Отправить
+            {{ sendingInProgress ? 'Отправка...' : 'Отправить' }}
           </v-btn>
         </div>
       </v-card-text>
@@ -53,6 +53,7 @@
       routeHasFeedBack: false,
       message: '',
       rating: 0,
+      sendingInProgress: false,
     }),
     computed: {
       isMobile() {
@@ -65,21 +66,27 @@
       });
     },
     methods: {
-      send() {
-        if (!this.rating) return;
+      async send() {
+        this.sendingInProgress = true;
+        await this.$recaptchaLoaded();
+        const recaptchaToken = await this.$recaptcha('homepage');
+        if (!this.rating || !recaptchaToken) return;
 
         this.$axios.$post('sendFeedback', {
           path: this.$route.path,
           rate: this.rating,
           message: this.message,
+          recaptchaToken,
         }).then(() => {
           this.feedBackSent = true;
+          this.sendingInProgress = false;
           
           setTimeout(() => {
             this.routeHasFeedBack = true;
           }, 3000);
         }).catch(err => {
           console.error(err);
+          this.sendingInProgress = false;
         });
       },
     },
