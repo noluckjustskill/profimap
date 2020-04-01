@@ -2,7 +2,7 @@ const dataForGolland = require('../config/golland/gollandRecommendations.json');
 const dataForKlimov = require('../config/klimov/klimovRecommendations.json');
 const dataForBelbin = require('../config/belbin/belbinRecommendations.json');
 const keyDictionary = require('../config/professionsDictionary.json');
-const { max, min, orderBy, cloneDeep } = require('lodash');
+const { max, min, cloneDeep } = require('lodash');
 const {
   GollandTypesModel,
   GollandResultsModel,
@@ -13,6 +13,9 @@ const {
   ProfessionsModel,
 } = require('../database');
 
+const staticUrl = process.env.STATIC_URL;
+
+//нормирование входных данных
 const normirData = data => {
   Object.values(data).forEach(type => {
     const profList = Object.values(type);
@@ -72,8 +75,8 @@ const recommendationsCalc = (types, results, testData) => {
 };
 
 const getRecommendations = async (userId) => {
-  //getting data with results from database for every test
-  //golland 
+  //получение данных с результатами для каждого теста
+  //голланд
   const gollandTypes = await GollandTypesModel.query().select('id', 'name');
   const gollandResultsList = await GollandResultsModel
     .query()
@@ -84,7 +87,7 @@ const getRecommendations = async (userId) => {
     return acc;
   }, {});
 
-  //klimov
+  //климов
   const klimovTypes = await KlimovTypesModel.query().select('id', 'name');
   const klimovResultsList = await KlimovResultsModel
     .query()
@@ -95,7 +98,7 @@ const getRecommendations = async (userId) => {
     return acc;
   }, {});
 
-  //belbin
+  //белбин
   const belbinTypes = await BelbinTypesModel.query().select('id', 'name');
   const belbinResultsList = await BelbinResultsModel
     .query()
@@ -106,45 +109,47 @@ const getRecommendations = async (userId) => {
     return acc;
   }, {});
 
-  //calculate recommendations for every test
+  //расчет рекомендаций для каждого теста
   const gollandCalcResults = recommendationsCalc(gollandTypes, gollandResults, normirData(dataForGolland));
   const klimovCalcResults = recommendationsCalc(klimovTypes, klimovResults, normirData(dataForKlimov));
   const belbinCalcResults = recommendationsCalc(belbinTypes, belbinResults, normirData(dataForBelbin));
 
-  //summary results
+  //суммирование результатов
   const result = gollandCalcResults;
   for (const key in result) {
     result[key] += klimovCalcResults[key];
     result[key] += belbinCalcResults[key];
   };
 
-  //return top3 professions
-  const resultArr = [];
-  const professionsNames = [];
-  Object.keys(result).forEach(elem => {
-    professionsNames.push(elem);
-    resultArr.push({name: elem, result: result[elem]});
-  });
+  //возврат профессий с рекомендациями
+  const professionsNames = Object.keys(result).sort((a, b) => result[b] - result[a]);
+  const resultArr = professionsNames.map(elem => ({
+    name: elem,
+    result: result[elem],
+  }));
+
+  if (!resultArr.some(elem => elem.result)) {
+    return [];
+  }
 
   const professions = await ProfessionsModel
     .query()
-    .whereIn('name', professionsNames)
-    .select('*');
+    .withGraphJoined('directions', { joinOperation: 'innerJoin' })
+    .whereIn('professions.name', professionsNames)
+    .execute();
 
-  const staticUrl = process.env.STATIC_URL;
-
-  if (resultArr.some(elem => elem.result)) {
-    return orderBy(resultArr, 'result', 'desc').map(elem => {
-      const profession = professions.find(p => p.name === elem.name);
+  return resultArr.reduce((acc, elem) => {
+    const profession = professions.find(p => p.name === elem.name);
+    if (profession) {
       profession.name = keyDictionary[elem.name] || elem.name;
       profession.result = elem.result;
       profession.image = `${staticUrl}/${profession.image}`;
 
-      return profession;
-    });
-  }
-  
-  return [];
+      acc.push(profession);
+    }
+
+    return acc;
+  }, []);
 };
 
 module.exports = {

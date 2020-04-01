@@ -99,13 +99,21 @@
                   contain
                 />
               </v-list-item-subtitle> -->
-              <v-list-item-title class="subline mb-3">
+              <v-list-item-title class="headline mb-3">
                 Направления в ВУЗах, связанные с профессией:
               </v-list-item-title>
-              <v-list-item-subtitle class="descr mb-2">
-                {{ item.education }}
+              <v-list-item-subtitle class="mb-2">
+                <h2 
+                  v-for="direction in item.directions"
+                  :key="`dir-${item.id}-${direction.id}`"
+                  class="title font-weight-light my-0 direction"
+                >
+                  {{ direction.name }}
+                  <!-- <br v-if="isMobile">
+                  (<span style="color: #1782FF">код направления {{ direction.code }}</span>) -->
+                </h2>
               </v-list-item-subtitle>
-              <nuxt-link to="/universities">
+              <nuxt-link :to="`/universities?professionId=${item.id}`">
                 <v-btn
                   :large="buttonSize"
                   rounded
@@ -275,6 +283,9 @@
       chartWidth() {
         return this.$vuetify.breakpoint.xsOnly ? 6 : 11;
       },
+      isMobile() {
+        return this.$vuetify.breakpoint.smAndDown;
+      },
     },
     methods: {
       chartSize(index) {
@@ -332,21 +343,6 @@
     opacity: 0.8;
     @media (max-width: 960px) {
       font-size: 17px;
-      line-height: 20px;
-    }
-    @media (max-width: 600px) {
-      font-size: 12px;
-      line-height: 12px;
-    }
-  }
-  .descr {
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 24px;
-    color: #000000;
-    opacity: 0.8;
-    @media (max-width: 960px) {
-      font-size: 14px;
       line-height: 20px;
     }
     @media (max-width: 600px) {
@@ -511,8 +507,32 @@
       margin-top: 5px;
     }
 
+    .headline {
+      @media (max-width: 960px) {
+        line-height: normal;
+        font-size: 24px !important;
+      }
+      @media (max-width: 600px) {
+        font-size: 20px !important;
+      }
+    }
+
     .avatar-container {
       margin-top: -30px;
+    }
+
+    .direction {
+      line-height: 26px;
+      
+      @media (max-width: 960px) {
+        font-size: 14px !important;
+        line-height: 20px !important;
+        margin-bottom: 6px !important;
+      }
+      @media (max-width: 600px) {
+        font-size: 12px !important;
+        line-height: 12px !important;
+      }
     }
   }
 </style>

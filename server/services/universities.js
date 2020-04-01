@@ -1,14 +1,25 @@
 const { UniversitiesModel } = require('../database');
 const staticUrl = process.env.STATIC_URL;
 
-const getUniversities = async (city) => {
-  const universitiesQuery = UniversitiesModel.query();
+const getUniversities = async ({ city, professionId }) => {
+  const universitiesQuery = UniversitiesModel
+    .query()
+    .withGraphJoined(
+      'universitiesToDirections.directions.professions',
+      { minimize: true, joinOperation: 'innerJoin' },
+    );
 
   if (city) {
-    universitiesQuery.where({ city });
+    universitiesQuery.where('universities.city', city);
   }
 
-  const universities = await universitiesQuery.select('*');
+  if (professionId) {
+    universitiesQuery.modifyGraph('universitiesToDirections.directions.professions', qb => {
+      qb.where({ id: professionId });
+    });
+  }
+
+  const universities = await universitiesQuery.execute();
   return universities.map(elem => ({
     ...elem,
     image: `${staticUrl}/${elem.image}`,
