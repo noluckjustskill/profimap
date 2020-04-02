@@ -325,6 +325,9 @@
     padding-left: 10px;
     margin-top: 35px;
     margin-bottom: 15px;
+    @media (max-width: 420px) {
+      font-size: 28px !important;
+    }
   }
   .page-title.second-title {
     margin-top: 50px;

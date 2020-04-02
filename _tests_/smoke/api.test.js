@@ -264,7 +264,7 @@ describe('getProfession Endpoint', () => {
 
 
 describe('recommendations Endpoint', () => {
-  it('should return array of dictionaries with recommended professions', (done) => {
+  it('should return array of objects, in every object - array with directions', (done) => {
     request(app.callback())
       .get('/api/recommendations')
       .set('Authorization', token)
@@ -273,9 +273,14 @@ describe('recommendations Endpoint', () => {
         if (err) done(err);
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.every(cur => {
-          return Object.values(cur).every(val => !isObject(val));
-        })).toBe(true);
+        res.body.forEach(elem => {
+          expect(Object.keys(elem)).toEqual(expect.arrayContaining(['id', 'name', 'directions']));
+          expect(Array.isArray(elem.directions)).toBe(true);
+          expect(elem.directions).not.toHaveLength(0);
+          elem.directions.forEach(dir => {
+            expect(dir).toHaveProperty('name');
+          });
+        });
 
         done();
       });
