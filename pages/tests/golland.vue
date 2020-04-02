@@ -209,7 +209,7 @@
 
       return {
         professions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
+        userCanContinue: !error || !store.state.guestFirstTest || store.state.guestFirstTest === testName,
         hasResult: !isEmpty(result),
         calculated: get(result, 'name'),
         description: get(result, 'description'),

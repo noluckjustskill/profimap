@@ -194,7 +194,7 @@
 
       return {
         professions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
+        userCanContinue: !error || !store.state.guestFirstTest || store.state.guestFirstTest === testName,
         hasResult: results.some(t => t.result),
         calculated: get(maxResult, 'name'),
         description: get(maxResult, 'fullText'),

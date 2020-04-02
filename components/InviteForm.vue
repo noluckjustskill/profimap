@@ -97,6 +97,18 @@
         />
         <!-- eslint-disable-next-line -->
         <span v-html="message" />
+        <br>
+        <v-btn
+          v-if="!successSignup"
+          :block="isMobile"
+          color="primary"
+          rounded
+          depressed
+          class="mt-3"
+          @click="message = null"
+        >
+          Назад
+        </v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -125,7 +137,7 @@
 
       loading: false,
       successSignup: false,
-      message: ''
+      message: null,
     }),
     computed: {
       isOpened: {
@@ -150,20 +162,23 @@
           this.isOpened = false;
         }
       },
-      signUp() {
+      async signUp() {
         this.loading = true;
 
-        this.$axios.$post('invite', {
+        await this.$axios.$post('invite', {
           name: this.name,
           email: this.email,
         }).then(() => {
           this.successSignup = true;
           this.message = 'Готово! На твою почту мы отправили письмо с дальнейшими инструкциями';
         }).catch(err => {
-          this.successSignup = true;
-          this.message = `К сожалению, что-то пошло не так, попробуйте позже или напишите нам на <a href="mailto:help@profimap.ru" style="color: #1782FF">help@profimap.ru</a>`;
+          this.successSignup = false;
+          this.message = `К сожалению, что-то пошло не так, попробуйте позже<br/>
+          или напишите нам на <a href="mailto:help@profimap.ru" style="color: #1782FF">help@profimap.ru</a>`;
           console.error(err);
         });
+
+        this.loading = false;
       },
     },
   };
