@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
     "test:unit": "jest \"unit/.*\\.test\\.js\"",
-    "test:smoke": "jest \"smoke/.*\\.test\\.js\" --detectOpenHandles --forceExit"
+    "test:smoke": "jest \"smoke/.*\\.test\\.js\" --setupFiles dotenv/config --detectOpenHandles --forceExit"
   },
   "pre-commit": [
     "lint",
