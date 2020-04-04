@@ -1,6 +1,7 @@
 const { maxBy } = require('lodash');
 const {
   knex,
+  UsersModel,
   GollandTasksModel,
   GollandTypesModel,
   GollandResultsModel
@@ -24,16 +25,24 @@ const getTasks = async() => {
 };
 
 const getProfileResult = async (userId) => {
-  const results = await GollandResultsModel
+  const { gollandResults = [] } = await UsersModel
     .query()
-    .where({ userId })
-    .withGraphJoined('gollandType', { joinOperation: 'innerJoin' })
+    .where('users.id', userId)
+    .withGraphJoined('gollandResults.gollandTypes', { joinOperation: 'leftJoin' })
     .execute();
 
-  return results.reduce((acc, elem) => {
+  if (!gollandResults || !gollandResults.length) {
+    return Object.values(keyDictionary).reduce((acc, curr) => {
+      acc[curr] = { result: 0 };
+      return acc;
+    }, {});
+  }
+
+  console.log(gollandResults);
+  return gollandResults.reduce((acc, elem) => {
     acc[keyDictionary[elem.gollandType.name] || elem.gollandType.name] = {
       descr: elem.gollandType.descr,
-      result: elem.result,
+      result: elem.result || 0,
     };
 
     return acc;
