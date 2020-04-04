@@ -1,5 +1,6 @@
-const { mapKeys, keyBy, maxBy } = require('lodash');
+const { maxBy } = require('lodash');
 const {
+  knex,
   GollandTasksModel,
   GollandTypesModel,
   GollandResultsModel
@@ -8,41 +9,35 @@ const { keyWithMaxValue } = require('../utils/object');
 const { answers } = require('../config/golland/golland.json');
 const keyDictionary = require('../config/golland/gollandSkillsDictionary.json');
 
+const staticUrl = process.env.STATIC_URL;
+
 const getTasks = async() => {
-  const tasks = await GollandTasksModel
+  return GollandTasksModel
     .query()
-    .leftJoinRelation('left')
-    .leftJoinRelation('right')
-    .select(
-      'left.name as leftName', 'left.smallDescr as leftDescr', 'left.image as leftImage',
-      'right.name as rightName', 'right.smallDescr as rightDescr', 'right.image as rightImage',
-    );
-
-  const staticUrl = process.env.STATIC_URL;
-
-  return tasks.map(task => ([{
-    name: task.leftName,
-    descr: task.leftDescr,
-    image: `${staticUrl}/${task.leftImage}`,
-  }, {
-    name: task.rightName,
-    descr: task.rightDescr,
-    image: `${staticUrl}/${task.rightImage}`,
-  }]));
+    .withGraphJoined( '[left, right]', { joinOperation: 'innerJoin' })
+    .modifyGraph('[left, right]', qb => {
+      qb.select('name', 'smallDescr', knex.raw(`CONCAT('${staticUrl}/', image) as image`));
+    })
+    .select('left.image as left:image')
+    .select('right.image as right:image')
+    .execute();
 };
 
 const getProfileResult = async (userId) => {
-  const arr = await GollandResultsModel
+  const results = await GollandResultsModel
     .query()
-    .leftJoinRelation('gollandType')
-    .where('gollandResults.userId', userId)
-    .select('gollandType.name', 'gollandType.descr', 'gollandResults.result');
-  if (!Object.values(arr).length) {
-    const array = await GollandTypesModel.query().select('name');
-    return array.map(el => keyDictionary[el.name]);
-  }
+    .where({ userId })
+    .withGraphJoined('gollandType', { joinOperation: 'innerJoin' })
+    .execute();
 
-  return mapKeys(keyBy(arr, 'name'), (val, key) => keyDictionary[key]);
+  return results.reduce((acc, elem) => {
+    acc[keyDictionary[elem.gollandType.name] || elem.gollandType.name] = {
+      descr: elem.gollandType.descr,
+      result: elem.result,
+    };
+
+    return acc;
+  }, {});
 };
 
 const getProfileType = async (userId) => {
