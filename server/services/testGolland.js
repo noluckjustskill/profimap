@@ -25,21 +25,20 @@ const getTasks = async() => {
 };
 
 const getProfileResult = async (userId) => {
-  const { gollandResults = [] } = await UsersModel
+  const [ user ] = await UsersModel
     .query()
     .where('users.id', userId)
-    .withGraphJoined('gollandResults.gollandTypes', { joinOperation: 'leftJoin' })
+    .withGraphJoined('gollandResults.gollandType', { joinOperation: 'leftJoin' })
     .execute();
 
-  if (!gollandResults || !gollandResults.length) {
+  if (!user || !Array.isArray(user.gollandResults) || !user.gollandResults.length) {
     return Object.values(keyDictionary).reduce((acc, curr) => {
       acc[curr] = { result: 0 };
       return acc;
     }, {});
   }
 
-  console.log(gollandResults);
-  return gollandResults.reduce((acc, elem) => {
+  return user.gollandResults.reduce((acc, elem) => {
     acc[keyDictionary[elem.gollandType.name] || elem.gollandType.name] = {
       descr: elem.gollandType.descr,
       result: elem.result || 0,

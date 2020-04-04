@@ -10,7 +10,7 @@ module.exports = class GollandResults extends Model {
   }
   static get relationMappings() {
     return {
-      gollandTypes: {
+      gollandType: {
         relation: Model.BelongsToOneRelation,
         modelClass: GollandTypes,
         join: {
