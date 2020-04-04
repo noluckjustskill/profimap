@@ -38,23 +38,23 @@
       class="layout"
     >
       <v-card
-        v-for="item in universities"
-        :key="item.id"
+        v-for="univer in universities"
+        :key="univer.id"
         class="mt-6 card"
         outlined
       >
         <v-list-item class="pa-0">
           <v-list-item-content>
             <v-list-item-title class="mainline mb-3">
-              {{ item.name }}
+              {{ univer.name }}
             </v-list-item-title>
             <v-list-item-subtitle class="descr mb-5">
               <v-layout row wrap class="ma-0 pa-0">
                 <v-flex xs9>
-                  {{ item.description }}
+                  {{ univer.description }}
                 </v-flex>
                 <v-flex xs3 class="avatar-container">
-                  <v-img :src="item.image" :width="avatarSize" class="mx-auto" />
+                  <v-img :src="univer.image" :width="avatarSize" class="mx-auto" />
                 </v-flex>
               </v-layout>
             </v-list-item-subtitle>
@@ -68,28 +68,21 @@
                 class="mx-0 pl-0"
               >
                 <v-flex
+                  v-for="direction in univer.universitiesToDirections"
+                  :key="direction.id"
                   xs12 
                   md6
                 >
                   <p class="mb-0" style="color: #1782FF">
-                    {{ item.direction1 }}
+                    {{ direction.directions.name }}
                   </p>
-                  <p>Проходной балл 2019 года: {{ item.passingScore1 }}</p>
-                </v-flex>
-                <v-flex
-                  xs12 
-                  md6
-                >
-                  <p class="mb-0" style="color: #1782FF">
-                    {{ item.direction2 }}
-                  </p>
-                  <p>Проходной балл 2019 года: {{ item.passingScore2 }}</p>
+                  <p>Проходной балл 2019 года: {{ direction.score }}</p>
                 </v-flex>
               </v-layout>
             </v-list-item-subtitle>
             <v-btn
               target="_blank"
-              :href="item.link"
+              :href="univer.link"
               :large="buttonSize"
               rounded
               depressed
@@ -99,15 +92,6 @@
               <span class="body-2">Перейти на сайт</span>
             </v-btn>
           </v-list-item-content>
-
-          <!-- <v-list-item-action class="right-block ml-0">
-            <v-list-item-avatar :size="avatarSize" class="avatar mr-0">
-              <v-img src="https://sun9-54.userapi.com/xDCjYqfcoY34ExqjIlQseUr17f9SX51Q0w817w/HjnqqM-JB90.jpg" />
-            </v-list-item-avatar>
-            <v-card-actions class="pb-8">
-              
-            </v-card-actions>
-          </v-list-item-action> -->
         </v-list-item>
       </v-card>
     </v-layout>
@@ -116,23 +100,31 @@
 
 <script>
   export default {
-    async asyncData({ $axios, params, redirect }) {
-      const citiesList = await $axios.$get('getCities').catch(() => null);
-      if (citiesList) {
-        citiesList.forEach((element, index) => {
-          element.id = index + 1;
-        });
-        const cities = [{ city: 'Все', id: null }].concat(citiesList);
-        return { cities };
-      } else {
+    watchQuery: true,
+    async asyncData({ $axios, query, redirect }) {
+      const findString = Object.keys(query)
+        .filter(key => query[key])
+        .map(key => `${key}=${encodeURIComponent(query[key])}`)
+        .join('&');
+
+      const [citiesList, universities] = await Promise.all([
+        $axios.$get('getCities').catch(() => []),
+        $axios.$get(`getUniversities${findString ? ('?' + findString) : ''}`).catch(() => null),
+      ]);
+
+      if (!universities) {
         redirect('/');
+        return;
       }
-    },
-    data() {
-      return {
-        city: null,
-        universities: [],
-      };
+
+      const cities = [{ city: 'Все', id: null }].concat(citiesList.map((city, i) => ({
+        ...city,
+        id: i + 1,
+      })));
+
+      const city = query.city && cities.find(elem => query.city === elem.city) || null;
+
+      return { city, cities, universities };
     },
     computed: {
       avatarSize() {
@@ -151,18 +143,11 @@
     },
     methods: {
       fetchUniversities() {
-        if (this.city) {
-          const city = this.cities.find(elem => elem.id === this.city);
-          const cityName = city && city.city;
+        const city = this.city && this.cities.find(elem => elem.id === this.city);
+        const cityName = city && city.city;
+        const query = Object.assign({}, this.$route.query, { city: cityName || undefined });
 
-          if (cityName) {
-            this.$axios.get(`getUniversities?city=${cityName}`).then(res => {
-              this.universities = res.data;
-            });
-          }
-        } else {
-          this.$axios.get('getUniversities').then(res => this.universities = res.data);;
-        }
+        this.$router.replace({ query });
       }
     },
     middleware: ['authenticated', 'paid'],

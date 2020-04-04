@@ -101,7 +101,7 @@
                           Войти
                         </v-btn>
                         <v-btn
-                          class="white--text mt-2"
+                          class="white--text mt-2 reg-btn"
                           block
                           large
                           color="accent"
@@ -314,8 +314,15 @@
         this.registrationInProgress = true;
         await this.$recaptchaLoaded();
         const recaptchaToken = await this.$recaptcha('homepage');
+
+        if (!recaptchaToken) {
+          this.snackbarText = 'Ошибка валидации';
+          this.snackbar = true;
+          this.registrationInProgress = false;
+          return;
+        }
         
-        if (!this.acceptRules || !this.email || !this.name || !recaptchaToken) { 
+        if (!this.acceptRules || !this.email || !this.name) { 
           return;
         }
         const validation = this.emailRules.find(rule => typeof rule(this.email) === 'string');
@@ -364,6 +371,10 @@
     padding-right: 0;
     padding-bottom: 8px
   }
+}
+
+.reg-btn {
+  max-width: 100%;
 }
 
 .title-info {

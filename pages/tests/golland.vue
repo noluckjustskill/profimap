@@ -60,7 +60,7 @@
               justify-space-around
               class="my-5"
             >
-              <v-hover v-for="(item, i) in professions[current]" :key="i" v-slot:default="{ hover }">
+              <v-hover v-for="(item, i) in Object.values(professions[current])" :key="i" v-slot:default="{ hover }">
                 <v-card
                   :elevation="hover ? 3 : 1"
                   class="item-card"
@@ -74,11 +74,11 @@
                     class="white"
                   />
                   <div
-                    v-if="hover && !isMobile && item.descr"
+                    v-if="hover && !isMobile && item.smallDescr"
                     :style="{ height: `${cardImageHeight}px`}"
                     class="hint subtitle-1 white--text"
                   >
-                    {{ item.descr }}
+                    {{ item.smallDescr }}
                   </div>
                   <v-card-title class="card-title subtitle-1 white--text text-truncate">
                     {{ item.name }}
@@ -209,7 +209,7 @@
 
       return {
         professions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
+        userCanContinue: !error || !store.state.guestFirstTest || store.state.guestFirstTest === testName,
         hasResult: !isEmpty(result),
         calculated: get(result, 'name'),
         description: get(result, 'description'),
@@ -325,6 +325,9 @@
     padding-left: 10px;
     margin-top: 35px;
     margin-bottom: 15px;
+    @media (max-width: 420px) {
+      font-size: 28px !important;
+    }
   }
   .page-title.second-title {
     margin-top: 50px;

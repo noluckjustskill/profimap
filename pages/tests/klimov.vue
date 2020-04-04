@@ -194,7 +194,7 @@
 
       return {
         professions,
-        userCanContinue: !error || store.state.guestFirstTest === testName,
+        userCanContinue: !error || !store.state.guestFirstTest || store.state.guestFirstTest === testName,
         hasResult: results.some(t => t.result),
         calculated: get(maxResult, 'name'),
         description: get(maxResult, 'fullText'),
@@ -301,6 +301,9 @@
     padding-left: 10px;
     margin-top: 35px;
     margin-bottom: 15px;
+    @media (max-width: 420px) {
+      font-size: 28px !important;
+    }
   }
   .page-title.second-title {
     margin-top: 50px;

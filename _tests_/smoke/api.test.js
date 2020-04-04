@@ -1,24 +1,27 @@
 const request = require ('supertest');
-const app = require ('../../server/koa');
+const jwt = require('jsonwebtoken');
 const { isObject, isNumber, isString, difference } = require('lodash');
 
-let token = '';
-const testUser = {
-  email: 'testuser@gmail.com',
-  password: '12345'
-};
+const app = require ('../../server/koa');
 
-describe('Login Endpoint', () => {
-  it('should return token', (done) => {
+const token = jwt.sign(
+  { id: process.env.TEST_USER_ID, name: 'Test', status: 'active', paid: true },
+  process.env.JWT_SECRET,
+  {
+    algorithm: 'HS512',
+  }
+);
+
+describe('Me Endpoint', () => {
+  it('should return me object', (done) => {
     request(app.callback())
-      .post('/auth/login')
-      .send(testUser)
+      .get('/api/me')
+      .set('Authorization', token)
       .expect(200)
       .end((err, res) => {
         if (err) done(err);
 
-        expect(res.body).toHaveProperty('token');
-        token = res.body.token;
+        expect(res.body).toHaveProperty('me');
 
         done();
       });
@@ -36,17 +39,16 @@ describe('getGolland Endpoint', () => {
       .end((err, res) => {
         if (err) done(err);
 
-        expect(res.body.every(cur => ( cur.length === 2 ))).toBe(true);
-        expect(res.body.every(cur => {
-          return cur.every(elem => {
-            return (difference(Object.keys(elem), ['name', 'image', 'descr']).length === 0);
-          });
-        })).toBe(true);
-        expect(res.body.every(cur => {
-          return cur.every(elem => {
-            return Object.values(elem).every(element => isString(element));
-          });
-        })).toBe(true);
+        expect(res.body).toHaveLength(43);
+
+        res.body.forEach(profession => {
+          expect(profession).toHaveProperty('left');
+          expect(profession).toHaveProperty('right');
+
+          const professionFields = ['image', 'name', 'smallDescr'];
+          expect(Object.keys(profession.left)).toEqual(expect.arrayContaining(professionFields));
+          expect(Object.keys(profession.right)).toEqual(expect.arrayContaining(professionFields));
+        });
 
         done();
       });
@@ -62,8 +64,9 @@ describe('gollandResults Endpoint', () => {
       .end((err, res) => {
         if (err) done(err);
 
+        expect(Object.keys(res.body)).toHaveLength(6);
+
         expect(Object.values(res.body).every(val => isObject(val))).toBe(true);
-        expect(Object.values(res.body).every(val => isString(val.name))).toBe(true);
         expect(Object.values(res.body).every(val => isString(val.descr))).toBe(true);
         expect(Object.values(res.body).every(val => isNumber(val.result))).toBe(true);
 
@@ -264,7 +267,7 @@ describe('getProfession Endpoint', () => {
 
 
 describe('recommendations Endpoint', () => {
-  it('should return array of dictionaries with recommended professions', (done) => {
+  it('should return array of objects, in every object - array with directions', (done) => {
     request(app.callback())
       .get('/api/recommendations')
       .set('Authorization', token)
@@ -273,9 +276,14 @@ describe('recommendations Endpoint', () => {
         if (err) done(err);
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.every(cur => {
-          return Object.values(cur).every(val => !isObject(val));
-        })).toBe(true);
+        res.body.forEach(elem => {
+          expect(Object.keys(elem)).toEqual(expect.arrayContaining(['id', 'name', 'directions']));
+          expect(Array.isArray(elem.directions)).toBe(true);
+          expect(elem.directions).not.toHaveLength(0);
+          elem.directions.forEach(dir => {
+            expect(dir).toHaveProperty('name');
+          });
+        });
 
         done();
       });

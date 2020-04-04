@@ -36,15 +36,25 @@ const CreatePaymentUrl = async (user, code) => {
     }
 
     invoice = await InvoiceModel.query().insert({ userId: user.id, amount, promocodeId });
-    const invoiceId = invoice.toJSON().id;
 
-    const signature = md5(`${merchantLogin}:${amount}:${invoiceId}:${merchantPass1}`);
-    const email = user.email ? `&Email=${encodeURIComponent(user.email)}` : '';
-    const payLink = `${RobokassaUrl}?MrchLogin=${merchantLogin}&OutSum=${amount}&InvId=${invoiceId}${email}&Desc=${invDesc}&IsTest=${isTest}&SignatureValue=${signature}&Encoding=UTF-8`;
+    if (amount <= 0) {
+      await Promise.all([
+        invoice.$query().patch({ status: 'paid', updatedAt: knex.raw('now()') }),
+        UsersModel.query().updateAndFetchById(user.id, { paid: true }),
+      ]);
 
-    await invoice.$query().patch({ payLink });
+      return '/api/success-pay';
+    } else {
+      const invoiceId = invoice.toJSON().id;
 
-    return payLink;
+      const signature = md5(`${merchantLogin}:${amount}:${invoiceId}:${merchantPass1}`);
+      const email = user.email ? `&Email=${encodeURIComponent(user.email)}` : '';
+      const payLink = `${RobokassaUrl}?MrchLogin=${merchantLogin}&OutSum=${amount}&InvId=${invoiceId}${email}&Desc=${invDesc}&IsTest=${isTest}&SignatureValue=${signature}&Encoding=UTF-8`;
+
+      await invoice.$query().patch({ payLink });
+
+      return payLink;
+    }
   }
 };
 

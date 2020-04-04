@@ -14,7 +14,7 @@ module.exports = class Users extends Model {
   }
   static get relationMappings() {
     return {
-      GollandResults: {
+      gollandResults: {
         relation: Model.HasManyRelation,
         modelClass: GollandResults,
         join: {
@@ -22,7 +22,7 @@ module.exports = class Users extends Model {
           to: 'gollandResults.userId'
         }
       },
-      KlimovResults: {
+      klimovResults: {
         relation: Model.HasManyRelation,
         modelClass: KlimovResults,
         join: {
@@ -30,7 +30,7 @@ module.exports = class Users extends Model {
           to: 'klimovResults.userId'
         }
       },
-      BelbinResults: {
+      belbinResults: {
         relation: Model.HasManyRelation,
         modelClass: BelbinResults,
         join: {
@@ -38,7 +38,7 @@ module.exports = class Users extends Model {
           to: 'belbinResults.userId'
         }
       },
-      DiskResults: {
+      diskResults: {
         relation: Model.HasManyRelation,
         modelClass: DiskResults,
         join: {
@@ -46,7 +46,7 @@ module.exports = class Users extends Model {
           to: 'diskResults.userId'
         }
       },
-      UserFeedback: {
+      userFeedback: {
         relation: Model.HasManyRelation,
         modelClass: FeedBack,
         join: {

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 class="display-1 page-title mb-0">
-      {{ paidUser ? 'Направления, которые Вам подходят:' : 'Что ждет тебя после тестирования?' }}
+    <h2 class="display-1 font-weight-medium page-title">
+      {{ paidUser ? 'Карьерные рекомендации' : 'Что ждет тебя после тестирования?' }}
     </h2>
     <v-layout
       v-if="paidUser"
@@ -32,7 +32,6 @@
               :key="item.id" 
               xs4
               class="graphs__item text-center"
-              style="flex-basis: 0"
             >
               <v-progress-circular
                 rotate="-90"
@@ -100,13 +99,21 @@
                   contain
                 />
               </v-list-item-subtitle> -->
-              <v-list-item-title class="subline mb-3">
+              <v-list-item-title class="headline mb-3">
                 Направления в ВУЗах, связанные с профессией:
               </v-list-item-title>
-              <v-list-item-subtitle class="descr mb-2">
-                {{ item.education }}
+              <v-list-item-subtitle class="mb-2">
+                <h2 
+                  v-for="direction in item.directions"
+                  :key="`dir-${item.id}-${direction.id}`"
+                  class="title font-weight-light my-0 direction"
+                >
+                  {{ direction.name }}
+                  <!-- <br v-if="isMobile">
+                  (<span style="color: #1782FF">код направления {{ direction.code }}</span>) -->
+                </h2>
               </v-list-item-subtitle>
-              <nuxt-link to="/universities">
+              <nuxt-link :to="`/universities?professionId=${item.id}`">
                 <v-btn
                   :large="buttonSize"
                   rounded
@@ -160,7 +167,7 @@
           <v-img :src="require('~/assets/bar-chart.png')" width="50" class="img" />
           <h3>Направления, которые подходят именно тебе</h3>
           <p>По результатам тестирования ты получишь топ-3 наиболее подходящих направления в виде диаграммы</p>
-          <v-img :src="require('~/assets/example.png')" width="210" class="img mx-auto mt-2" />
+          <v-img :src="require('~/assets/example.png')" width="270" class="img mx-auto mt-2" />
         </div>
       </v-flex>
       <v-flex
@@ -173,8 +180,7 @@
           <v-img :src="require('~/assets/edu.png')" width="50" class="img" />
           <h3>Рекомендации по ВУЗам и курсам</h3>
           <p>
-            Мы предоставим описание 
-            всех подходящих тебе направлений, 
+            Мы предоставим описание всех подходящих тебе направлений, 
             а также поделимся своими личными рекомендациями по ВУЗам и курсам, 
             которые помогут освоить данные профессии
           </p>
@@ -190,8 +196,8 @@
           <v-img :src="require('~/assets/cost.png')" width="50" class="img" />
           <h3>Не просто доступ, а целый жизненный путь</h3>
           <p>
-            Все еще не знаешь, 
-            в какой сфере развиваться? Мы готовы помочь и направить тебя на правильный путь. 
+            Все еще не знаешь, в какой сфере развиваться? 
+            Мы готовы помочь и направить тебя на правильный путь. 
             Безлимитный доступ к тестам и рекомендациям по цене чашки кофе!
           </p>
           <div class="text-center">
@@ -227,15 +233,16 @@
         return;
       }
 
-      const fullProfessionsList = await $axios.$get('recommendations').catch(() => null);
-      if (fullProfessionsList) {
-        if (fullProfessionsList.length) {
-          const max = fullProfessionsList[0].result;
-          const min = fullProfessionsList[fullProfessionsList.length-1].result;
+      const fullProfessions = await $axios.$get('recommendations').catch(() => null);
+      if (fullProfessions) {
+        if (fullProfessions.length) {
+          const max = fullProfessions[0].result;
+          const min = fullProfessions[fullProfessions.length-1].result;
 
-          fullProfessionsList.forEach(profession => {
-            profession.chartResult = Math.round((profession.result - min) * 100 / (max - min));
-          });
+          const fullProfessionsList = fullProfessions.map(profession => ({
+            ...profession,
+            chartResult: Math.round((profession.result - min) * 100 / (max - min)),
+          })).filter(({ chartResult }) => chartResult);
           const professions = fullProfessionsList.slice(0, 3);
           const [first, second, third] = professions;
 
@@ -276,6 +283,9 @@
       chartWidth() {
         return this.$vuetify.breakpoint.xsOnly ? 6 : 11;
       },
+      isMobile() {
+        return this.$vuetify.breakpoint.smAndDown;
+      },
     },
     methods: {
       chartSize(index) {
@@ -298,17 +308,8 @@
     position: relative;
     width: 100%;
     background-color: transparent;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding: 10px;
     border-radius: 5px;
-    @media (max-width: 767px) {
-      padding: 20px 10px;
-    }
-    @media (min-width: 768px) and (max-width: 1099px) {
-      padding: 30px;
-    }
   }
   .card {
     padding: 0 40px;
@@ -349,21 +350,6 @@
       line-height: 12px;
     }
   }
-  .descr {
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 24px;
-    color: #000000;
-    opacity: 0.8;
-    @media (max-width: 960px) {
-      font-size: 14px;
-      line-height: 20px;
-    }
-    @media (max-width: 600px) {
-      font-size: 12px;
-      line-height: 12px;
-    }
-  }
   .course-image {
     width: 60px;
     height: 60px;
@@ -378,15 +364,11 @@
     }
   }
   .page-title {
+    padding-left: 10px;
     margin-top: 35px;
     margin-bottom: 15px;
-    padding-left: 60px;
     @media (max-width: 799px) {
       margin-top: 15px;
-      padding-left: 10px;
-    }
-    @media (min-width: 800px) and (max-width: 1099px) {
-      padding-left: 30px;
     }
   }
   .nuxtLink {
@@ -442,6 +424,8 @@
       & .img {
         display: block;
         margin-bottom: 10px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       & h3 {
@@ -523,8 +507,32 @@
       margin-top: 5px;
     }
 
+    .headline {
+      @media (max-width: 960px) {
+        line-height: normal;
+        font-size: 24px !important;
+      }
+      @media (max-width: 600px) {
+        font-size: 20px !important;
+      }
+    }
+
     .avatar-container {
       margin-top: -30px;
+    }
+
+    .direction {
+      line-height: 26px;
+      
+      @media (max-width: 960px) {
+        font-size: 14px !important;
+        line-height: 20px !important;
+        margin-bottom: 6px !important;
+      }
+      @media (max-width: 600px) {
+        font-size: 12px !important;
+        line-height: 12px !important;
+      }
     }
   }
 </style>

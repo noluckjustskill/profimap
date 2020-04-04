@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
     "test:unit": "jest \"unit/.*\\.test\\.js\"",
-    "test:smoke": "jest \"smoke/.*\\.test\\.js\" --detectOpenHandles --forceExit"
+    "test:smoke": "jest \"smoke/.*\\.test\\.js\" --setupFiles dotenv/config --detectOpenHandles --forceExit"
   },
   "pre-commit": [
     "lint",
@@ -52,7 +52,7 @@
     "mysql": "^2.17.1",
     "nuxt": "^2.11.0",
     "nuxt-rfg-icon": "^0.6.4",
-    "objection": "^1.6.11",
+    "objection": "^2.1.3",
     "passport-google-oauth20": "^2.0.0",
     "passport-vkontakte": "^0.3.2",
     "sharp": "^0.25.1",

@@ -90,12 +90,25 @@
       </v-card-text>
       <v-card-text v-else class="text-center body-1 pt-5">
         <v-img
-          :src="require('~/assets/checked.png')"
+          :src="successSignup ? require('~/assets/checked.png') : require('~/assets/fail.png')"
           :width="100"
           :height="100"
           class="mb-2 mx-auto"
         />
-        {{ message }}
+        <!-- eslint-disable-next-line -->
+        <span v-html="message" />
+        <br>
+        <v-btn
+          v-if="!successSignup"
+          :block="isMobile"
+          color="primary"
+          rounded
+          depressed
+          class="mt-3"
+          @click="message = null"
+        >
+          Назад
+        </v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -123,7 +136,8 @@
       nameRules: [v => !!v || 'Имя - обязательное поле'],
 
       loading: false,
-      message: ''
+      successSignup: false,
+      message: null,
     }),
     computed: {
       isOpened: {
@@ -148,18 +162,23 @@
           this.isOpened = false;
         }
       },
-      signUp() {
+      async signUp() {
         this.loading = true;
 
-        this.$axios.$post('invite', {
+        await this.$axios.$post('invite', {
           name: this.name,
           email: this.email,
         }).then(() => {
+          this.successSignup = true;
           this.message = 'Готово! На твою почту мы отправили письмо с дальнейшими инструкциями';
         }).catch(err => {
-          this.message = 'Что-то пошло не так';
+          this.successSignup = false;
+          this.message = `К сожалению, что-то пошло не так, попробуйте позже<br/>
+          или напишите нам на <a href="mailto:help@profimap.ru" style="color: #1782FF">help@profimap.ru</a>`;
           console.error(err);
         });
+
+        this.loading = false;
       },
     },
   };

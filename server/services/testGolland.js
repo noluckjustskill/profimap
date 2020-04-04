@@ -1,5 +1,7 @@
-const { mapKeys, keyBy, maxBy } = require('lodash');
+const { maxBy } = require('lodash');
 const {
+  knex,
+  UsersModel,
   GollandTasksModel,
   GollandTypesModel,
   GollandResultsModel
@@ -8,41 +10,42 @@ const { keyWithMaxValue } = require('../utils/object');
 const { answers } = require('../config/golland/golland.json');
 const keyDictionary = require('../config/golland/gollandSkillsDictionary.json');
 
+const staticUrl = process.env.STATIC_URL;
+
 const getTasks = async() => {
-  const tasks = await GollandTasksModel
+  return GollandTasksModel
     .query()
-    .leftJoinRelation('left')
-    .leftJoinRelation('right')
-    .select(
-      'left.name as leftName', 'left.smallDescr as leftDescr', 'left.image as leftImage',
-      'right.name as rightName', 'right.smallDescr as rightDescr', 'right.image as rightImage',
-    );
-
-  const staticUrl = process.env.STATIC_URL;
-
-  return tasks.map(task => ([{
-    name: task.leftName,
-    descr: task.leftDescr,
-    image: `${staticUrl}/${task.leftImage}`,
-  }, {
-    name: task.rightName,
-    descr: task.rightDescr,
-    image: `${staticUrl}/${task.rightImage}`,
-  }]));
+    .withGraphJoined( '[left, right]', { joinOperation: 'innerJoin' })
+    .modifyGraph('[left, right]', qb => {
+      qb.select('name', 'smallDescr', knex.raw(`CONCAT('${staticUrl}/', image) as image`));
+    })
+    .select('left.image as left:image')
+    .select('right.image as right:image')
+    .execute();
 };
 
 const getProfileResult = async (userId) => {
-  const arr = await GollandResultsModel
+  const [ user ] = await UsersModel
     .query()
-    .leftJoinRelation('gollandType')
-    .where('gollandResults.userId', userId)
-    .select('gollandType.name', 'gollandType.descr', 'gollandResults.result');
-  if (!Object.values(arr).length) {
-    const array = await GollandTypesModel.query().select('name');
-    return array.map(el => keyDictionary[el.name]);
+    .where('users.id', userId)
+    .withGraphJoined('gollandResults.gollandType', { joinOperation: 'leftJoin' })
+    .execute();
+
+  if (!user || !Array.isArray(user.gollandResults) || !user.gollandResults.length) {
+    return Object.values(keyDictionary).reduce((acc, curr) => {
+      acc[curr] = { result: 0 };
+      return acc;
+    }, {});
   }
 
-  return mapKeys(keyBy(arr, 'name'), (val, key) => keyDictionary[key]);
+  return user.gollandResults.reduce((acc, elem) => {
+    acc[keyDictionary[elem.gollandType.name] || elem.gollandType.name] = {
+      descr: elem.gollandType.descr,
+      result: elem.result || 0,
+    };
+
+    return acc;
+  }, {});
 };
 
 const getProfileType = async (userId) => {

@@ -94,7 +94,7 @@
         const ctx = this.$refs.canvas;
         const result = await this.$axios.$get('gollandResults');
         
-        if (Array.isArray(result)) {
+        if (Object.values(result).every(r => !r.result)) {
           this.noData = true;
         }
 
@@ -127,11 +127,11 @@
         } : {
           ...this.config, 
           data: {
-            labels: result, 
+            labels: Object.keys(result), 
             datasets: [{
               backgroundColor: this.bgColor,
               pointBackgroundColor: this.$vuetify.theme.themes.light.primary,
-              data: [0, 0, 0, 0, 0, 0],
+              data: Object.values(result).map(v => v.result),
               pointRadius: 4,
               pointHoverRadius: 5,
             }]

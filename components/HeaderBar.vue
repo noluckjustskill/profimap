@@ -1,5 +1,19 @@
 <template>
   <div>
+    <v-btn
+      v-if="canBack()"
+      icon
+      small
+      color="gray"
+      class="back-button hidden-md-and-up"
+      @click="$router.back()"
+    >
+      <v-img
+        :src="require('~/assets/back.png')"
+        height="20"
+        contain
+      />
+    </v-btn>
     <v-layout
       row
       wrap
@@ -80,11 +94,13 @@
         }
 
         return false;
+      },
+      canBack() {
+        return this.$router.currentRoute.path !== '/';
       }
     },
   };
 </script>
-
 
 <style scoped>
   .header-layout {
@@ -98,5 +114,8 @@
     text-transform: none;
     font-size: 18px;
     font-weight: 500;
+  }
+  .back-button {
+    opacity: 0.7;
   }
 </style>

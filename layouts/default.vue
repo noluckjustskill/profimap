@@ -30,25 +30,14 @@
         <nuxt />
       </v-container>
     </v-content>
-    <v-bottom-navigation
-      v-if="user"
-      v-model="tab"
-      color="primary"
-      class="hidden-md-and-up tabs"
-    >
-      <v-btn v-for="(item, i) in itemsBar" :key="i" :to="item.to">
-        <span>{{ item.title }}</span>
-        <v-icon v-if="item.icon">
-          {{ item.icon }}
-        </v-icon>
-        <v-img
-          v-else-if="item.image"
-          :src="item.image"
-          max-width="24"
-          max-height="24"
-        />
-      </v-btn>
-    </v-bottom-navigation>
+    <client-only>
+      <FooterBar
+        v-if="user"
+        v-model="tab"
+        :items="itemsBar"
+        class="hidden-md-and-up tabs"
+      />
+    </client-only>
     <v-footer
       app
     >
@@ -66,7 +55,7 @@
           <v-icon> mdi-vk </v-icon>
         </v-btn>
         <v-btn 
-          href="https://www.instagram.com/prof1map/?igshid=8xyua4f3xstv"
+          href="https://www.instagram.com/prof1map"
           target="_blank"
           text
           icon
@@ -83,11 +72,13 @@
 <script>
   import UserBar from '~/components/UserBar.vue';
   import HeaderBar from '~/components/HeaderBar.vue';
+  import FooterBar from '~/components/FooterBar.vue';
 
   export default {
     components: {
       UserBar,
       HeaderBar,
+      FooterBar,
     },
     data () {
       return {

@@ -66,8 +66,8 @@ const createOAuthUser = async (id, name, email, picture) => {
 };
 
 const createTempUser = async () => {
-  const userObj = await UsersModel.query().insert({ status: 'invited' });
-  const user = userObj.toJSON();
+  const newUser = await UsersModel.query().insert({ status: 'invited' });
+  const user = (await UsersModel.query().findById(newUser.id)).toJSON();
 
   delete user.password;
 
@@ -194,7 +194,7 @@ const refreshToken = async (userId) => {
 };
 
 const checkProfileProgress = async (user) => {
-  if (!user || user.status !== 'active') return 0;
+  if (!user || (user.name !== 'guest' && user.status !== 'active')) return 0;
   const allModels = [GollandResultsModel, KlimovResultsModel, BelbinResultsModel, DiskResultsModel];
 
   return Promise.all(
