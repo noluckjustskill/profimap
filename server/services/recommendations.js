@@ -4,11 +4,8 @@ const dataForBelbin = require('../config/belbin/belbinRecommendations.json');
 const keyDictionary = require('../config/professionsDictionary.json');
 const { max, min, cloneDeep } = require('lodash');
 const {
-  GollandTypesModel,
   GollandResultsModel,
-  KlimovTypesModel,
   KlimovResultsModel,
-  BelbinTypesModel,
   BelbinResultsModel,
   ProfessionsModel,
 } = require('../database');
@@ -54,7 +51,7 @@ const recommendationsCalc = (types, results, testData) => {
 
   // перемножение критериев с нормированными результатами
   Object.keys(recommendationsData).forEach(type => {
-    const perem = normResults.find(result => result.name === type).result;
+    const perem = normResults[0] ? normResults.find(result => result.name === type).result : 0;
     for (const key in recommendationsData[type]) {
       recommendationsData[type][key] *= perem;  
     }
@@ -77,33 +74,39 @@ const recommendationsCalc = (types, results, testData) => {
 const getRecommendations = async (userId) => {
   //получение данных с результатами для каждого теста
   //голланд
-  const gollandTypes = await GollandTypesModel.query().select('id', 'name');
   const gollandResultsList = await GollandResultsModel
     .query()
     .where({ userId })
-    .select('gollandTypeId', 'result');
+    .withGraphJoined('gollandType', { joinOperation: 'leftJoin' })
+    .execute();
+
+  const gollandTypes = gollandResultsList.map(elem => elem.gollandType);
   const gollandResults = gollandResultsList.reduce((acc, curr) => {
     acc[curr.gollandTypeId] = curr.result;
     return acc;
   }, {});
 
   //климов
-  const klimovTypes = await KlimovTypesModel.query().select('id', 'name');
   const klimovResultsList = await KlimovResultsModel
     .query()
     .where({ userId })
-    .select('klimovTypeId', 'result');
+    .withGraphJoined('klimovType', { joinOperation: 'leftJoin' })
+    .execute();
+  
+  const klimovTypes = klimovResultsList.map(elem => elem.klimovType);
   const klimovResults = klimovResultsList.reduce((acc, curr) => {
     acc[curr.klimovTypeId] = curr.result;
     return acc;
   }, {});
 
   //белбин
-  const belbinTypes = await BelbinTypesModel.query().select('id', 'name');
   const belbinResultsList = await BelbinResultsModel
     .query()
     .where({ userId })
-    .select('belbinTypeId', 'result');
+    .withGraphJoined('belbinType', { joinOperation: 'leftJoin' })
+    .execute();
+
+  const belbinTypes = belbinResultsList.map(elem => elem.belbinType);
   const belbinResults = belbinResultsList.reduce((acc, curr) => {
     acc[curr.belbinTypeId] = curr.result;
     return acc;

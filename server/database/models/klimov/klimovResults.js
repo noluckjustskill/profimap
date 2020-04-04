@@ -20,7 +20,7 @@ module.exports = class KlimovResults extends Model {
         },
       },
       klimovType: {
-        relatiom: Model.BelongsToOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: KlimovTypes,
         join: {
           from: 'klimovResults.klimovTypeId',

@@ -20,7 +20,7 @@ module.exports = class BelbinResults extends Model {
         },
       },
       belbinType: {
-        relatiom: Model.BelongsToOneRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: BelbinTypes,
         join: {
           from: 'belbinResults.belbinTypeId',
