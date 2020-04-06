@@ -62,10 +62,11 @@
               <v-list-item-title class="mainline mt-4 mb-3">
                 {{ item.chartResult }}% {{ item.name }}
               </v-list-item-title>
-              <v-list-item-subtitle class="descr mb-5">
+              <v-list-item-subtitle class="font-weight-light descr mb-5">
                 <v-layout row wrap class="ma-0">
                   <v-flex xs9>
-                    {{ item.smallDescr }}
+                    <p>{{ item.smallDescr }}</p>
+                    <p>{{ item.fullDescr }}</p>
                   </v-flex>
                   <v-flex xs3 class="avatar-container">
                     <v-img :src="item.image" :width="avatarSize" class="mx-auto" />
@@ -106,7 +107,7 @@
                 <h2 
                   v-for="direction in item.directions"
                   :key="`dir-${item.id}-${direction.id}`"
-                  class="title font-weight-light my-0 direction"
+                  class="title font-weight-light my-0 descr"
                 >
                   {{ direction.name }}
                   <!-- <br v-if="isMobile">
@@ -517,15 +518,16 @@
       }
     }
 
-    .avatar-container {
-      margin-top: -30px;
-    }
+    // .avatar-container {
+    //   margin-top: -30px;
+    // }
 
-    .direction {
-      line-height: 26px;
+    .descr {
+      font-size: 20px;
+      line-height: 24px;
       
       @media (max-width: 960px) {
-        font-size: 14px !important;
+        font-size: 16px !important;
         line-height: 20px !important;
         margin-bottom: 6px !important;
       }
