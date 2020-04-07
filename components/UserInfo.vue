@@ -49,13 +49,16 @@
 
           const age = Math.abs(ageDate.getUTCFullYear() - 1970);
           const lastNumeral = age.toString().slice(-1);
+          const lastTwoNumerals = age.toString().slice(-2);
           const postfixMap = {
             'лет': ['0', '5', '6', '7', '8', '9'],
             'год': ['1'],
             'года': ['2', '3', '4'],
           };
 
-          const postfix = Object.keys(postfixMap).find(p => postfixMap[p].includes(lastNumeral));
+          const postfix = ['11', '12', '13', '14'].includes(lastTwoNumerals)
+            ? 'лет'
+            : Object.keys(postfixMap).find(p => postfixMap[p].includes(lastNumeral));
           if (!postfix) {
             return null;
           }
