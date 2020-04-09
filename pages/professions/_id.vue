@@ -7,7 +7,7 @@
       row
       wrap
       align-start
-      justify-start
+      justify-space-between
       class="list ma-0"
     >
       <v-flex
@@ -38,51 +38,78 @@
         </div>
       </v-flex>
       <v-flex
+        v-if="profession.fullDescr"
         sm6
         xs12
         class="block-wrap"
       >
-        <div>
-          <div v-if="profession.fullDescr" class="block">
-            <h3 class="title sub">
-              Задачи
-            </h3>
-            <h4 class="text small">
-              {{ profession.fullDescr }}
-            </h4>
-          </div>
-          <div v-if="profession.education" class="block">
-            <h3 class="title sub">
-              Образование
-            </h3>
-            <h4 class="text small">
-              {{ profession.education }}
-            </h4>
-          </div>
+        <div class="block">
+          <h3 class="title sub">
+            Задачи
+          </h3>
+          <h4 class="text small">
+            {{ profession.fullDescr }}
+          </h4>
         </div>
       </v-flex>
       <v-flex
+        v-if="profession.education"
         sm6
         xs12
         class="block-wrap"
       >
-        <div>
-          <div v-if="profession.requirements" class="block">
-            <h3 class="title sub">
-              Особенности
-            </h3>
-            <h4 class="text small">
-              {{ profession.requirements }}
-            </h4>
-          </div>
-          <div v-if="profession.dangerous" class="block">
-            <h3 class="title sub">
-              Недостатки
-            </h3>
-            <h4 class="text small">
-              {{ profession.dangerous }}
-            </h4>
-          </div>
+        <div class="block">
+          <h3 class="title sub">
+            Образование
+          </h3>
+          <h4 class="text small">
+            {{ profession.education }}
+          </h4>
+        </div>
+      </v-flex>
+      <v-flex
+        v-if="profession.requirements"
+        sm6
+        xs12
+        class="block-wrap"
+      >
+        <div class="block">
+          <h3 class="title sub">
+            Особенности
+          </h3>
+          <h4 class="text small">
+            {{ profession.requirements }}
+          </h4>
+        </div>
+      </v-flex>
+      <v-flex
+        v-if="profession.dangerous"
+        sm6
+        xs12
+        class="block-wrap"
+      >
+        <div class="block">
+          <h3 class="title sub">
+            Недостатки
+          </h3>
+          <h4 class="text small">
+            {{ profession.dangerous }}
+          </h4>
+        </div>
+      </v-flex>
+      <v-flex
+        v-if="profession.directions.length"
+        sm6
+        xs12
+        class="block-wrap"
+      >
+        <div class="block">
+          <h3 class="title sub">
+            Подходящие направления
+          </h3>
+          <h4 v-for="direction in profession.directions" :key="direction.id" class="text small">
+            {{ direction.name }}
+          </h4>
         </div>
       </v-flex>
     </v-layout>
@@ -124,7 +151,6 @@
     margin: 0 auto;
   }
   .page-title {
-    padding-left: 10px;
     margin-top: 35px;
     margin-bottom: 15px;
   }
@@ -132,8 +158,8 @@
     margin-top: 50px;
   }
   .block-wrap {
-    padding: 10px;
     box-sizing: border-box;
+    max-width: 48%;
   }
   .block {
     border: none;

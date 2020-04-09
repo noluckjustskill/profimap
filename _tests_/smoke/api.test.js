@@ -246,7 +246,7 @@ describe('diskResults Endpoint', () => {
 //=================Others=============================
 
 describe('getProfession Endpoint', () => {
-  const id = Math.floor(Math.random() * 92) + 1; // Random [1, 80]
+  const id = Math.floor(Math.random() * 96) + 1; // Random [1, 96]
 
   it(`should return dictionary with description of profession with id = ${id}`, (done) => {
     request(app.callback())
@@ -257,8 +257,12 @@ describe('getProfession Endpoint', () => {
         if (err) done(err);
 
         expect(res.statusCode).toEqual(200);
-        expect(Object.values(res.body).every(val => !isObject(val))).toBe(true);
         expect(res.body.id).toBe(id);
+        res.body.forEach(elem => {
+          expect(Object.keys(elem)).toEqual(expect.arrayContaining(['id', 'name', 'directions']));
+          expect(Array.isArray(elem.directions)).toBe(true);
+        });
+
 
         done();
       });

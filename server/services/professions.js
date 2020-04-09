@@ -3,7 +3,9 @@ const { ProfessionsModel } = require('../database');
 const getProfession = async (profId) => {
   return ProfessionsModel
     .query()
-    .findById(profId);
+    .findById(profId)
+    .withGraphJoined('directions')
+    .execute();
 };
 
 module.exports = {
