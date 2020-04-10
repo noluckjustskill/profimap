@@ -258,11 +258,8 @@ describe('getProfession Endpoint', () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.id).toBe(id);
-        res.body.forEach(elem => {
-          expect(Object.keys(elem)).toEqual(expect.arrayContaining(['id', 'name', 'directions']));
-          expect(Array.isArray(elem.directions)).toBe(true);
-        });
-
+        expect(Object.keys(res.body)).toEqual(expect.arrayContaining(['id', 'name', 'directions']));
+        expect(Array.isArray(res.body.directions)).toBe(true);
 
         done();
       });
