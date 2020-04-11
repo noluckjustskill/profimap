@@ -25,11 +25,10 @@ const getTasks = async() => {
 };
 
 const getProfileResult = async (userId) => {
-  const [ user ] = await UsersModel
+  const user = await UsersModel
     .query()
-    .where('users.id', userId)
     .withGraphJoined('gollandResults.gollandType', { joinOperation: 'leftJoin' })
-    .execute();
+    .findById(userId);
 
   if (!user || !Array.isArray(user.gollandResults) || !user.gollandResults.length) {
     return Object.values(keyDictionary).reduce((acc, curr) => {

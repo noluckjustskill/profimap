@@ -35,9 +35,9 @@
           >
             <template v-if="!preloader">
               <v-card class="mx-auto card px-lg-12 px-md-8 px-sm-6">
-                <v-card-text v-if="!registrationSuccess">
+                <v-card-text>
                   <h2 class="title-info mt-6 text-center">
-                    {{ !registration ? 'Войти' : 'Зарегистрироваться' }} с помощью
+                    Войти с помощью
                   </h2>  
                   <v-layout row wrap class="mt-6 px-4">
                     <v-flex xs12 md6 class="google-btn">
@@ -69,7 +69,7 @@
                       </v-btn>
                     </v-flex>
                   </v-layout>
-                  <v-form v-if="!registration" class="mt-6" @submit.prevent="login">
+                  <v-form class="mt-6" @submit.prevent="login">
                     <v-text-field
                       v-model="email"
                       :rules="emailRules"
@@ -101,107 +101,18 @@
                           Войти
                         </v-btn>
                         <v-btn
+                          to="/registration#form"
+                          nuxt
                           class="white--text mt-2 reg-btn"
                           block
                           large
                           color="accent"
-                          @click="registration = true"
                         >
                           Зарегистрироваться
                         </v-btn>
                       </v-flex>
                     </v-layout>
                   </v-form>
-                  <v-form v-else class="mt-6" @submit.prevent="register">
-                    <v-text-field
-                      v-model="name"
-                      label="Ваше имя"
-                      required
-                      @change="nameInput"
-                    />
-                    <v-text-field
-                      v-model="email"
-                      :rules="emailRules"
-                      label="E-mail"
-                      required
-                      @change="emailInput"
-                    />
-                    <v-select
-                      v-model="gender"
-                      :items="genderList"
-                      label="Пол"
-                      item-text="name"
-                      item-value="key"
-                    />
-                    <v-menu
-                      ref="menu"
-                      v-model="pickDoB"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="dateOfBirth"
-                          label="Дата рождения"
-                          readonly
-                          v-on="on"
-                        />
-                      </template>
-                      <v-date-picker
-                        ref="picker"
-                        v-model="dateOfBirth"
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                        locale="ru-RU"
-                        @change="saveDoB"
-                      />
-                    </v-menu>
-                    <v-checkbox v-model="acceptRules" hide-details class="mt-0">
-                      <template v-slot:label class="accept">
-                        <div class="caption">
-                          Я принимаю условия 
-                          <a href="https://profimap.ru/privacypolicy" target="_blank" @click.stop>конфиденциальности</a> и 
-                          <a href="https://profimap.ru/useragreement" target="_blank" @click.stop>пользовательского соглашения</a>
-                        </div>
-                      </template>
-                    </v-checkbox>
-                    <v-layout row wrap class="mt-3 px-4">
-                      <v-flex xs12 class="mb-6">
-                        <v-btn
-                          :disabled="!acceptRules || !name || !email || registrationInProgress"
-                          class="white--text"
-                          block
-                          large
-                          color="accent" 
-                          type="submit"
-                        >
-                          {{ registrationInProgress ? 'Отправка...' : 'Отправить' }}
-                        </v-btn>
-                        <v-btn
-                          class="white--text mt-2"
-                          block
-                          large
-                          color="#333333" 
-                          @click="registration = false"
-                        >
-                          Войти
-                        </v-btn>
-                      </v-flex>
-                    </v-layout>
-                  </v-form>
-                </v-card-text>
-                <v-card-text v-else class="text-center">
-                  <v-img
-                    :src="require('~/assets/checked.png')"
-                    :width="100"
-                    :height="100"
-                    class="my-8 mx-auto"
-                  />
-                  <h3 class="text-center headline mb-3">
-                    Успешно! На Вашу почту было отправлено письмо с дальнейшими инструкциями.
-                  </h3>
                 </v-card-text>
               </v-card>
             </template>
@@ -231,40 +142,19 @@
       if (store.$auth.loggedIn && !route.query.token) {
         redirect('/');
       }
-      return { registration: Boolean(route.query.registration) };
     },
     data: () => ({
-      registrationSuccess: false,
-      registrationInProgress: false,
-      drawer: null,
       email: null,
-      name: null,
-      gender: null,
-      dateOfBirth: null,
       password: null,
-      acceptRules: false,
       emailRules: [
         v => !!v || 'E-mail обязателен',
         v => /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(v) || 'E-mail введён не верно',
       ],
       passwordRules: [v => !!v || 'Необходим пароль'],
-      genderList: [{
-        key: 'M',
-        name: 'Мужской',
-      }, {
-        key: 'F',
-        name: 'Женский',
-      }],
-      pickDoB: false,
       snackbar: false,
       snackbarText: '',
       preloader: true,
     }),
-    watch: {
-      pickDoB (val) {
-        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'));
-      },
-    },
     created() {
       const token = this.$route.query.token;
 
@@ -296,58 +186,6 @@
           this.snackbarText = 'Не удалось авторизоваться';
           this.snackbar = true;
         }
-      },
-      nameInput(val) {
-        if (String(val).length > 64) {
-          this.name = this.name.slice(0, 64).trim();
-        }
-      },
-      emailInput(val) {
-        if (String(val).length > 64) {
-          this.email = this.email.slice(0, 64).trim();
-        }
-      },
-      saveDoB(date) {
-        this.$refs.menu.save(date);
-      },
-      async register() {
-        this.registrationInProgress = true;
-        await this.$recaptchaLoaded();
-        const recaptchaToken = await this.$recaptcha('homepage');
-
-        if (!recaptchaToken) {
-          this.snackbarText = 'Ошибка валидации';
-          this.snackbar = true;
-          this.registrationInProgress = false;
-          return;
-        }
-        
-        if (!this.acceptRules || !this.email || !this.name) { 
-          return;
-        }
-        const validation = this.emailRules.find(rule => typeof rule(this.email) === 'string');
-        if (validation) {
-          this.snackbarText = validation(this.email);
-          this.snackbar = true;
-          return;
-        }
-
-        this.$axios.$post('signup', {
-          name: this.name,
-          email: this.email,
-          gender: this.gender,
-          dateOfBirth: this.dateOfBirth,
-          recaptchaToken,
-        }).then(() => {
-          this.registrationSuccess = true;
-          this.registrationInProgress = false;
-        }).catch(err => {
-          console.log(err);
-          
-          this.snackbarText = 'Не удалось зарегистрироваться';
-          this.snackbar = true;
-          this.registrationInProgress = false;
-        });
       },
     },
     head () {
