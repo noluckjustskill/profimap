@@ -135,6 +135,7 @@ module.exports = {
       themes: {
         light: {
           primary: '#E23B3B',
+          minor: '#F6CAAE',
           secondary: '#b0bec5',
           accent: '#1782FF',
           error: '#b71c1c',
