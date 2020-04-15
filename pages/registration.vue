@@ -16,7 +16,37 @@
         Close
       </v-btn>
     </v-snackbar>
-    <v-dialog v-model="registrationSuccess" persistent>
+    <v-dialog
+      v-model="tutorial"
+      width="560"
+      overlay-color="white"
+      overlay-opacity="0.8"
+    >
+      <v-card v-if="tutorial">
+        <v-card-title class="headline">
+          {{ tutorialText[currentStep].title }}
+        </v-card-title>
+        <v-card-text class="tutor-text">
+          {{ tutorialText[currentStep].text }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <p class="mb-0 mr-3">
+            Шаг {{ currentStep + 1 }} из 4
+          </p>
+          <v-img class="tutor-logo" :src="require('~/assets/logo.png')" />
+          <v-btn 
+            rounded
+            depressed
+            color="primary"
+            @click="currentStep++"
+          >
+            {{ currentStep === 3 ? 'Начать' : 'Далее' }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="registrationSuccess">
       <div class="pa-2 white">
         <v-img
           :src="require('~/assets/checked.png')"
@@ -34,6 +64,7 @@
       wrap
       align-center
       justify-space-between
+      :class="{ blur: tutorial }"
       class="ma-0 px-4"
     >
       <v-flex md7 xs12 class="full-h px-6">
@@ -79,7 +110,7 @@
         ref="form"
         md4
         xs12
-        class="full-h px-6"
+        class="px-6"
       >
         <v-layout row wrap class="mt-6 px-4 reg-form">
           <v-flex xs12 md6 class="google-btn">
@@ -201,6 +232,14 @@
   export default {
     layout: 'login',
     data: () => ({
+      currentStep: 0,
+      tutorial: true,
+      tutorialText: [
+        { title: 'Кто мы такие?', text: '- Привет! На нашем сервисе ты сможешь сделать первый шаг к своей будущей карьере в IT… \n- Если считаешь, что пока рано, не нажимай кнопку «Далее»' },
+        { title: 'Пройти тестирование', text: '- Прохождение тестов позволит понять твои сильные стороны и узнать в какой области IT они применимы \n- Не забудь пройти их при первой возможности!' },
+        { title: 'Профиль', text: '- В профиле ты сможешь подробно посмотреть результаты тестов \n- Графики покажут тебе твои сильные и слабые стороны' },
+        { title: 'Первый шаг', text: '- Если ты выбираешь ВУЗ, ищешь стажировку или хочешь сменить работу, наш алгоритм подскажет ТОП профессий, подходящих именно тебе \n- А наша База Данных курсов и ВУЗов, подберет лучшие именно для тебя' },
+      ],
       registrationSuccess: false,
       registrationInProgress: false,
       email: null,
@@ -240,9 +279,19 @@
       snackbarText: '',
       preloader: true,
     }),
+    computed: {
+      isMobile() {
+        return this.$vuetify.breakpoint.xsOnly;
+      }
+    },
     watch: {
       pickDoB (val) {
         val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'));
+      },
+      currentStep (val) {
+        if (val >= 4) {
+          this.tutorial = false;
+        }
       },
     },
     methods: {
@@ -319,8 +368,13 @@
     background-color: #F6CAAE;
   }
 
+  .blur {
+    filter: blur(5px);
+  }
+
   #form {
     background: white;
+    margin-bottom: 20px;
     border-radius: 4px;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   }
@@ -336,16 +390,31 @@
   }
 
   .title {
-    word-break: normal;
+    word-break: break-word;
   }
 
   .full-h {
     @media (max-width: 960px) {
       min-height: 100vh;
-
-      .reg-form {
-        padding-top: 40px;
-      }
     }
+  }
+
+  .reg-form {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .v-dialog__content {
+    @media (min-width: 960px) {
+      justify-content: left;
+      margin-left: 5%;
+    }
+  }
+
+  .tutor-logo {
+    position: absolute;
+    left: 24px;
+    bottom: 10px;
+    width: 70px;
   }
 </style>
