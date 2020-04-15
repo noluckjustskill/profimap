@@ -52,6 +52,7 @@ module.exports = {
     '~/plugins/constants',
     { src: '~/plugins/cookies', mode: 'client' },
     { src: '~/plugins/recaptcha', mode: 'client' },
+    { src: '~/plugins/vue-typed', mode: 'client' },
   ],
   /*
   ** Nuxt.js dev-modules

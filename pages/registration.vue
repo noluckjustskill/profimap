@@ -18,17 +18,23 @@
     </v-snackbar>
     <v-dialog
       v-model="tutorial"
-      width="560"
+      width="680"
       overlay-color="white"
       overlay-opacity="0.8"
     >
-      <v-card v-if="tutorial">
+      <v-card v-if="tutorialText[currentStep]">
         <v-card-title class="headline">
           {{ tutorialText[currentStep].title }}
         </v-card-title>
-        <v-card-text class="tutor-text">
-          {{ tutorialText[currentStep].text }}
-        </v-card-text>
+        <!-- 'key' propety need for retype text on each step -->
+        <vue-typed-js
+          :key="currentStep"
+          :strings="[tutorialText[currentStep].text]"
+          :show-cursor="false"
+          :type-speed="35"
+        >
+          <v-card-text class="tutor-text typing px-6" />
+        </vue-typed-js>
         <v-card-actions>
           <v-spacer />
           <p class="mb-0 mr-3">
@@ -369,7 +375,7 @@
   }
 
   .blur {
-    filter: blur(5px);
+    filter: blur(7px);
   }
 
   #form {
@@ -416,5 +422,10 @@
     left: 24px;
     bottom: 10px;
     width: 70px;
+  }
+
+  .tutor-text {
+    min-height: 14vh;
+    white-space: pre-line;
   }
 </style>
