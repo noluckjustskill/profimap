@@ -101,7 +101,7 @@
                           Войти
                         </v-btn>
                         <v-btn
-                          to="/registration#form"
+                          to="/registration"
                           nuxt
                           class="white--text mt-2 reg-btn"
                           block
