@@ -73,11 +73,11 @@
       :class="{ blur: tutorial }"
       class="ma-0 px-4"
     >
-      <v-flex md7 xs12 class="full-h px-6">
+      <v-flex md7 xs12 class="full-h px-4">
         <h1 class="text-center display-1 font-weight-medium mt-2 mb-4">
           Зачем регистрироваться?
         </h1>
-        <v-timeline align-top :dense="$vuetify.breakpoint.smAndDown">
+        <v-timeline align-top :dense="$vuetify.breakpoint.xsOnly">
           <v-timeline-item
             v-for="(item, i) in reasons"
             :key="i"
@@ -85,12 +85,12 @@
             color="primary"
             fill-dot
             large
-            class="my-12"
+            class="timeline-item"
           >
             <v-card
               color="primary"
               dark
-              class="py-2"
+              class="timeline-card"
             >
               <v-card-title class="title">
                 {{ item.text }}
@@ -118,7 +118,7 @@
         xs12
         class="px-6"
       >
-        <v-layout row wrap class="mt-6 px-4 reg-form">
+        <v-layout row wrap class="mt-2 px-4 reg-form">
           <v-flex xs12 md6 class="google-btn">
             <v-btn
               block
@@ -148,7 +148,7 @@
             </v-btn>
           </v-flex>
         </v-layout>
-        <v-divider class="mt-6" light />
+        <v-divider class="mt-2" light />
         <v-form class="mt-6" @submit.prevent="register">
           <v-text-field
             v-model="name"
@@ -374,6 +374,16 @@
     background-color: #F6CAAE;
   }
 
+  .display-1 {
+    @media (max-width: 600px) {
+      font-size: 2rem !important;
+    }
+
+    @media (max-width: 320px) {
+      font-size: 1.5rem !important;
+    }
+  }
+
   .blur {
     filter: blur(7px);
   }
@@ -400,8 +410,33 @@
   }
 
   .full-h {
-    @media (max-width: 960px) {
+    @media (max-width: 600px) {
       min-height: 100vh;
+    }
+  }
+
+  .timeline-item {
+    margin: 48px 0;
+
+    @media (max-width: 600px) {
+      margin: 24px 0;
+    }
+
+    @media (max-width: 320px) {
+      margin: 0;
+    }
+
+    .timeline-card {
+      padding: 8px 0;
+
+      @media (max-width: 600px) {
+        padding: 4px 0;
+      }
+
+      .title {
+        font-size: 1rem !important;
+        line-height: 1.5rem;
+      }
     }
   }
 
