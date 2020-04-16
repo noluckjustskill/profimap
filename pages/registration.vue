@@ -31,7 +31,7 @@
           :key="currentStep"
           :strings="[tutorialText[currentStep].text]"
           :show-cursor="false"
-          :type-speed="35"
+          :type-speed="10"
         >
           <v-card-text class="tutor-text typing px-6" />
         </vue-typed-js>
