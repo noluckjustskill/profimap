@@ -1,6 +1,6 @@
 {
   "name": "ProfiMap",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Пройди тесты, узнай, в чем ты талантлив и построй свой карьерный путь.",
   "author": "Artem Eskov",
   "private": true,
@@ -59,6 +59,7 @@
     "vue-chartjs": "^3.5.0",
     "vue-cookies": "^1.7.0",
     "vue-recaptcha-v3": "^1.8.0",
+    "vue-typed-js": "^0.1.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {

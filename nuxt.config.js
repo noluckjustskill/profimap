@@ -52,6 +52,7 @@ module.exports = {
     '~/plugins/constants',
     { src: '~/plugins/cookies', mode: 'client' },
     { src: '~/plugins/recaptcha', mode: 'client' },
+    { src: '~/plugins/vue-typed', mode: 'client' },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -135,6 +136,7 @@ module.exports = {
       themes: {
         light: {
           primary: '#E23B3B',
+          minor: '#F6CAAE',
           secondary: '#b0bec5',
           accent: '#1782FF',
           error: '#b71c1c',
