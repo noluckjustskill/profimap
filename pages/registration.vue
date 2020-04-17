@@ -21,6 +21,7 @@
       width="680"
       overlay-color="white"
       overlay-opacity="0.8"
+      class="tutorial"
     >
       <v-card v-if="tutorialText[currentStep]">
         <v-card-title class="headline">
@@ -52,7 +53,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="registrationSuccess">
+    <v-dialog v-model="registrationSuccess" width="680" persistent>
       <div class="pa-2 white">
         <v-img
           :src="require('~/assets/checked.png')"
@@ -70,7 +71,7 @@
       wrap
       align-center
       justify-space-between
-      :class="{ blur: tutorial }"
+      :class="{ blur: tutorial || registrationSuccess }"
       class="ma-0 px-4"
     >
       <v-flex md7 xs12 class="full-h px-4">
@@ -445,7 +446,7 @@
     padding-bottom: 20px;
   }
 
-  .v-dialog__content {
+  .tutorial .v-dialog__content {
     @media (min-width: 960px) {
       justify-content: left;
       margin-left: 5%;
