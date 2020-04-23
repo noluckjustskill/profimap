@@ -54,12 +54,6 @@
 
 <script>
   export default {
-    props: {
-      opened: {
-        type: Boolean,
-        default: false
-      },
-    },
     data: () => ({
       code: null,
       snackbar: false,
@@ -69,12 +63,10 @@
     computed: {
       isOpened: {
         get() {
-          return this.opened;
+          return this.$store.state.promocode;
         },
         set(val) {
-          if (!val) {
-            this.$emit('close');
-          }
+          this.$store.commit('activatePromocode', val);
         }
       },
       isMobile() {

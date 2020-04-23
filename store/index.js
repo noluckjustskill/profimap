@@ -6,6 +6,7 @@ export const state = () => ({
     disk: false,
   },
   guestFirstTest: null,
+  promocode: false,
 });
 
 export const mutations = {
@@ -17,6 +18,9 @@ export const mutations = {
       state.guestFirstTest = name;
     }
   },
+  activatePromocode(state, val) {
+    state.promocode = val;
+  }
 };
 
 export const getters = {
