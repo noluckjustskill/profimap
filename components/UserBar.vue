@@ -30,6 +30,14 @@
         </div>
       </template>
       <v-list>
+        <v-list-item @click="promocode">
+          <v-list-item-icon>
+            <v-icon>mdi-gift</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Ввести промокод</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item to="/settings">
           <v-list-item-icon>
             <v-icon>mdi-settings</v-icon>
@@ -79,6 +87,12 @@
       },
     },
     methods: {
+      promocode() {
+        this.$store.commit('activatePromocode', true);
+        if (this.$route.name !== 'career') {
+          this.$router.push('career');
+        }
+      },
       async logout() {
         await this.$auth.logout();
         this.$router.push('/login');

@@ -48,7 +48,15 @@
             color="primary"
             @click="currentStep++"
           >
-            {{ currentStep === 3 ? 'Начать' : 'Далее' }}
+            <span class="ml-1 body-2" :class="{ 'mr-1': currentStep === 3 }">
+              {{ currentStep === 3 ? 'Начать' : 'Далее' }}
+              <v-icon
+                v-if="currentStep < 3"
+                right
+                dark
+                class="ml-1 next-icon"
+              >mdi-arrow-right</v-icon>
+            </span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -463,5 +471,9 @@
   .tutor-text {
     min-height: 14vh;
     white-space: pre-line;
+  }
+
+  .next-icon {
+    vertical-align: text-bottom;
   }
 </style>

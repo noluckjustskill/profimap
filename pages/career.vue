@@ -214,7 +214,7 @@
             <!-- <h4 class="text-center caption mt-3 promocode" @click="promocode = true">
               У меня есть промокод!
             </h4> -->
-            <ActivatePromocode :opened="promocode" @close="promocode = false" />
+            <ActivatePromocode />
           </div>
         </div>
       </v-flex>
@@ -255,11 +255,6 @@
 
       redirect('/');
     },
-    data() {
-      return {
-        promocode: false,
-      };
-    },
     computed: {
       paidUser() {
         return Boolean(this.$store.state.auth.user.paid);
@@ -297,6 +292,10 @@
         }
         return index % 2 ? 240 : 200;
       },
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$store.commit('activatePromocode', false);
+      next();
     },
     middleware: 'authenticated',
   };
@@ -418,7 +417,7 @@
     & .advantage{
       box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
       border-radius: 5px;
-      padding: 25px 10px;
+      padding: 25px 20px;
       height: 450px;
       box-sizing: border-box;
 
