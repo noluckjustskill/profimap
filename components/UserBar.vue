@@ -30,7 +30,7 @@
         </div>
       </template>
       <v-list>
-        <v-list-item @click="promocode">
+        <v-list-item v-if="!isPaid" @click="promocode">
           <v-list-item-icon>
             <v-icon>mdi-gift</v-icon>
           </v-list-item-icon>
@@ -84,6 +84,9 @@
       },
       subTitle() {
         return this.user.email;
+      },
+      isPaid() {
+        return Boolean(this.user.paid);
       },
     },
     methods: {
