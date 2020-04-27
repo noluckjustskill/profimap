@@ -131,6 +131,7 @@
 </template>
 
 <script>
+  import * as Sentry from '@sentry/browser';
   import Preloader from '../components/Preloader';
   
   export default {
@@ -160,6 +161,11 @@
 
       if (token) {
         this.$auth.setUserToken(token).then(() => {
+          const { id, email } = this.$auth.user;
+          Sentry.configureScope((scope) => {
+            scope.setUser({ id, email });
+          });
+          
           this.$router.push('/');
         }).catch(() => {
           this.preloader = false;
@@ -179,7 +185,10 @@
             }
           });
 
-          this.$router.push('/');
+          const { id, email } = this.$auth.user;
+          Sentry.configureScope((scope) => {
+            scope.setUser({ id, email });
+          });
         } catch (e) {
           console.log(e);
           

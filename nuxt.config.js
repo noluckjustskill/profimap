@@ -47,9 +47,9 @@ module.exports = {
   plugins: [
     '~/plugins/axios.js',
     '~/plugins/dynamicColor',
-    { src: '~/plugins/base64Image', mode: 'client' },
-    '~/plugins/sentry',
     '~/plugins/constants',
+    { src: '~/plugins/sentry', mode: 'client' },
+    { src: '~/plugins/base64Image', mode: 'client' },
     { src: '~/plugins/cookies', mode: 'client' },
     { src: '~/plugins/recaptcha', mode: 'client' },
     { src: '~/plugins/vue-typed', mode: 'client' },
